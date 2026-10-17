@@ -13,7 +13,7 @@ const {POST,GET}=await import(uri(compile(source)));
 let now=1000000;Date.now=()=>now;
 async function post(action,cookie='',extra={}){const r=await POST(new Request('https://test.local/api/game',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://test.local',Cookie:cookie},body:JSON.stringify({action,room:'cinema',...extra})}));return {status:r.status,body:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]||cookie}}
 let a=await post('join','',{name:'Alice'}),b=await post('join','',{name:'Bob'});assert.equal(a.status,200);assert.equal(a.body.phase,'countdown');assert.ok(a.cookie.startsWith('sv_player='));assert.equal(b.body.players.length,2);
-now+=5000;let snap=(await post('sync',a.cookie)).body;assert.equal(snap.phase,'guess');assert.equal(snap.question.answer,undefined);
+now+=10000;let snap=(await post('sync',a.cookie)).body;assert.equal(snap.phase,'guess');assert.equal(snap.question.answer,undefined);
 const {QUESTIONS}=await import(game);const state=JSON.parse(sql.prepare('SELECT state FROM rooms WHERE id=?').get('cinema').state);const answer=QUESTIONS[state.deck[0]].answer;
 now+=1000;const guesses=await Promise.all([post('answer',a.cookie,{answer,game:snap.game,round:1}),post('answer',a.cookie,{answer,game:snap.game,round:1}),post('answer',b.cookie,{answer,game:snap.game,round:1})]);assert.ok(guesses.every(g=>g.status===200));snap=(await post('sync',a.cookie)).body;assert.equal(snap.phase,'reveal');assert.equal(snap.players.find(p=>p.id==='me').score,955);assert.equal(snap.question.answer,answer);assert.deepEqual(snap.players.map(p=>p.solveRank).sort(),[1,2],'Concurrent submissions must award exactly one first place');
 const avatar={shape:4,hair:3,eyes:2,nose:6,mouth:5,accessory:1,outfit:4,color:'#c8b9ff'};
@@ -25,7 +25,7 @@ await post('leave',a.cookie);const empty=await post('leave',b.cookie);assert.equ
 const list=await GET();assert.equal((await list.json()).rooms.find(r=>r.id==='cinema').count,0);
 now+=100000;const restart=await post('join',a.cookie,{name:'Alice'});assert.equal(restart.body.phase,'countdown');assert.equal(restart.body.players.find(p=>p.id==='me').score,0);
 // Chat visibility is enforced by the server, survives DB reloads and keeps late joiners out.
-const third=await post('join','',{name:'Carol'});now+=5000;const start=(await post('sync',a.cookie)).body;
+const third=await post('join','',{name:'Carol'});now+=10000;const start=(await post('sync',a.cookie)).body;
 const stored=JSON.parse(sql.prepare('SELECT state FROM rooms WHERE id=?').get('cinema').state);
 const target=QUESTIONS[stored.deck[0]].answer;
 await post('answer',a.cookie,{answer:target,game:start.game,round:start.round});
@@ -40,7 +40,7 @@ console.log('Passed: SQLite persistence, separate sessions, concurrent guesses, 
 
 // Each newly listed room creates durable state and serves its own deck.
 for(const room of ['videogames','series','food','music','characters','expressions','objects','myths']){
- const joined=await post('join','',{room,name:'Test salon'});assert.equal(joined.status,200,room);now+=5000;
+ const joined=await post('join','',{room,name:'Test salon'});assert.equal(joined.status,200,room);now+=10000;
  const playing=await post('sync',joined.cookie,{room});assert.equal(playing.body.phase,'guess',room);assert.equal(playing.body.question.theme,room);assert.equal(playing.body.question.answer,undefined);
  await post('leave',joined.cookie,{room});
 }

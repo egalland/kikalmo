@@ -21,3 +21,5 @@ assert.equal(left(sync(null,{...snap,serverNow:99000},0),0),20000);
 const podium=sync(null,{...snap,phase:'podium',deadline:160000},0);assert.equal(left(podium,0),60000);assert.equal(fraction(podium,30000),.5);
 const realDate=Date.now;Date.now=()=>9999999999999;assert.equal(left(clock,8000),3000);Date.now=realDate;
 console.log('Passed: smooth monotonic countdown, delayed sync, no refill, early reveal, phase reset, late arrival, hidden tab, wall-clock jumps, clamping.');
+
+const launch=sync(null,{game:'launch',round:0,phase:'countdown',serverNow:100000,deadline:110000},0);assert.equal(left(launch,0),10000);assert.equal(fraction(launch,0),1);assert.equal(left(launch,5000),5000);

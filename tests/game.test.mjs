@@ -6,12 +6,12 @@ const {fresh,begin,advance,submit,view,QUESTIONS,mask,normalize}=await import('d
 const player=(id,t)=>({id,name:id,score:0,seen:t,solved:false,gain:0,tries:0});
 let now=100000,s=fresh();s.players=[player('alice',now),player('bob',now)];begin(s,'cinema',now);
 assert.equal(s.deck.length,10);assert.equal(new Set(s.deck).size,10);assert.ok(s.deck.every(i=>QUESTIONS[i].theme==='cinema'));
-now+=5000;s=advance(s,now);assert.equal(s.round,1);assert.equal(s.phase,'guess');assert.ok(!JSON.stringify(view(s,'alice',now)).includes('"answer"'));
+assert.equal(s.deadline,now+10000);assert.equal(advance(s,now+9999).phase,'countdown');now+=10000;s=advance(s,now);assert.equal(s.round,1);assert.equal(s.phase,'guess');assert.ok(!JSON.stringify(view(s,'alice',now)).includes('"answer"'));
 const correct=QUESTIONS[s.deck[0]].answer;
 assert.equal(submit(s,'alice','wrong',now),'incorrect');assert.equal(s.players[0].score,0);
 assert.equal(submit(s,'alice',correct,now+1000),'correct');assert.equal(s.players[0].score,955);assert.equal(submit(s,'alice',correct,now+2000),'wait');
 s=advance(s,now+1000);assert.equal(s.phase,'guess');
-assert.equal(submit(s,'bob',correct,now+2000),'correct');s=advance(s,now+2000);assert.equal(s.phase,'reveal');assert.equal(s.deadline,now+7000);assert.equal(view(s,'alice',now).question.answer,correct);
+assert.equal(submit(s,'bob',correct,now+2000),'correct');s.players.forEach(p=>p.seen=now+2000);s=advance(s,now+2000);assert.equal(s.phase,'reveal');assert.equal(s.deadline,now+7000);assert.equal(view(s,'alice',now).question.answer,correct);
 s.players.push(player('carol',now+2000));assert.equal(s.players[2].score,0);
 now+=7000;s.players.forEach(p=>p.seen=now);s=advance(s,now);assert.equal(s.round,2);assert.equal(s.phase,'guess');assert.ok(s.players.every(p=>!p.solved));
 for(let round=2;round<=10;round++){now+=20000;s.players.forEach(p=>p.seen=now);s=advance(s,now);assert.equal(s.phase,'reveal');assert.equal(s.round,round);now+=5000;s.players.forEach(p=>p.seen=now);s=advance(s,now);assert.equal(s.phase,round===10?'podium':'guess');}
