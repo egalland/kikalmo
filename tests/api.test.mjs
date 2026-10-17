@@ -24,7 +24,7 @@ const edited=await post('profile',a.cookie,{name:'KiwiCosmique',avatar});assert.
 const otherView=(await post('sync',b.cookie)).body;assert.equal(otherView.players.find(p=>p.name==='KiwiCosmique').avatar.color,'#c8b9ff');assert.equal(otherView.players.find(p=>p.name==='KiwiCosmique').avatar.nose,6,'Custom nose propagates to remote players');
 const blank=await post('profile',a.cookie,{name:'   ',avatar});assert.equal(blank.status,400);
 const refresh=await post('join',a.cookie,{name:'KiwiCosmique',avatar});assert.deepEqual(refresh.body.players.find(p=>p.id==='me').avatar,avatar);assert.equal(refresh.body.players.find(p=>p.id==='me').score,955);
-await post('leave',a.cookie);const empty=await post('leave',b.cookie);assert.equal(empty.body.phase,'empty');assert.equal(empty.body.players.length,0);
+await post('leave',a.cookie);const empty=await post('leave',b.cookie);assert.equal(empty.body.phase,'reveal');assert.equal(empty.body.players.length,0);assert.equal(empty.body.vacancy,undefined);
 const list=await GET();assert.equal((await list.json()).rooms.find(r=>r.id==='cinema').count,0);
 now+=100000;const restart=await post('join',a.cookie,{name:'Alice'});assert.equal(restart.body.phase,'countdown');assert.equal(restart.body.players.find(p=>p.id==='me').score,0);
 // Chat visibility is enforced by the server, survives DB reloads and keeps late joiners out.
@@ -106,3 +106,38 @@ assert.ok(stats.sessionActiveMs.max>0);
 now+=13000;await post('join','',{room:'animals',name:'Next'});
 assert.ok(sql.prepare("SELECT * FROM analytics_sessions WHERE room='animals' AND reason='timeout'").all().length);
 console.log('Passed: complete match, ten rounds, winner, streak, durations, report export and expired session.');
+
+// A solo player can leave to the menu and recover the same word, score and clock.
+let grace=await post('join','',{room:'food',name:'Retour'});
+now+=10000;grace=await post('sync',grace.cookie,{room:'food'});
+const graceGame=grace.body.game;
+now+=2000;
+const beforeLeave=await post('sync',grace.cookie,{room:'food'});
+const deadline=beforeLeave.body.deadline;
+const words=beforeLeave.body.question.masked;
+const abandonedBefore=allEvents().filter(e=>e.kind==='match_abandoned').length;
+await post('leave',grace.cookie,{room:'food'});
+let listing=await GET();assert.equal((await listing.json()).rooms.find(r=>r.id==='food').resumable,true);
+now+=9999;
+const recovered=await post('join',grace.cookie,{room:'food',name:'Retour'});
+assert.equal(recovered.body.game,graceGame);assert.equal(recovered.body.round,1);
+assert.equal(recovered.body.question.masked,words);assert.equal(recovered.body.deadline,deadline+9999);
+assert.equal(allEvents().filter(e=>e.kind==='match_abandoned').length,abandonedBefore);
+assert.equal(allEvents().filter(e=>e.kind==='match_started'&&e.game===graceGame).length,1);
+assert.ok(!JSON.stringify(recovered.body).includes('vacancy'));
+// Resume a solved player's score and reveal state, not just the word.
+const gstate=JSON.parse(sql.prepare("SELECT state FROM rooms WHERE id='food'").get().state);
+now+=1000;const won=await post('answer',grace.cookie,{room:'food',game:graceGame,round:1,answer:QUESTIONS[gstate.deck[0]].answer});
+await post('leave',grace.cookie,{room:'food'});now+=1000;
+const scoreRecovered=await post('join',grace.cookie,{room:'food',name:'Retour'});
+assert.equal(scoreRecovered.body.players[0].score,won.body.players[0].score);
+assert.equal(scoreRecovered.body.players[0].solved,true);assert.equal(scoreRecovered.body.phase,'reveal');
+// Exactly ten seconds is the expiry boundary, including repeated leave requests.
+await post('leave',grace.cookie,{room:'food'});now+=5000;
+await post('leave',grace.cookie,{room:'food'});now+=5000;
+listing=await GET();assert.equal((await listing.json()).rooms.find(r=>r.id==='food').resumable,false);
+const replacement=await post('join',grace.cookie,{room:'food',name:'Retour'});
+assert.notEqual(replacement.body.game,graceGame);assert.equal(replacement.body.phase,'countdown');
+assert.equal(replacement.body.players[0].score,0);
+assert.equal(allEvents().filter(e=>e.kind==='match_abandoned'&&e.game===graceGame).length,1);
+console.log('Passed: solo room grace, 9.999s recovery, paused timer, score restoration, no duplicate matches, private state and 10s expiry.');

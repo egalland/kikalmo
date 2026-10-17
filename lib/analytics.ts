@@ -23,7 +23,7 @@ export function collector(room:string,now:number){
   }
   if(before.phase==='guess'&&(after.phase!=='guess'||before.game!==after.game||before.round!==after.round)){
    const interrupted=after.phase==='empty';
-   emit(interrupted?'round_abandoned':'round_completed',before,undefined,before.solveCount||0);emit('round_duration_ms',before,undefined,Math.max(0,Math.min(now,before.deadline)-before.started));
+   emit(interrupted?'round_abandoned':'round_completed',before,undefined,before.solveCount||0);emit('round_duration_ms',before,undefined,Math.max(0,Math.min(before.vacancy?.since??now,before.deadline)-before.started));
    if(!interrupted)emit(before.solveCount?'round_solved':'round_unsolved',before);
    for(const p of after.players){const old=before.players.find(x=>x.id===p.id);if(!old||!p.tracking)continue;
     p.tracking.streak=old.solved?p.tracking.streak+1:0;
