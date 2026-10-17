@@ -17,11 +17,11 @@ export function PuppetArt({value,frame,id,className='',label,expression='idle'}:
  // All layers use the SAME square viewBox, including narrow workshop thumbnails.
  // Cropping each cell before positioning avoids background sizing / span height drift.
  const layer=(name:string,col:number,row:number,columns:number,rows:number,tint=false)=>{
-  const {x,y,scale,crop}=puppetPlacement(name,col,row,a.shape,frame);
-  return <svg key={name} className={'puppet-layer puppet-'+name} aria-hidden="true" x={x+crop.x*scale} y={y+crop.y*scale} width={crop.width*scale} height={crop.height*scale} viewBox={`${col*256+crop.x} ${row*256+crop.y} ${crop.width} ${crop.height}`} overflow="hidden" style={tint?{filter:color}:undefined}><image href={`/puppets/${name==='hair'||name==='accessory'||name==='outfit'?'parts':name==='nose'?'body':name}.webp?v=5`} x="0" y="0" width={columns*256} height={rows*256}/></svg>;
+  const {x,y,scaleX,scaleY,crop}=puppetPlacement(name,col,row,a.shape,frame);
+  return <svg key={name} className={'puppet-layer puppet-'+name} aria-hidden="true" x={x+crop.x*scaleX} y={y+crop.y*scaleY} width={crop.width*scaleX} height={crop.height*scaleY} viewBox={`${col*256+crop.x} ${row*256+crop.y} ${crop.width} ${crop.height}`} overflow="hidden" preserveAspectRatio="none" style={tint?{filter:color}:undefined}><image href={`/puppets/${name==='hair'||name==='accessory'||name==='outfit'?'parts':name==='nose'?'body':name}.webp?v=5`} x="0" y="0" width={columns*256} height={rows*256}/></svg>;
  };
  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -24 280 280" width="256" height="256" preserveAspectRatio="xMidYMid meet" className={'cartoon-avatar felt-avatar '+className} role={label?'img':undefined} aria-label={label?(label+(EXPRESSION_LABELS[expression]?' — '+EXPRESSION_LABELS[expression]:'')):undefined} aria-hidden={label?undefined:true} data-puppet="felt" data-expression={expression} data-frames={`${frame.body},${frame.eyes},${frame.mouth}`}>
- <defs><clipPath id={neckId}><rect x="-12" y="-24" width="280" height={collarY+24}/></clipPath><clipPath id={noseId}><ellipse cx="128" cy="128" rx="20" ry="20"/></clipPath></defs>
+ <defs><clipPath id={neckId}><rect x="-12" y="-24" width="280" height={collarY+29}/></clipPath><clipPath id={noseId}><ellipse cx="128" cy="128" rx="20" ry="20"/></clipPath></defs>
  {layer('outfit',a.outfit,2,7,3)}<g clipPath={`url(#${neckId})`}>{layer('body',frame.body,a.shape,3,6,true)}</g>{layer('eyes',frame.eyes,frame.eyesRow,4,6,true)}{layer('mouth',frame.mouth,frame.mouthRow,4,6,true)}<g clipPath={`url(#${noseId})`}>{layer('nose',frame.body,a.shape,3,6,true)}</g>{a.hair>0&&layer('hair',a.hair,0,7,3)}{a.accessory>0&&layer('accessory',a.accessory,1,7,3)}
  </svg>;
 }

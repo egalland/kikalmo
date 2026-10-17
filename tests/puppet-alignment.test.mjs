@@ -26,11 +26,11 @@ for(let shape=0;shape<6;shape++)for(let body=0;body<3;body++){
  for(let hair=1;hair<7;hair++){
   const p=placement('hair',hair,0,shape,pose),m=measured.atlas.parts[0][hair];
   const top=head.forehead+128-head.nose.y;
-  assert.ok(Math.abs(m.hairline*p.scale+p.y-Math.min(top+14,64))<.25,'Hair detaches from the forehead during a drawn pose');checked++;
+  assert.ok(Math.abs(m.hairline*p.scaleY+p.y-(top+12))<.25,'Hair detaches from the forehead during a drawn pose');checked++;
  }
  for(let outfit=0;outfit<6;outfit++){
   const p=placement('outfit',outfit,2,shape,pose),m=measured.atlas.parts[2][outfit];
-  assert.ok(Math.abs(m.collar*p.scale+p.y-(head.neck+128-head.nose.y+6))<.25,'The collar must follow the native neck');checked++;
+  assert.ok(Math.abs(m.collar*p.scale+p.y-(head.neck+128-head.nose.y-5))<.25,'The collar must follow the native neck');checked++;
  }
 }
 console.log(`Passed ${checked} geometric alignment checks across all heads and animation frames.`);

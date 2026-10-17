@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "atlas": {
     "body": [
       [
@@ -21,7 +21,23 @@
           },
           "forehead": 40,
           "neck": 188,
-          "temple": 173
+          "temple": 173,
+          "brow": {
+            "left": 81,
+            "right": 173,
+            "width": 93
+          },
+          "cheek": {
+            "left": 65,
+            "right": 187,
+            "width": 123
+          },
+          "jaw": {
+            "left": 76,
+            "right": 175,
+            "width": 100
+          },
+          "neckWidth": 46
         },
         {
           "center": {
@@ -41,7 +57,23 @@
           },
           "forehead": 42,
           "neck": 192,
-          "temple": 174
+          "temple": 174,
+          "brow": {
+            "left": 79,
+            "right": 174,
+            "width": 96
+          },
+          "cheek": {
+            "left": 65,
+            "right": 187,
+            "width": 123
+          },
+          "jaw": {
+            "left": 76,
+            "right": 177,
+            "width": 102
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -61,7 +93,23 @@
           },
           "forehead": 43,
           "neck": 191,
-          "temple": 173
+          "temple": 173,
+          "brow": {
+            "left": 78,
+            "right": 173,
+            "width": 96
+          },
+          "cheek": {
+            "left": 64,
+            "right": 187,
+            "width": 124
+          },
+          "jaw": {
+            "left": 74,
+            "right": 177,
+            "width": 104
+          },
+          "neckWidth": 45
         }
       ],
       [
@@ -83,7 +131,23 @@
           },
           "forehead": 46,
           "neck": 194,
-          "temple": 184
+          "temple": 184,
+          "brow": {
+            "left": 68,
+            "right": 184,
+            "width": 117
+          },
+          "cheek": {
+            "left": 63,
+            "right": 188,
+            "width": 126
+          },
+          "jaw": {
+            "left": 68,
+            "right": 184,
+            "width": 117
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -103,7 +167,23 @@
           },
           "forehead": 46,
           "neck": 197,
-          "temple": 185
+          "temple": 185,
+          "brow": {
+            "left": 67,
+            "right": 185,
+            "width": 119
+          },
+          "cheek": {
+            "left": 63,
+            "right": 189,
+            "width": 127
+          },
+          "jaw": {
+            "left": 67,
+            "right": 185,
+            "width": 119
+          },
+          "neckWidth": 46
         },
         {
           "center": {
@@ -123,7 +203,23 @@
           },
           "forehead": 46,
           "neck": 195,
-          "temple": 184
+          "temple": 184,
+          "brow": {
+            "left": 67,
+            "right": 184,
+            "width": 118
+          },
+          "cheek": {
+            "left": 63,
+            "right": 189,
+            "width": 127
+          },
+          "jaw": {
+            "left": 67,
+            "right": 184,
+            "width": 118
+          },
+          "neckWidth": 45
         }
       ],
       [
@@ -145,7 +241,23 @@
           },
           "forehead": 37,
           "neck": 191,
-          "temple": 166
+          "temple": 166,
+          "brow": {
+            "left": 88,
+            "right": 166,
+            "width": 79
+          },
+          "cheek": {
+            "left": 75,
+            "right": 178,
+            "width": 104
+          },
+          "jaw": {
+            "left": 82,
+            "right": 171,
+            "width": 90
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -165,7 +277,23 @@
           },
           "forehead": 38,
           "neck": 191,
-          "temple": 168
+          "temple": 168,
+          "brow": {
+            "left": 86,
+            "right": 168,
+            "width": 83
+          },
+          "cheek": {
+            "left": 74,
+            "right": 180,
+            "width": 107
+          },
+          "jaw": {
+            "left": 81,
+            "right": 173,
+            "width": 93
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -185,7 +313,23 @@
           },
           "forehead": 39,
           "neck": 193,
-          "temple": 167
+          "temple": 167,
+          "brow": {
+            "left": 86,
+            "right": 167,
+            "width": 82
+          },
+          "cheek": {
+            "left": 73,
+            "right": 178,
+            "width": 106
+          },
+          "jaw": {
+            "left": 80,
+            "right": 172,
+            "width": 93
+          },
+          "neckWidth": 45
         }
       ],
       [
@@ -207,7 +351,23 @@
           },
           "forehead": 36,
           "neck": 200,
-          "temple": 168
+          "temple": 168,
+          "brow": {
+            "left": 86,
+            "right": 168,
+            "width": 83
+          },
+          "cheek": {
+            "left": 54,
+            "right": 199,
+            "width": 146
+          },
+          "jaw": {
+            "left": 60,
+            "right": 193,
+            "width": 134
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -227,7 +387,23 @@
           },
           "forehead": 36,
           "neck": 193,
-          "temple": 166
+          "temple": 166,
+          "brow": {
+            "left": 87,
+            "right": 166,
+            "width": 80
+          },
+          "cheek": {
+            "left": 56,
+            "right": 197,
+            "width": 142
+          },
+          "jaw": {
+            "left": 63,
+            "right": 190,
+            "width": 128
+          },
+          "neckWidth": 44
         },
         {
           "center": {
@@ -247,7 +423,23 @@
           },
           "forehead": 37,
           "neck": 200,
-          "temple": 166
+          "temple": 166,
+          "brow": {
+            "left": 87,
+            "right": 166,
+            "width": 80
+          },
+          "cheek": {
+            "left": 56,
+            "right": 196,
+            "width": 141
+          },
+          "jaw": {
+            "left": 62,
+            "right": 190,
+            "width": 129
+          },
+          "neckWidth": 45
         }
       ],
       [
@@ -269,7 +461,23 @@
           },
           "forehead": 44,
           "neck": 201,
-          "temple": 174
+          "temple": 174,
+          "brow": {
+            "left": 78,
+            "right": 174,
+            "width": 97
+          },
+          "cheek": {
+            "left": 52,
+            "right": 201,
+            "width": 150
+          },
+          "jaw": {
+            "left": 59,
+            "right": 193,
+            "width": 135
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -289,7 +497,23 @@
           },
           "forehead": 43,
           "neck": 195,
-          "temple": 173
+          "temple": 173,
+          "brow": {
+            "left": 79,
+            "right": 173,
+            "width": 95
+          },
+          "cheek": {
+            "left": 50,
+            "right": 201,
+            "width": 152
+          },
+          "jaw": {
+            "left": 59,
+            "right": 193,
+            "width": 135
+          },
+          "neckWidth": 44
         },
         {
           "center": {
@@ -309,7 +533,23 @@
           },
           "forehead": 43,
           "neck": 204,
-          "temple": 172
+          "temple": 172,
+          "brow": {
+            "left": 78,
+            "right": 172,
+            "width": 95
+          },
+          "cheek": {
+            "left": 51,
+            "right": 200,
+            "width": 150
+          },
+          "jaw": {
+            "left": 58,
+            "right": 193,
+            "width": 136
+          },
+          "neckWidth": 45
         }
       ],
       [
@@ -331,7 +571,23 @@
           },
           "forehead": 55,
           "neck": 197,
-          "temple": 186
+          "temple": 186,
+          "brow": {
+            "left": 67,
+            "right": 186,
+            "width": 120
+          },
+          "cheek": {
+            "left": 61,
+            "right": 191,
+            "width": 131
+          },
+          "jaw": {
+            "left": 69,
+            "right": 184,
+            "width": 116
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -351,7 +607,23 @@
           },
           "forehead": 55,
           "neck": 201,
-          "temple": 187
+          "temple": 187,
+          "brow": {
+            "left": 66,
+            "right": 187,
+            "width": 122
+          },
+          "cheek": {
+            "left": 60,
+            "right": 192,
+            "width": 133
+          },
+          "jaw": {
+            "left": 68,
+            "right": 185,
+            "width": 118
+          },
+          "neckWidth": 45
         },
         {
           "center": {
@@ -371,7 +643,23 @@
           },
           "forehead": 55,
           "neck": 201,
-          "temple": 186
+          "temple": 186,
+          "brow": {
+            "left": 66,
+            "right": 186,
+            "width": 121
+          },
+          "cheek": {
+            "left": 60,
+            "right": 192,
+            "width": 133
+          },
+          "jaw": {
+            "left": 67,
+            "right": 185,
+            "width": 119
+          },
+          "neckWidth": 45
         }
       ]
     ],

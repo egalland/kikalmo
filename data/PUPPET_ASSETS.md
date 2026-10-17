@@ -28,12 +28,12 @@ Les zones source des trois rangées de pièces sont mesurées séparément : les
 
 Le rang de découverte `solveRank` est attribué côté serveur avec un compteur par manche, dans la même mise à jour atomique que les points. Les réponses simultanées ne produisent qu’un seul premier. Le départ d’un joueur ne change pas le rang des suivants. Le compteur est remis à zéro à la manche suivante. La couronne du match précédent ne déclenche pas l’expression de victoire pendant un nouveau match.
 
-Les sons d’émotes utilisent des enveloppes courtes, glissandos élastiques, filtres de formants et percussions douces avec compression de sortie. Ils restent soumis au bouton haut-parleur. Les nœuds audio sont déconnectés après lecture.
+Les sons d’émotes ont été remplacés par la synthèse PCM décrite ci-dessous. Ils restent soumis au bouton haut-parleur. Les nœuds audio sont déconnectés après lecture.
 
 
 ## Correction du raccord du col
 
-Le découpage conserve le cou dessiné dans les sprites d’origine et écarte les épaules nues pour laisser la place aux vêtements. Le vêtement passe au premier plan, 26 unités plus bas dans le canevas commun, afin de laisser visible le cou sous le menton. Les rangées source de silhouettes sont mesurées individuellement : leur hauteur réelle n’était pas uniforme, ce qui rognait le sommet du visage ovale. Le test d’atlas vérifie la présence du cou pour les 18 poses ; 36 combinaisons visage / vêtement sont contrôlées dans les rendus du composant. Les illustrations et les expressions de réussite de la version précédente sont conservées.
+Le découpage conserve le cou dessiné dans les sprites d’origine et écarte les épaules nues pour laisser la place aux vêtements. La correction initiale du col a été remplacée par le placement derrière la tête et le raccord au cou décrits ci-dessous. Les rangées source de silhouettes sont mesurées individuellement : leur hauteur réelle n’était pas uniforme, ce qui rognait le sommet du visage ovale. Le test d’atlas vérifie la présence du cou pour les 18 poses ; 36 combinaisons visage / vêtement sont contrôlées dans les rendus du composant. Les illustrations et les expressions de réussite de la version précédente sont conservées.
 
 
 ## Calibration image par image
@@ -57,3 +57,14 @@ Les tests vérifient que les repères enregistrés correspondent toujours aux pi
 Le vêtement est dessiné derrière la tête. La tête et le cou passent au premier plan, avec une limite de découpage au niveau du col pour empêcher le cou de recouvrir le vêtement jusqu’au bas du portrait. Le test `puppet-occlusion.test.mjs` élève volontairement le col d’un vêtement pour vérifier, dans les pixels du composant rendu, qu’un col trop haut ne peut pas masquer le menton.
 
 La révélation utilise maintenant `AnswerReveal` et `answer-reveal.css`. Elle dispose d’une zone d’image indépendante de l’ancien bloc à hauteur fixe ; la photo ou l’affiche est contenue intégralement dans la hauteur disponible, sans grand fond rectangulaire ajouté. Un bouton d’image ouvre une boîte de dialogue native agrandie, fermable par Échap ou son bouton de fermeture. Le chargement et l’absence d’image ont des états distincts.
+
+
+## Ajustement aux six contours — 16 octobre, seconde correction
+
+La calibration version 2 mesure trois sections contiguës du visage (front, joues, mâchoire) sans les oreilles, ainsi que la largeur du cou, pour chacune des 18 silhouettes dessinées. `puppetFit` fournit ces dimensions. La largeur des coiffures suit le front ; les lunettes suivent le haut du visage ; la fleur se fixe à la tempe ; les joues roses suivent les joues ; la moustache suit la mâchoire ; le foulard commence sous le menton. Chaque pièce possède des échelles horizontale et verticale distinctes, appliquées dans le SVG avec `preserveAspectRatio="none"`.
+
+Les épaules des vêtements suivent la largeur des joues. Le haut du col se place cinq unités au-dessus du repère de cou, derrière la tête, et le cou au premier plan s’arrête cinq unités sous le col. Cela ferme le raccord sans faire remonter le vêtement sur le menton.
+
+`render-puppet-fit-qa.mjs` produit trois planches : les six coiffures, accessoires et vêtements avec les six têtes (108 portraits). `puppet-fit.test.mjs` rasterise les 324 assemblages sur les trois poses et vérifie leurs dimensions, leur visibilité et le dégagement du foulard. Les autres tests de calibration et de superposition restent actifs. Ces rendus isolés ne vérifient pas toute la page dans un navigateur.
+
+La nouvelle banque audio est produite par `renderEmoteSamples` : dix effets PCM déterministes, avec voix à résonances, frottements bruités, pops, clochettes et rebonds élastiques. Le signal est normalisé puis doucement saturé, mis en cache dans chaque contexte audio et lu par un buffer. Trois réactions au maximum peuvent se superposer ; les sources et gains sont libérés après lecture. Le test contrôle les dix signaux à 8, 44,1 et 48 kHz (énergie, niveau maximal, silence aux extrémités, absence de biais continu), leur distinction, le cache et le nettoyage. Le caractère subjectif des sons reste à apprécier à l’écoute dans le jeu.

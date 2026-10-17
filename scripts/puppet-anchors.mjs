@@ -26,6 +26,12 @@ export async function measurePuppets(root='public/puppets'){
      for(let y=170;y<240;y++)if([0,1,2].every(dy=>Array.from({length:200},(_,i)=>on(28+i,y+dy)).filter(Boolean).length>=20&&Array.from({length:200},(_,i)=>on(28+i,y+dy)).filter(Boolean).length<60)){v.neck=y;break;}
      if(v.neck===undefined)throw Error('Neck not found in body '+r+'/'+c);
      let side=128;for(let x=128;x<230;x++)if(on(x,v.forehead+25))side=x;v.temple=side;
+     // Follow the contiguous face, excluding the separate ears and the neck.
+     const span=y=>{let left=128,right=128;while(left>0&&on(left-1,y))left--;while(right<255&&on(right+1,y))right++;return {left,right,width:right-left+1};};
+     v.brow=span(v.forehead+25);
+     v.cheek=span(154);
+     v.jaw=span(173);
+     v.neckWidth=span(Math.min(v.neck+8,239)).width;
     }
     if(name==='parts'&&r===0){for(let y=0;y<150;y++)if(Array.from({length:33},(_,i)=>on(112+i,y)).filter(Boolean).length>14)v.hairline=y;}
     if(name==='parts'&&r===2){for(let y=150;y<240;y++)if(Array.from({length:33},(_,i)=>on(112+i,y)).filter(Boolean).length>14){v.collar=y;break;}}
@@ -35,5 +41,5 @@ export async function measurePuppets(root='public/puppets'){
   }
  }
  for(const row of atlas.eyes){const width=Math.max(...row.map(v=>v.crop.width-4)),height=Math.max(...row.map(v=>v.crop.height-4));const scale=Math.min(96/width,64/height);for(const v of row)v.scale=scale;}
- return {version:1,atlas};
+ return {version:2,atlas};
 }
