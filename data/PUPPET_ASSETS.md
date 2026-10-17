@@ -34,3 +34,19 @@ Les sons d’émotes utilisent des enveloppes courtes, glissandos élastiques, f
 ## Correction du raccord du col
 
 Le découpage conserve le cou dessiné dans les sprites d’origine et écarte les épaules nues pour laisser la place aux vêtements. Le vêtement passe au premier plan, 26 unités plus bas dans le canevas commun, afin de laisser visible le cou sous le menton. Les rangées source de silhouettes sont mesurées individuellement : leur hauteur réelle n’était pas uniforme, ce qui rognait le sommet du visage ovale. Le test d’atlas vérifie la présence du cou pour les 18 poses ; 36 combinaisons visage / vêtement sont contrôlées dans les rendus du composant. Les illustrations et les expressions de réussite de la version précédente sont conservées.
+
+
+## Calibration image par image
+
+Le recalage de la planche entière ne garantissait pas celui de chaque image : le centre des yeux se déplaçait jusqu’à 9 unités et celui de certaines bouches de 6 unités sur le canevas natif de 256. `scripts/calibrate-puppets.mjs` mesure désormais les pixels opaques de chaque cellule et enregistre les repères dans `lib/puppet-registration.json`. `lib/puppet-registration.ts` place chaque dessin sur un axe commun : nez (128,128), bas des yeux à 130, centre de bouche (128,169). Le front et le cou de chaque silhouette pilotent respectivement la coiffure et le col. Les fragments parasites sous les yeux endormis sont exclus du découpage de rendu. Les images et leurs textures sont conservées.
+
+`PuppetArt` est le composant de dessin pur ; `Avatar` fournit son horloge et les poses. Le canevas carré inclut une marge au-dessus des cheveux. Les règles CSS des petites coches SVG excluent explicitement le SVG de l’avatar dans le créateur.
+
+Commandes depuis la racine :
+
+- `node scripts/calibrate-puppets.mjs` : recalculer les repères après modification d’un atlas.
+- `node --test tests/puppet*.test.mjs` : contrôler le dessin, 1 080 assemblages géométriques et 96 rendus du composant en pixels (32, 54, 120 et 270 px).
+- `node tests/puppet-alignment.test.mjs --baseline` : reproduire l’échec géométrique de l’ancien placement sans calibration.
+- `node scripts/render-puppet-qa.mjs` : produire une planche de 36 poses et une séquence animée de 28 images dans `.sites-runtime/`.
+
+Les tests vérifient que les repères enregistrés correspondent toujours aux pixels des atlas. Le contrôle des composants SVG ne remplace pas une vérification de la page complète en navigateur.
