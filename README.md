@@ -22,16 +22,17 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 Node.js **22.13 ou plus récent** est requis.
 
 ```sh
-npm ci
-npm run dev
+corepack enable
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
 Le profil local par défaut est portable. Le multijoueur utilise le serveur et une base Cloudflare D1 ; la version publiée ci-dessus constitue le déploiement de référence.
 
 ```sh
 node --test tests/*.test.mjs
-npx tsc --noEmit --incremental false
-npm run build
+pnpm exec tsc --noEmit --incremental false
+pnpm build
 ```
 
 ## Organisation
@@ -51,6 +52,6 @@ Stack : TypeScript, React, Vinext/Vite, Cloudflare Workers et D1. Détails du ru
 
 Les **28 étapes du dépôt source Sites**, jusqu’au commit `9a20512`, sont reprises dans l’historique GitHub. Les fichiers et arbres Git de chaque étape conservent leurs empreintes d’origine.
 
-L’import via l’API GitHub recrée les commits avec de nouveaux identifiants et de nouvelles métadonnées de création. Les références originales, auteurs et dates sont conservés dans [SOURCE_HISTORY.json](SOURCE_HISTORY.json) et dans les messages des commits importés. Le commit final de documentation est propre à ce dépôt GitHub.
+L’import via l’API GitHub recrée les commits avec de nouveaux identifiants et de nouvelles métadonnées de création. Les références originales, auteurs et dates sont conservés dans [SOURCE_HISTORY.json](SOURCE_HISTORY.json) et dans les messages des commits importés. Les commits de documentation ajoutés après l’import sont propres à ce dépôt GitHub.
 
 Les données de jeu en production et les secrets d’exécution ne sont pas inclus.
