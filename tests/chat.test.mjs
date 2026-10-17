@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
-const js=ts.transpileModule(readFileSync('lib/game.ts','utf8').replace("import questionBank from './question-bank.json';",'const questionBank='+readFileSync('lib/question-bank.json','utf8')+';'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
+const js=ts.transpileModule(readFileSync('lib/game.ts','utf8').replace("import questionBank from './question-bank.json';",'const questionBank='+readFileSync('lib/question-bank.json','utf8')+';').replace("import questionClues from './question-clues.json';",'const questionClues='+readFileSync('lib/question-clues.json','utf8')+';').replace("import clueSources from './question-clue-sources.json';",'const clueSources='+readFileSync('lib/question-clue-sources.json','utf8')+';'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
 const {fresh,begin,advance,submit,view,communicate,matchAnswer,QUESTIONS,distance}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
 const q=(answer)=>({answer,theme:'test',wiki:'test',hint:'test'});
 assert.equal(matchAnswer('coeur',q('Cœur')),'correct');

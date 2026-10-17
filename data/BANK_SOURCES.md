@@ -50,3 +50,16 @@ Références de consultation pour les familles de termes :
 Les nouveaux indices sont des formulations éditoriales courtes. Les références d’article des ajouts servent à rechercher une illustration disponible à la révélation ; elles ne constituent pas un audit exhaustif des illustrations. Une illustration absente affiche un état sans image. Les expressions restent volontairement sans illustration afin de ne pas leur associer une image générique trompeuse.
 
 Les tests vérifient le minimum de 200 réponses distinctes par salon, les compteurs affichés, la compatibilité des 2 000 entrées initiales, la validité des chaînes du jeu et l’isolation des nouveaux salons en base de données.
+
+## Refonte des indices — 16 octobre 2026
+
+Les indices de manche sont désormais séparés de la banque des réponses : `lib/question-clues.json` contient une entrée pour chacune des 4 382 réponses, indexée par catégorie et réponse normalisée. La banque et l’ordre des questions restent identiques, y compris pour les parties en cours.
+
+- `data/clue-overrides.txt` : rédaction éditoriale des sens figurés des 236 expressions, indices de personnages, recettes, usages d’objets, intrigues et corrections d’homonymes. Les sections désignent la catégorie ; la dernière correction d’une même clé prévaut.
+- `data/clue-introductions.json` : instantané des introductions françaises obtenues auprès de l’API Wikipédia le 16 octobre 2026, avec normalisations et redirections. Les textes de Wikipédia relèvent de CC BY-SA 4.0 ; les historiques des articles identifient leurs auteurs.
+- `scripts/build-clues.py` : construit les formulations courtes depuis la rédaction éditoriale et cet instantané ; rejette les homonymies, les extraits hors catégorie et les indices contenant la réponse ou un alias. Les formulations éditoriales priment sur les textes extraits. Aucun appel externe n’est nécessaire pendant une manche.
+- `data/clue-sources.json` : provenance de chaque formulation, lien vers la page source et attribution. `lib/question-clue-sources.json` ne contient que les liens nécessaires à l’affichage des crédits.
+
+Les détails de lieu, d’usage, d’ingrédients, d’intrigue ou d’apparence sont privilégiés. Les descriptions sont limitées à 190 caractères. Aucune formulation n’est répétée plus de deux fois au sein d’un même salon. Les joueurs voient toujours l’indice uniquement lorsqu’il reste dix secondes ; la réponse et le lien source, dont le titre pourrait trahir la solution, ne sont envoyés qu’à la révélation. Les crédits Wikipédia et CC BY-SA apparaissent alors sous le texte concerné.
+
+Les tests parcourent toute la banque, vérifient la couverture, la longueur, les doublons, l’absence de réponse et d’alias, des exemples sémantiques représentatifs, ainsi que le seuil de dix secondes et la non-divulgation des liens sources. Les introductions externes ont été reformulées et filtrées automatiquement, avec des corrections éditoriales ; elles ne constituent pas une vérification humaine indépendante de chaque fait.

@@ -2,7 +2,7 @@
 import {useEffect,useRef} from 'react';
 import {Expand,X} from 'lucide-react';
 type Art={url?:string|null;page?:string|null};
-export default function AnswerReveal({question,label,art,onImageError}:{question?:{answer?:string;hint?:string;words:number;theme:string};label?:string;art:Art|null;onImageError:()=>void}){
+export default function AnswerReveal({question,label,art,onImageError}:{question?:{answer?:string;hint?:string;hintSource?:string;words:number;theme:string};label?:string;art:Art|null;onImageError:()=>void}){
  const dialog=useRef<HTMLDialogElement>(null);
  const hasImage=!!art?.url;
  const loading=art===null&&question?.theme!=='expressions';
@@ -17,6 +17,7 @@ export default function AnswerReveal({question,label,art,onImageError}:{question
     </button>:<div className="answer-media-loading" role="status"><span className="image-loading"/><span>Chargement de l’illustration…</span></div>}
    </div>}
    <div className="answer-reveal-copy"><span className="eyebrow">C’ÉTAIT…</span><h2>{question?.answer}</h2><p>{question?.hint}</p>
+    {question?.hintSource&&<small className="clue-credit">Indice adapté de <a href={question.hintSource} target="_blank" rel="noreferrer">Wikipédia ↗</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA</a></small>}
     {hasImage&&art?.page&&<a className="image-credit" href={art.page} target="_blank" rel="noreferrer">Image : source et crédits ↗</a>}
     {!hasImage&&!loading&&question?.theme!=='expressions'&&<small className="answer-no-image">Aucune illustration disponible pour cette réponse.</small>}
    </div>

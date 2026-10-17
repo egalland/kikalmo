@@ -22,3 +22,5 @@
 .answer-image-close{position:absolute;top:7px;right:7px;width:30px;height:30px;border:1px solid #d4c49f;border-radius:50%;background:#fff9ee;display:grid;place-items:center}
 @media(max-width:1150px){.answer-reveal-layout{gap:16px}.answer-reveal-copy h2{font-size:28px}}
 @media(max-width:650px){.answer-reveal{gap:8px;padding:8px 0}.answer-reveal-layout{grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:12px}.answer-reveal-copy h2{font-size:22px;line-height:1.12;margin:8px 0}.answer-reveal-copy p{font-size:11px;line-height:1.45}.answer-reveal-copy .image-credit{font-size:9px;margin-top:8px}.answer-media-expand{font-size:8px;gap:4px;padding:4px;bottom:3px;right:3px}.answer-text-only{grid-template-columns:minmax(0,1fr)}}
+
+.clue-credit{display:block;font-size:9px;line-height:1.4;color:#88795d;margin:7px 0}.clue-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
