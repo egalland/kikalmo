@@ -1,3 +1,4 @@
+import type {Avatar} from './profile';
 export const normalize=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/œ/g,'oe').replace(/æ/g,'ae').replace(/[^a-z0-9]/g,'');
 export function mask(s:string){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/œ/gi,'oe').replace(/æ/gi,'ae').replace(/[aeiouy]/gi,'').toUpperCase();}
 export type Question={answer:string;theme:string;wiki:string;hint:string;aliases?:string[]};
@@ -8,7 +9,7 @@ const groups:Record<string,[string,string,string][]>= {
  animals:[['Hippopotame','Hippopotame','Un poids lourd semi-aquatique.'],['Ornithorynque','Ornithorynque','Un mammifère au bec étonnant.'],['Caméléon','Caméléon','Un expert de la couleur.'],['Pangolin','Pangolin','Un mammifère à écailles.'],['Papillon','Papillon','Après la chenille.'],['Rhinocéros','Rhinocéros','Une corne ou deux.'],['Crocodile','Crocodile','Un reptile au sourire redoutable.'],['Écureuil','Écureuil','Un acrobate amateur de noisettes.'],['Flamant rose','Flamant_rose','Un échassier tout en couleur.'],['Hérisson','Hérisson','Une petite boule de piquants.'],['Kangourou','Kangourou','Un marsupial qui fait des bonds.'],['Chimpanzé','Chimpanzé','Un grand singe très habile.'],['Salamandre','Salamandre','Un amphibien souvent tacheté.'],['Girafe','Girafe','Une vue imprenable sur la savane.'],['Pieuvre','Pieuvre','Huit bras et beaucoup d’intelligence.']]
 };
 export const QUESTIONS:Question[]=Object.entries(groups).flatMap(([theme,items])=>items.map(([answer,wiki,hint])=>({answer,wiki,hint,theme})));
-export type Player={id:string;name:string;score:number;seen:number;solved:boolean;gain:number;tries:number};
+export type Player={id:string;name:string;avatar?:Avatar;score:number;seen:number;solved:boolean;gain:number;tries:number};
 export type State={players:Player[];phase:'empty'|'countdown'|'guess'|'reveal'|'podium';deadline:number;started:number;round:number;deck:number[];game:string};
 export const fresh=():State=>({players:[],phase:'empty',deadline:0,started:0,round:0,deck:[],game:''});
 export function begin(s:State,room:string,now:number){s.deck=QUESTIONS.map((q,i)=>({q,i})).filter(x=>room==='general'||x.q.theme===room).map(x=>x.i);for(let i=s.deck.length-1;i>0;i--){const j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[s.deck[i],s.deck[j]]=[s.deck[j],s.deck[i]];}s.deck=s.deck.slice(0,10);s.game=crypto.randomUUID();s.round=0;s.phase='countdown';s.deadline=now+5000;s.players.forEach(p=>{p.score=0;p.solved=false;p.gain=0;p.tries=0;});}
