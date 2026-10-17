@@ -1,0 +1,24 @@
+/* Isolated reveal layout: none of the former .puzzle / .answer-art rules apply. */
+.game-layout>.arena.revealing{display:flex;flex-direction:column;min-height:0}
+.answer-reveal{flex:1 1 0;min-height:0;width:100%;display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:12px 0;overflow:hidden}
+.answer-reveal>.category-chip{align-self:center;flex:none}
+.answer-reveal-layout{flex:1 1 0;min-height:0;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:24px;align-items:stretch}
+.answer-media-slot{position:relative;min-height:0;min-width:0;height:100%}
+.answer-media-button{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;border-radius:12px;background:transparent;display:block;cursor:zoom-in}
+.answer-media-button>img{position:absolute;inset:0;display:block;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;object-position:center}
+.answer-media-expand{position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:5px;padding:6px 9px;background:#fff9eeeb;border:1px solid #d4c49f;border-radius:8px;color:#675c42;font-size:10px;box-shadow:0 2px 8px #48391d15}
+.answer-media-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column;color:#82745b;font-size:11px}
+.answer-reveal-copy{align-self:center;min-height:0;max-height:100%;min-width:0;overflow:auto;overscroll-behavior:contain;padding:8px 2px;text-align:left}
+.answer-reveal-copy h2{color:#3d5941;font-size:clamp(24px,2.6vw,40px);line-height:1.1;letter-spacing:-.7px;overflow-wrap:anywhere;font-weight:700;margin:14px 0}
+.answer-reveal-copy p{color:#756b51;font-size:13px;line-height:1.6}
+.answer-reveal-copy .image-credit{display:inline-block;font-size:10px;line-height:1.5;margin-top:12px;text-decoration:underline}
+.answer-text-only{grid-template-columns:minmax(0,1fr)}
+.answer-text-only .answer-reveal-copy{text-align:center;max-width:700px;justify-self:center}
+.answer-no-image{display:block;font-size:10px;color:#8d826c;margin-top:14px}
+.answer-image-dialog{position:fixed;inset:0;margin:auto;padding:38px 20px 16px;border:1px solid #d4c49f;border-radius:16px;background:#fff9ee;color:#3d5941;max-width:94vw;max-height:94dvh;overflow:auto;box-shadow:0 15px 80px #0006}
+.answer-image-dialog::backdrop{background:#1a211bba;backdrop-filter:blur(5px)}
+.answer-image-dialog>img{display:block;width:auto;height:auto;max-width:min(86vw,1200px);max-height:78dvh;object-fit:contain;margin:auto}
+.answer-image-dialog>p{text-align:center;font-weight:700;font-size:14px;margin-top:12px}
+.answer-image-close{position:absolute;top:7px;right:7px;width:30px;height:30px;border:1px solid #d4c49f;border-radius:50%;background:#fff9ee;display:grid;place-items:center}
+@media(max-width:1150px){.answer-reveal-layout{gap:16px}.answer-reveal-copy h2{font-size:28px}}
+@media(max-width:650px){.answer-reveal{gap:8px;padding:8px 0}.answer-reveal-layout{grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:12px}.answer-reveal-copy h2{font-size:22px;line-height:1.12;margin:8px 0}.answer-reveal-copy p{font-size:11px;line-height:1.45}.answer-reveal-copy .image-credit{font-size:9px;margin-top:8px}.answer-media-expand{font-size:8px;gap:4px;padding:4px;bottom:3px;right:3px}.answer-text-only{grid-template-columns:minmax(0,1fr)}}

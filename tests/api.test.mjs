@@ -37,3 +37,11 @@ const stale=await post('chat',a.cookie,{message:'stale',game:start.game,round:99
 const emote=await post('emote',third.cookie,{message:'🔥',game:start.game,round:start.round});assert.equal(emote.body.result,'sent');
 const observed=(await post('sync',a.cookie)).body;assert.ok(observed.players.some(p=>p.reaction?.text==='🔥'));assert.ok(!observed.messages.some(m=>m.kind==='emote'));
 console.log('Passed: SQLite persistence, separate sessions, concurrent guesses, CAS scoring, early reveal, refresh recovery, leave, idle rooms and restart; profile edits preserve score and propagate avatar, blank names refused.');
+
+// Each newly listed room creates durable state and serves its own deck.
+for(const room of ['videogames','series','food','music','characters','expressions','objects','myths']){
+ const joined=await post('join','',{room,name:'Test salon'});assert.equal(joined.status,200,room);now+=5000;
+ const playing=await post('sync',joined.cookie,{room});assert.equal(playing.body.phase,'guess',room);assert.equal(playing.body.question.theme,room);assert.equal(playing.body.question.answer,undefined);
+ await post('leave',joined.cookie,{room});
+}
+console.log('Passed: all eight new room IDs persist independently and serve the correct category.');

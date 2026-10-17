@@ -1,1 +1,15 @@
-export const THEMES = [{id:'general',name:'Le grand mélange',label:'Généraliste',icon:'✳',description:'Un peu de tout. Beaucoup de déclics.',color:'#657c62'},{id:'cinema',name:'Salle obscure',label:'Cinéma',icon:'◉',description:'Les titres cultes passent au révélateur.',color:'#8a789e'},{id:'people',name:'Qui est-ce ?',label:'Personnalités',icon:'☺',description:'Des noms connus, méconnaissables.',color:'#b77f67'},{id:'world',name:'Autour du monde',label:'Lieux',icon:'◎',description:'Des destinations sans les voyelles.',color:'#5d8b8b'},{id:'animals',name:'Drôles de bêtes',label:'Animaux',icon:'♧',description:'Le bestiaire perd son latin.',color:'#a48a4c'}];
+export const THEMES = [
+ {id:'general',name:'Le grand mélange',label:'Généraliste',icon:'✳',description:'Tous les univers réunis, une surprise à chaque manche.',color:'#657c62'},
+ {id:'cinema',name:'Salle obscure',label:'Cinéma',icon:'◉',description:'Les titres cultes passent au révélateur.',color:'#8a789e'},
+ {id:'people',name:'Qui est-ce ?',label:'Personnalités',icon:'☺',description:'Des noms connus, méconnaissables.',color:'#b77f67'},
+ {id:'world',name:'Autour du monde',label:'Voyage & lieux',icon:'◎',description:'Des destinations sans les voyelles.',color:'#5d8b8b'},
+ {id:'animals',name:'Drôles de bêtes',label:'Animaux',icon:'♧',description:'Le bestiaire perd son latin.',color:'#a48a4c'},
+ {id:'videogames',name:'À vos manettes',label:'Jeux vidéo',icon:'🎮',description:'Des consoles d’hier aux aventures d’aujourd’hui.',color:'#8070a6'},
+ {id:'series',name:'Encore un épisode',label:'Séries & dessins animés',icon:'📺',description:'Séries cultes, dessins animés et anime.',color:'#b67558'},
+ {id:'food',name:'À table !',label:'Cuisine & gourmandises',icon:'🍕',description:'Des plats et des douceurs à retrouver.',color:'#b18543'},
+ {id:'music',name:'Sur la bonne piste',label:'Musique',icon:'🎵',description:'Artistes, groupes et noms qui résonnent.',color:'#9a6b83'},
+ {id:'characters',name:'Têtes d’affiche',label:'Personnages cultes',icon:'🦸',description:'Les héros et les méchants changent de visage.',color:'#637e9a'},
+ {id:'expressions',name:'Façon de parler',label:'Expressions françaises',icon:'💬',description:'Expressions imagées et proverbes à reconstituer.',color:'#9c8756'},
+ {id:'objects',name:'Sous votre nez',label:'Objets du quotidien',icon:'🧦',description:'Ils vous entourent. Saurez-vous les reconnaître ?',color:'#6b8b7a'},
+ {id:'myths',name:'Il était une légende',label:'Mythes & légendes',icon:'🐉',description:'Divinités, héros et créatures des récits anciens.',color:'#8c7692'},
+];

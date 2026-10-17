@@ -2,7 +2,7 @@ import questionBank from './question-bank.json';
 import type {Avatar} from './profile';
 export const normalize=(s:string)=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/œ/g,'oe').replace(/æ/g,'ae').replace(/[^a-z0-9]/g,'');
 export function mask(s:string){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/œ/gi,'oe').replace(/æ/gi,'ae').replace(/[aeiouy]/gi,'').toUpperCase();}
-export type Question={answer:string;theme:string;wiki:string;hint:string;aliases?:string[];wikiEn?:string;illustration?:{url:string;page:string;credit:string}};
+export type Question={answer:string;theme:string;wiki:string;hint:string;aliases?:string[];wikiEn?:string;illustration?:{url:string|null;page:string|null;credit:string}};
 export const QUESTIONS:Question[]=questionBank;
 export type Player={id:string;name:string;avatar?:Avatar;score:number;seen:number;solved:boolean;solveRank?:number;gain:number;tries:number;reaction?:{id:string;text:string;at:number}};
 export const EMOTES=['👏','😂','🤔','🔥','🎉','❤️','👍','👎','🦆','🐶'] as const;

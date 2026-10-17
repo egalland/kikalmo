@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import ts from 'typescript';
+import {readFileSync} from 'node:fs';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+let source=ts.transpileModule(readFileSync('app/components/AnswerReveal.tsx','utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
+source=source.replaceAll('"react/jsx-runtime"',JSON.stringify(import.meta.resolve('react/jsx-runtime'))).replace("'react'",JSON.stringify(import.meta.resolve('react'))).replace("'lucide-react'",JSON.stringify(import.meta.resolve('lucide-react')));
+const {default:AnswerReveal}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const render=props=>renderToStaticMarkup(createElement(AnswerReveal,{question:{answer:'X-Men: Days of Future Past',hint:'Un film',words:5,theme:'cinema'},label:'Cinéma',onImageError(){},...props}));
+const image=render({art:{url:'https://upload.wikimedia.org/poster.jpg',page:'https://fr.wikipedia.org/wiki/film'}});
+assert.match(image,/answer-media-slot/);assert.match(image,/Agrandir l/);assert.match(image,/<dialog/);assert.match(image,/<form method="dialog"/);assert.match(image,/source et crédits/);assert.doesNotMatch(image,/class="answer-art"|class="reveal-content"|class="puzzle"/,'Reveal must not inherit the obsolete 185px illustration box');
+const loading=render({art:null});assert.match(loading,/Chargement/);assert.doesNotMatch(loading,/<img/);
+const missing=render({art:{url:null}});assert.match(missing,/answer-text-only/);assert.doesNotMatch(missing,/answer-media-slot|<dialog/);
+const expression=render({question:{answer:'Poser un lapin',words:3,theme:'expressions'},art:null});assert.match(expression,/answer-text-only/);assert.doesNotMatch(expression,/Chargement|Aucune illustration/);
+console.log('Passed: independent image stage, native accessible zoom dialog, credits, loading, missing image and text-only answers.');

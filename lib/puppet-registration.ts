@@ -23,3 +23,9 @@ export function puppetPlacement(name:string,col:number,row:number,shape:number,p
  }
  return {x,y,scale,crop:a.crop};
 }
+
+/** Top of the collar, also the bottom clipping boundary of the foreground neck. */
+export function puppetCollarY(shape:number,pose:{body:number}){
+ const head=atlas.body[shape][pose.body]!;
+ return head.neck!+128-head.nose!.y+6;
+}

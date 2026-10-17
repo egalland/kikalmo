@@ -50,3 +50,10 @@ Commandes depuis la racine :
 - `node scripts/render-puppet-qa.mjs` : produire une planche de 36 poses et une séquence animée de 28 images dans `.sites-runtime/`.
 
 Les tests vérifient que les repères enregistrés correspondent toujours aux pixels des atlas. Le contrôle des composants SVG ne remplace pas une vérification de la page complète en navigateur.
+
+
+## Superposition du vêtement — 16 octobre
+
+Le vêtement est dessiné derrière la tête. La tête et le cou passent au premier plan, avec une limite de découpage au niveau du col pour empêcher le cou de recouvrir le vêtement jusqu’au bas du portrait. Le test `puppet-occlusion.test.mjs` élève volontairement le col d’un vêtement pour vérifier, dans les pixels du composant rendu, qu’un col trop haut ne peut pas masquer le menton.
+
+La révélation utilise maintenant `AnswerReveal` et `answer-reveal.css`. Elle dispose d’une zone d’image indépendante de l’ancien bloc à hauteur fixe ; la photo ou l’affiche est contenue intégralement dans la hauteur disponible, sans grand fond rectangulaire ajouté. Un bouton d’image ouvre une boîte de dialogue native agrandie, fermable par Échap ou son bouton de fermeture. Le chargement et l’absence d’image ont des états distincts.
