@@ -11,3 +11,5 @@ const storage=new Map();const expected={version:1,name:randomName(),avatar:rando
 console.log('Passed: all avatar parts, independent randomizers, guaranteed change, colors, pseudo limits, malformed profiles, round-trip serialization and restored profile.');
 
 assert.equal(migrated.avatar.nose,1,'Old profiles retain a classic nose');assert.equal(cleanAvatar({nose:0}).nose,0);assert.equal(cleanAvatar({nose:999}).nose,1);assert.ok(PARTS.find(p=>p.key==='nose').options.length===7);
+
+assert.equal(cleanAvatar({hair:7}).hair,7);assert.equal(parseProfile(JSON.stringify({version:1,name:'Mèche',avatar:{...DEFAULT_AVATAR,hair:7}})).avatar.hair,7);

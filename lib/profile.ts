@@ -2,7 +2,7 @@ export const PROFILE_KEY='sv-profile-v1';
 export const COLORS=['#d8fc70','#c8b9ff','#ffae92','#8fe1dd','#f8d779','#ff8eb2','#80baff','#f2ede0','#bfa1ff','#b5dd9b'];
 export const PARTS=[
  {key:'shape',label:'Visage',options:['Tout rond','Carré doux','Ovale','Petite poire','Nuage','Grand menton']},
- {key:'hair',label:'Coiffure',options:['Sans cheveux','Mèche rousse','Laine pétrole','Banane dorée','Boucles auburn','Carré de laine','Bonnet marine']},
+ {key:'hair',label:'Coiffure',options:['Sans cheveux','Mèche rousse','Laine pétrole','Banane dorée','Boucles auburn','Carré de laine','Bonnet marine','Mèche Titeuf']},
  {key:'eyes',label:'Yeux',options:['Grand ouverts','Malicieux','Émerveillés','Petites perles','Endormis','Rieurs']},
  {key:'nose',label:'Nez',options:['Sans nez','Classique ovale','Petit rond','Bouton large','Petite poire','Allongé','Retroussé']},
  {key:'mouth',label:'Bouche',options:['Sourire','Grand rire','Surprise','Petit sourire','Grimace','La langue']},

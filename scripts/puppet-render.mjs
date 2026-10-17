@@ -15,7 +15,7 @@ const {PuppetArt,default:Avatar}=await import(uri(source));
 export {Avatar};
 export const {puppetPose}=await import(puppet);
 const assets={};for(const name of ['body','eyes','mouth','parts'])assets[name]=(await sharp('public/puppets/'+name+'.webp').png().toBuffer()).toString('base64');
-const v2={};for(const name of ['heads','outfits','noses','neck','hair'])v2[name]=(await sharp('public/puppets/v2/'+name+'.webp').png().toBuffer()).toString('base64');
+const v2={};for(const name of ['heads','outfits','noses','neck','hair','tuft'])v2[name]=(await sharp('public/puppets/v2/'+name+'.webp').png().toBuffer()).toString('base64');
 export function renderPuppet(value,frame,id='qa',expression='idle',size=256){
  let svg=renderToStaticMarkup(createElement(PuppetArt,{value,frame,id,expression,label:'Avatar de contrôle'}));
  return svg.replaceAll(/href="\/puppets\/v2\/([a-z]+)\.webp"/g,(_,name)=>'href="data:image/png;base64,'+v2[name]+'"').replace('width="256" height="256"',`width="${size}" height="${size}"`).replaceAll(/href="\/puppets\/([a-z]+)\.webp\?v=\d+"/g,(_,name)=>'href="data:image/png;base64,'+assets[name]+'"');
