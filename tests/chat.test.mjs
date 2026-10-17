@@ -22,12 +22,16 @@ assert.ok(view(s,'bob',now).messages.some(m=>m.text==='une proposition publique'
 assert.equal(view(s,'bob',now).messages.at(-1).result,'incorrect');
 assert.equal(communicate(s,'carol','message interdit',now+5200),'wait');
 assert.equal(submit(s,'alice',answer,now+5300),'correct');
+assert.equal(view(s,'carol',now).messages.at(-1).solveRank,1);
+assert.match(view(s,'carol',now).messages.at(-1).text,/en premier/);
 assert.equal(communicate(s,'alice','secret: '+answer,now+5400),'sent');
 assert.equal(communicate(s,'alice','trop rapide',now+5500),'sent');
 assert.ok(!JSON.stringify(view(s,'bob',now)).includes('secret:'));
 assert.ok(JSON.stringify(view(s,'alice',now)).includes('secret:'));
 assert.ok(!JSON.stringify(view(s,'bob',now)).includes(answer));
 assert.equal(submit(s,'bob',answer,now+5600),'correct');
+assert.equal(view(s,'carol',now).messages.at(-1).solveRank,2);
+assert.doesNotMatch(view(s,'carol',now).messages.at(-1).text,/en premier/);
 assert.ok(JSON.stringify(view(s,'bob',now)).includes('secret:'));
 assert.ok(!JSON.stringify(view(s,'carol',now)).includes('secret:'));
 assert.equal(communicate(s,'carol','👏',now+5700,true),'sent');
