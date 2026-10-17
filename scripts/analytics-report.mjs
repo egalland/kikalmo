@@ -1,6 +1,11 @@
 // Input: complete native Sites table exports, NOT a public HTTP endpoint.
 // node scripts/analytics-report.mjs export.json [YYYY-MM-DD] [YYYY-MM-DD] [room]
 import {readFileSync} from 'node:fs';
+export function dailyReport(rows,from='0000-00-00',to='9999-99-99'){
+ const records=(rows||[]).filter(r=>r.day>=from&&r.day<=to);
+ const summarize=items=>{const played=items.filter(r=>r.tries>0),solved=played.filter(r=>r.solved_at!=null);const values=solved.map(r=>r.tries).sort((a,b)=>a-b);const errors=items.map(r=>JSON.parse(r.state).guesses.filter(g=>g.result!=='correct').length);const guesses=items.flatMap(r=>JSON.parse(r.state).guesses);return {participants:items.length,playersWhoTried:played.length,solved:solved.length,inProgress:played.length-solved.length,successRate:played.length?solved.length/played.length:null,guesses:guesses.length,incorrect:guesses.filter(g=>g.result!=='correct').length,close:guesses.filter(g=>g.result==='close').length,firstTry:solved.filter(r=>r.tries===1).length,solvedAttempts:{mean:values.length?values.reduce((a,b)=>a+b,0)/values.length:null,median:values.length?(values[Math.floor((values.length-1)/2)]+values[Math.floor(values.length/2)])/2:null,best:values[0]??null},hintUnlocks:{first:errors.filter(n=>n>=3).length,second:errors.filter(n=>n>=6).length,vowel:errors.filter(n=>n>=9).length},solveHourParis:Object.fromEntries(Array.from({length:24},(_,h)=>[String(h).padStart(2,'0'),solved.filter(r=>Number(new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',hourCycle:'h23'}).format(r.solved_at))===h).length]))};};
+ return {uniqueBrowsers:new Set(records.map(r=>r.player)).size,...summarize(records),days:Object.fromEntries([...new Set(records.map(r=>r.day))].sort().map(day=>[day,summarize(records.filter(r=>r.day===day))])),caveats:['Participants = browser profiles opening the daily challenge; playersWhoTried excludes zero attempts.','Multiple days count participations; uniqueBrowsers is deduplicated across days.','In-progress puzzles remain retryable until Paris midnight; they are not confirmed abandonments.','No stopwatch or active-time metric; timestamps preserve when attempts and solves occurred.']};
+}
 export function report(data,from='0000-00-00',to='9999-99-99',room){
  const inRange=day=>day>=from&&day<=to;
  const commits=data.analytics_commits||[];
@@ -29,7 +34,7 @@ export function report(data,from='0000-00-00',to='9999-99-99',room){
  }));
  const nextDay=day=>{const d=new Date(day+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+1);return d.toISOString().slice(0,10);};
  const retention=group(days,d=>d.day,rows=>{const ids=new Set(rows.map(r=>r.player));const tomorrow=(data.analytics_player_days||[]).filter(d=>d.day===nextDay(rows[0].day)&&(!room||d.room===room));return {players:ids.size,returnedNextDay:new Set(tomorrow.filter(d=>ids.has(d.player)).map(d=>d.player)).size};});
- return {period:{from,to,room:room||'all',timezone:'Europe/Paris'},trackingSince:commits.length?new Date(Math.min(...commits.map(c=>c.at))).toISOString():null,
+ return {dailyWord:room?undefined:dailyReport(data.daily_players,from,to),period:{from,to,room:room||'all',timezone:'Europe/Paris'},trackingSince:commits.length?new Date(Math.min(...commits.map(c=>c.at))).toISOString():null,
  uniquePlayers:unique(days),dailyPlayers,counts,
  solveMs:summary(values('solve_ms')),firstSolveMs:summary(values('first_solve_ms')),
  matchDurationMs:summary(values('match_duration_ms')),roundDurationMs:summary(values('round_duration_ms')),
