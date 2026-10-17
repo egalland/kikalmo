@@ -1,0 +1,259 @@
+{
+  "source": "Sites",
+  "source_head": "9a20512a68c636cca69df0eda5856b2e9ddae5e6",
+  "note": "Commits recreated through GitHub API; original blob and tree hashes preserved.",
+  "commits": [
+    {
+      "source_sha": "f4bc2b2f733377705a6878b741896e5d5e2ee236",
+      "github_sha": "937da6133555d5d23d88bab80901a6ad4253d354",
+      "tree_sha": "0a03f29263c076603edc1126e6fc757c12cc7665",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T09:11:40+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "990bba5fbcc4dd8b693db38b0345d7d6d261ebfa",
+      "github_sha": "c13de980d8f4710cbb3547468ef26e44a8d1aebf",
+      "tree_sha": "d000093cfca59063de2f6d77b74f532f4f522875",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T09:23:44+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "9b20caf0e393ed96fbc61ff2f336139022393e97",
+      "github_sha": "936f6096a17316917312f6b805e7ee97e79dbfa6",
+      "tree_sha": "89b766cd601dcfb0082ac80f61eefde50f9139ad",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T09:24:29+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "e827b085d84f0c1daa71fa5744583ed75d1945c9",
+      "github_sha": "d252eaa7363013aa3cba3b4b018a34bc14559d4b",
+      "tree_sha": "dddd8ed49be6c11355cf86b57b3476f8442fab0e",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T09:51:37+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "60ccad7864d2e666116f16e134c9483bbcacfb68",
+      "github_sha": "2af041bf13161be7b1ba49d81e078c20e691f383",
+      "tree_sha": "ca08100e7e2e74067dfbe6c544c2b2d6848fc49a",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T16:33:45+02:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "5ff78265dea90fa5d6b602a72fe152fb9caa6bca",
+      "github_sha": "dde67b7a1543b635bc41c36fbac2ad42ac2556ae",
+      "tree_sha": "c09419d23f97aff29b561eab44484f806afe6fa5",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T17:23:50+02:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "b994bdce9f2765aeb436337232d18c8ab627716e",
+      "github_sha": "77be08651444c014a963d805d36867ca8be45d6f",
+      "tree_sha": "0da44a9abd8982bd19f9349f9a0781c0392aebff",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T19:26:46+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "859c2e41585be3240ad6b219cb68d25969f37fbe",
+      "github_sha": "e36f9a646856a14ed65d1cb8b41d06ce4a55e702",
+      "tree_sha": "2b5663ebf4c115eec4b0d13d582e5f58d761a5af",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T19:35:44+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "6bfda44d73b13623d56ff99833ea745786cd03d4",
+      "github_sha": "e15469d46f0070fd453b9bbe2425312d927764d1",
+      "tree_sha": "92b4933a671594e5494a02cf13181433f9acfa92",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T21:02:32+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "5b77d6559da4dca60d22173fd64d2309a50b627c",
+      "github_sha": "ed01da6e6ec8093af0a5513af6cf0f4e7843c4e8",
+      "tree_sha": "a0ae4847de0b5935a0a7b0da16a51c57a67ab8d7",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T21:30:33+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "07110513cf9c4a9b24f113a4e088e1645ba8930a",
+      "github_sha": "0f33c3017112ae71357facd1f4de22ec6fa21a46",
+      "tree_sha": "76052b21fd6b81d97e6fb858b83dc947c864bf93",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T21:45:18+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "df09a649aa3c438ddd586f966f2ed7ffe474255a",
+      "github_sha": "008d6b6b20e4d7b55d837e241f770eaa1ffe288f",
+      "tree_sha": "40241641cdd29c029653cd7d109efeb8c2e0e3c3",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T22:11:22+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "9b7a39b4af785da76e8b80814e762c74722bc631",
+      "github_sha": "95274d550d5291234e5ac0d1cc41e245b3a3802b",
+      "tree_sha": "92dc8929efcba82f0acee5cafed276f9628f80d3",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T22:21:36+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "ee5e920336f40306cd65adec27fc6e4248468e4e",
+      "github_sha": "28a5ce7697dd911f004e8b0b806a7383dda93eac",
+      "tree_sha": "ca592159d86f7b31adf249db12d26db11c6aa3fc",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-15T22:38:23+03:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "151dc176f06a5ded4f695226fba5ecfdaff0f0f9",
+      "github_sha": "990ff7dc1d1903b275d8dda893f0acfdcd2e09e4",
+      "tree_sha": "fdc602068ac7184c31325f963e6c5716e7cb7376",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-16T19:56:37+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "1977f0655ff84b85ebf25029f6c2aeb220d28885",
+      "github_sha": "8439ea07414abea4def4d24d64b3e65e7a460c45",
+      "tree_sha": "bf07dd928dcec62067b0e2ddd599c523df2036ec",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-16T20:14:30+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "b5b38896637940e3ae57492b2e3dd9469d8771b0",
+      "github_sha": "9069fc058ec47029dcc8e81c6862169e98ff2a78",
+      "tree_sha": "2cb0d6924da06782d7ba421d2783ba002fb0cc97",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-16T20:27:54+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "9e2906d3f8f520a4357c8ac2f6036dcebdffe5eb",
+      "github_sha": "2404f85c2ff2918196abd214e9217d8573a5da44",
+      "tree_sha": "c3ee71676704d4c3c085d021dd65f5843920bd8f",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-16T21:05:31+04:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "0d2dbea3003b19e30c6bc93559eaaf4962d95427",
+      "github_sha": "96e0895b65222bf74ff7f6643d58d1b30f949829",
+      "tree_sha": "f9efd4b10a8941299443f5edbe0cf750ba097840",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-16T22:59:40+02:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "ef5ccb46975740ebfcf2b110c95d30740c46c9a7",
+      "github_sha": "4fdb4a03822ba89f53ebc1e8ee7e69658c696014",
+      "tree_sha": "9543e8e9b3ae6f0bb5ca108ea3bd0bab143ac1fd",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-16T23:04:57+02:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "fec0fae482f414f9afbecd2ce1c02598da753b0e",
+      "github_sha": "121e2b80300dd9989f1a170d413449ec0cf6adb6",
+      "tree_sha": "6a067a514334fc57b1e180b3851684bf83790486",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-16T23:08:01+02:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "dea422a9a0846bdbcc2cc9b82502164ca4b7e9e7",
+      "github_sha": "8e37edc52593a81d28036cae7efe6e1d9a61a383",
+      "tree_sha": "2452f1cc80c69c3f7d21b064ad52f434d2a20065",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T10:07:20Z",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "15a91a001397c0d05acde1b98970c4033f608cd1",
+      "github_sha": "e8694e28fafbd1a6d4b5ab319f9e0e6dd5e88ac1",
+      "tree_sha": "d635dbbb647bf119a6e6a8d92b8467432671143a",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T10:14:54Z",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "f5ddc412818381365dfc63cdf7c228f62a583cdd",
+      "github_sha": "312f5d5a54e1d346fa1f32906ba3b0fea61139bc",
+      "tree_sha": "dc816f61f373a02761025d69cb2eac2b3aeac63e",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T11:16:56Z",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "3ca620b206e2df8560b2e5556e8be99a3df53a82",
+      "github_sha": "223c84df4412786ce1b17faf37ea796e697bff41",
+      "tree_sha": "ce2c869428dab836e2b0b00f9253486cc4262812",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T13:45:45Z",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "87116396cd71cf78d2b05c16cc3b4d96cc841540",
+      "github_sha": "2a02d9671815008d34e2e261c2acd6d0b5850540",
+      "tree_sha": "9f794d9c0fcb2baa639dfb3ae3fa4f9edafbeef0",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T13:53:57Z",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "2baed4ecb86af66494dae61585e3fa534a2a32ce",
+      "github_sha": "81809437ea7e12f6b4da11f53ff383a814be6e16",
+      "tree_sha": "831140d7a82c573a4f1a8f023732eed17dcf382e",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T13:58:21Z",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "9a20512a68c636cca69df0eda5856b2e9ddae5e6",
+      "github_sha": "38434d23fd857dd483527c7a4c5309c60c4948de",
+      "tree_sha": "ffc979abf135991e9519841023e7c1988f2047d0",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T14:02:33Z",
+      "message": "Update Site source"
+    }
+  ]
+}
