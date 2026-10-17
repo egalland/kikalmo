@@ -12,6 +12,8 @@ source=source.replaceAll('"react/jsx-runtime"',JSON.stringify(import.meta.resolv
 const {default:AvatarEmote}=await import(uri(source));const {EMOTE_DETAILS,liveReaction}=await import(emotes);
 const avatars=[{shape:0,hair:2,eyes:0,mouth:0,accessory:0,outfit:0,color:'#f8d779'},{shape:2,hair:5,eyes:2,mouth:3,accessory:1,outfit:2,color:'#c8b9ff'},{shape:5,hair:1,eyes:1,mouth:1,accessory:6,outfit:5,color:'#8fe1dd'}];
 let checked=0;
+for(const nose of [0,1,2,3,4,5,6]){const markup=renderToStaticMarkup(createElement(Avatar,{value:{...avatars[0],nose},animated:false}));assert.equal(markup.includes('puppet-layer puppet-nose'),nose>0);assert.ok(markup.includes('data-nose="'+nose+'"'));}
+
 for(const avatar of avatars)for(const emoji of Object.keys(EMOTE_DETAILS)){
  const direct=renderToStaticMarkup(createElement(Avatar,{value:avatar,emotion:emoji,animated:false}));
  const reaction=renderToStaticMarkup(createElement(AvatarEmote,{avatar,emoji,name:'Camille'}));

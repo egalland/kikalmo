@@ -1,27 +1,31 @@
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import ts from 'typescript';
 import {readFileSync} from 'node:fs';
-import {renderPuppet} from '../scripts/puppet-render.mjs';
-const src=readFileSync('lib/puppet-registration.ts','utf8').replace("import registration from './puppet-registration.json';",'const registration='+readFileSync('lib/puppet-registration.json','utf8')+';');
-const js=ts.transpileModule(src,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
-const {puppetFit,puppetPlacement}=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
-let checked=0;const widths={hair:new Set(),accessory:new Set(),outfit:new Set()};
-for(let shape=0;shape<6;shape++)for(let body=0;body<3;body++)for(const name of ['hair','accessory','outfit'])for(let option=0;option<6;option++){
- const col=name==='outfit'?option:option+1,pose={body,eyes:0,mouth:0,eyesRow:0,mouthRow:0};
- const p=puppetPlacement(name,col,name==='hair'?0:name==='outfit'?2:1,shape,pose),fit=puppetFit(shape,pose);
- assert.ok([p.x,p.y,p.scaleX,p.scaleY].every(Number.isFinite));assert.ok(p.scaleX>.4&&p.scaleX<1.6);assert.ok(p.scaleY>.6&&p.scaleY<1.6);
- const a={shape,hair:0,eyes:0,mouth:0,accessory:0,outfit:0,color:'#f8d779',[name]:col};
- const svg=renderPuppet(a,pose,'fit','idle',280);
- const layer=svg.match(new RegExp('<svg[^>]*class="puppet-layer puppet-'+name+'"[^>]*>[\\s\\S]*?<\\/svg>'))[0];
- const isolated=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -24 280 280" width="280" height="280">${layer}</svg>`;
- const raw=await sharp(Buffer.from(isolated)).ensureAlpha().raw().toBuffer();let l=280,r=-1,t=280,b=-1;
- for(let y=0;y<280;y++)for(let x=0;x<280;x++)if(raw[(y*280+x)*4+3]>128){l=Math.min(l,x);r=Math.max(r,x);t=Math.min(t,y);b=Math.max(b,y);}
- assert.ok(r>l&&b>t,`${name} visible for every head and pose`);
- if(name==='outfit'){assert.ok(l>=10&&r<=270,'Shoulders stay within the portrait');assert.ok(t<fit.neck+24,'Garment reaches the neck');}
- if(name==='accessory'&&col===6)assert.ok(t>=fit.neck+24-9,'Scarf must stay below the chin, away from the mouth');
- if(name==='accessory'&&col===4)assert.ok(t>150,'Blush stays on the cheeks');
- if(body===0&&option===0)widths[name].add(r-l);checked++;
+import {createHash} from 'node:crypto';
+const morph=JSON.parse(readFileSync('lib/puppet-morphologies.json','utf8'));
+const raw=async name=>sharp('public/puppets/v2/'+name+'.webp').ensureAlpha().raw().toBuffer({resolveWithObject:true});
+const [heads,hair,outfits,noses]=await Promise.all(['heads','hair','outfits','noses'].map(raw));
+const alpha=(a,col,row,x,y)=>a.data[((row*256+y)*a.info.width+col*256+x)*4+3];
+let contacts=0;
+for(let shape=0;shape<6;shape++)for(let frame=0;frame<3;frame++){
+ const m=morph.shapes[shape*3+frame];assert.ok(m.chin<240&&m.chin>175);
+ assert.ok(alpha(heads,frame,shape,128,m.chin)>100,'Complete chin must exist in artwork');
+ assert.equal(alpha(heads,frame,shape,128,250),0,'No baked long neck that needs cropping');
+ for(let style=0;style<6;style++){
+  let contact=0;
+  // On each face, the continuous fringe must sit on skin, not over a paper-colored gap.
+  for(let y=m.forehead+4;y<m.forehead+22;y++)for(let x=105;x<151;x++)if(alpha(heads,frame,shape,x,y)>180&&alpha(hair,style,shape*3+frame,x,y+48)>180)contact++;
+  assert.ok(contact>90,`Hair ${style} detached from scalp ${shape}/${frame}`);contacts+=contact;
+ }
 }
-for(const name of Object.keys(widths))assert.ok(widths[name].size>=3,`${name} must actually change width with the head shape`);
-console.log(`Passed: ${checked} real raster fits over all six heads and three poses, including scarf clearance and fitted shoulders.`);
+for(let style=0;style<6;style++){
+ let bottom=-1,maxWidth=0;const widths=[];
+ for(let y=0;y<256;y++){let width=0;for(let x=0;x<256;x++)if(alpha(outfits,style,0,x,y)>128)width++;widths[y]=width;if(width){bottom=y;maxWidth=Math.max(maxWidth,width);}}
+ assert.ok(bottom<225,'Hem must have transparent margin below, never end at the sprite border');
+ assert.ok(widths[bottom]<maxWidth*.6,'Rounded lower hem, not a flat full-width rectangular crop');
+ assert.ok(widths.slice(bottom-6,bottom+1).some(w=>w<maxWidth*.8),'Visible curved lower outline');
+}
+for(let shape=0;shape<6;shape++){const frames=[];for(let pose=0;pose<3;pose++){const data=[];for(let y=0;y<256;y++)for(let x=0;x<256;x++)data.push(alpha(heads,pose,shape,x,y));frames.push(createHash('sha256').update(Buffer.from(data)).digest('hex'));}assert.equal(new Set(frames).size,3,'Three distinct drawn head outlines in every morphology');}
+const hashes=[];for(let nose=0;nose<6;nose++){const pixels=[];for(let y=95;y<160;y++)for(let x=95;x<160;x++)pixels.push(alpha(noses,nose,0,x,y));hashes.push(createHash('sha256').update(Buffer.from(pixels)).digest('hex'));}
+assert.equal(new Set(hashes).size,6,'All six selectable nose silhouettes must be distinct');
+console.log(`Passed: 108 scalp fittings (${contacts} contact pixels), 18 complete chins, six finished curved hems, and six distinct nose shapes.`);

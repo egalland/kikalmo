@@ -9,3 +9,5 @@ assert.equal(parseProfile('bad json'),null);assert.equal(parseProfile(null),null
 const migrated=parseProfile(JSON.stringify({version:1,name:'AncienProfil',avatar:{shape:2,hair:3,eyes:1,mouth:0,accessory:1,color:COLORS[0]}}));assert.equal(migrated.name,'AncienProfil');assert.equal(migrated.avatar.shape,2);assert.equal(migrated.avatar.outfit,DEFAULT_AVATAR.outfit);assert.equal(cleanAvatar({outfit:999}).outfit,DEFAULT_AVATAR.outfit);
 const storage=new Map();const expected={version:1,name:randomName(),avatar:randomAvatar()};storage.set(PROFILE_KEY,JSON.stringify(expected));assert.deepEqual(parseProfile(storage.get(PROFILE_KEY)),expected);assert.equal(parseProfile(JSON.stringify({...expected,name:'a'.repeat(21)})),null);
 console.log('Passed: all avatar parts, independent randomizers, guaranteed change, colors, pseudo limits, malformed profiles, round-trip serialization and restored profile.');
+
+assert.equal(migrated.avatar.nose,1,'Old profiles retain a classic nose');assert.equal(cleanAvatar({nose:0}).nose,0);assert.equal(cleanAvatar({nose:999}).nose,1);assert.ok(PARTS.find(p=>p.key==='nose').options.length===7);
