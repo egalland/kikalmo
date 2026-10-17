@@ -1,0 +1,32 @@
+# Statistiques Kikalmo à la demande
+
+Aucun panneau admin ni endpoint public de statistiques. Les données sont conservées dans la base D1 du Site et accessibles uniquement avec les outils autorisés du propriétaire. Demandes possibles : « Les stats Kikalmo de cette semaine », « Compare les salons sur 30 jours », « Quels mots sont trop difficiles ? ».
+
+## Lecture et rapport
+
+1. Appeler Sites `read_database_overview` pour le projet `appgprj_6ad05f1df98081918610be46548fd65f`.
+2. Lire les tables exactes renvoyées avec `read_database_table_rows`. Continuer uniquement avec `model_projection.next_offset`, jusqu'à null. Vérifier les omissions/troncatures : ne jamais présenter un export incomplet comme exhaustif. Si les bornes du connecteur sont atteintes, utiliser l'export du visualiseur de base Sites.
+3. Réunir les lignes dans un JSON dont les clés sont les noms de tables (`analytics_commits`, `analytics_daily`, `analytics_player_days`, `analytics_players`, `analytics_sessions`).
+4. Exécuter `node scripts/analytics-report.mjs export.json 2026-10-17 2026-10-31` (dates inclusives ; salon facultatif en dernier argument). Les uniques hebdomadaires/mensuels sont des unions d'identifiants sur la période, jamais une somme des uniques quotidiens.
+5. Fournir une synthèse adaptée à la demande, sans publier les identifiants pseudonymes. Pour les joueurs présents maintenant : lire `rooms`, filtrer les `seen` datant de moins de 12 secondes et dédupliquer les identifiants entre salons.
+
+## Définitions et couverture
+
+- Une **manche** correspond à un mot présenté. Une **partie/match** commence au compte à rebours et finit au podium après dix manches. Une partie dont le salon se vide avant le podium est abandonnée, y compris avant le premier mot. Une manche interrompue est distincte d'une manche terminée sans réponse.
+- Matchs/manches démarrés, terminés, abandonnés ; manches trouvées/non trouvées ; participations à chaque match/manche, joueurs au début et à la fin ; scores, points, victoires, premiers à trouver, séries de manches réussies.
+- Réponses acceptées, incorrectes et proches ; temps individuels et du premier joueur ; avant/après l'indice (10 secondes), par mot et catégorie. Moyennes, médianes et records viennent des événements, pas d'une moyenne de moyennes. Une requête répétée après validation n'est pas une nouvelle réponse.
+- Joueurs uniques par jour/période, nouveaux/retours selon la première activité observée, retour le lendemain. Le cookie existant d'un an identifie un navigateur ; suppression du cookie ou autre appareil = autre profil statistique. Aucun compte ne permet de reconnaître une même personne entre appareils.
+- Sessions par présence continue dans un salon, dernière activité et temps actif cumulé. Rafraîchir/rejoindre sans expiration ne crée pas une nouvelle session. Après 12 secondes sans requête, une présence expire. Les transitions d'expiration sont finalisées à la prochaine mutation du salon ; sans nouvelle visite, lire `last_seen` pour reconnaître une session inactive. La durée comptabilise les intervalles de requêtes inférieurs à 12 secondes ; elle exclut les longues absences. Les durées filtrées sont celles des sessions commencées dans la période, pas une ventilation exacte à minuit.
+- Fréquentation par jour/heure de Paris, pic simultané observé et occupation des salons. Échantillon de présence au moins chaque minute active et au changement de jour, plus les entrées. Pic calculé sur les présences valides de tous les salons aux événements ; occupation moyenne = moyenne des échantillons, pas moyenne pondérée par le temps. Une très brève variation sans événement peut ne pas apparaître.
+- Messages de chat acceptés (sans texte enregistré), émotes par type, entrées via URL de salon. L'URL ne distingue pas un vrai partage d'un favori ; les reconnexions actives ne sont pas des invitations nouvelles.
+- Déconnexions par expiration, départs explicites, échecs API/CAS quand la base reste accessible ; latence serveur échantillonnée incluant la sauvegarde du jeu (sans réseau client ni écriture de mesure). Les logs Workers complètent les pannes pour lesquelles D1 ne répond pas.
+- Images indisponibles : une observation par question/jour effectivement demandée, y compris les réponses volontairement sans image. Ce n'est pas un nombre de requêtes ni un comptage d'images cassées dans le navigateur.
+- Aucun historique ancien reconstitué. Un match déjà en cours à l'activation peut avoir une fin sans début observé : ne pas déduire les « en cours » par simple soustraction. Indiquer la date de première mesure dans les rapports.
+
+## Fiabilité et données
+
+Le changement de salle et toutes ses mesures métier appartiennent à un même `D1.batch` atomique. Chaque écriture est conditionnée à la révision CAS **et** à un nonce serveur unique : un concurrent perdant ne peut pas compter un événement ou créer une session. Les déclencheurs SQL entretiennent les totaux quotidiens ; les événements détaillés permettent les distributions et regroupements.
+
+Les identifiants analytiques sont des SHA-256 de l'identifiant aléatoire existant ; aucun pseudo, avatar, texte de chat, proposition incorrecte, IP ou user-agent n'est copié dans ces tables. Les mots du jeu sont des données du catalogue. Ne pas exposer les tables dans une route publique. Pas de suppression automatique de l'historique ; prévoir une politique de conservation si le volume augmente.
+
+Les noms de métriques restent stables dans le code. Ne pas confondre `round_started` (mots affichés), `round_participation` (expositions individuelles) et `guess_correct` (joueurs ayant trouvé). `analytics_daily.total` est une somme de valeurs, `count` un nombre de mesures, `maximum` un maximum. `presence` et `hour_XX` sont des échantillons, les uniques viennent de `analytics_player_days`.

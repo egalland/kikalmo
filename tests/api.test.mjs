@@ -6,9 +6,12 @@ const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2
 const uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
 const profile=uri(compile(readFileSync('lib/profile.ts','utf8')));
 const game=uri(compile(readFileSync('lib/game.ts','utf8').replace("import questionBank from './question-bank.json';",'const questionBank='+readFileSync('lib/question-bank.json','utf8')+';').replace("import questionClues from './question-clues.json';",'const questionClues='+readFileSync('lib/question-clues.json','utf8')+';').replace("import clueSources from './question-clue-sources.json';",'const clueSources='+readFileSync('lib/question-clue-sources.json','utf8')+';'))),themes=uri(compile(readFileSync('lib/themes.ts','utf8')));
+const analytics=uri(compile(readFileSync('lib/analytics.ts','utf8').replace("'./game'",JSON.stringify(game))));
 const sql=new DatabaseSync(':memory:');sql.exec(readFileSync('drizzle/0000_polite_next_avengers.sql','utf8'));
-globalThis.__testDB={prepare(query){let values=[];return {bind(...v){values=v;return this},async first(){return sql.prepare(query).get(...values)||null},async all(){return {results:sql.prepare(query).all(...values)}},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}}}}}};
-let source=readFileSync('app/api/game/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/themes'",JSON.stringify(themes)).replace("'../../../lib/profile'",JSON.stringify(profile));
+sql.exec(readFileSync('drizzle/0001_premium_miracleman.sql','utf8'));
+let batchTail=Promise.resolve();
+globalThis.__testDB={batch(statements){const task=batchTail.then(async()=>{sql.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sql.exec('COMMIT');return result;}catch(e){sql.exec('ROLLBACK');throw e;}});batchTail=task.catch(()=>{});return task;},prepare(query){let values=[];return {bind(...v){values=v;return this},async first(){return sql.prepare(query).get(...values)||null},async all(){return {results:sql.prepare(query).all(...values)}},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}}}}}};
+let source=readFileSync('app/api/game/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/analytics'",JSON.stringify(analytics)).replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/themes'",JSON.stringify(themes)).replace("'../../../lib/profile'",JSON.stringify(profile));
 const {POST,GET}=await import(uri(compile(source)));
 let now=1000000;Date.now=()=>now;
 async function post(action,cookie='',extra={}){const r=await POST(new Request('https://test.local/api/game',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://test.local',Cookie:cookie},body:JSON.stringify({action,room:'cinema',...extra})}));return {status:r.status,body:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]||cookie}}
@@ -45,3 +48,61 @@ for(const room of ['videogames','series','food','music','characters','expression
  await post('leave',joined.cookie,{room});
 }
 console.log('Passed: all eight new room IDs persist independently and serve the correct category.');
+
+// Private analytics: exact counts despite duplicate/concurrent answer requests.
+const allEvents=()=>sql.prepare('SELECT events FROM analytics_commits').all().flatMap(r=>JSON.parse(r.events));
+const correct=allEvents().filter(e=>e.kind==='guess_correct');
+assert.equal(correct.length,3,'Two concurrent solvers, plus Alice in the next match');
+assert.equal(allEvents().filter(e=>e.kind==='first_solve_ms').length,2);
+assert.equal(allEvents().filter(e=>e.kind==='round_completed').length,1);
+assert.equal(sql.prepare("SELECT count FROM analytics_daily WHERE room='cinema' AND metric='guess_correct'").get().count,3);
+assert.ok(sql.prepare('SELECT * FROM analytics_player_days').all().length>=3);
+assert.ok(allEvents().every(e=>!e.player||/^[a-f0-9]{64}$/.test(e.player)));
+assert.ok(!JSON.stringify(allEvents()).includes('secret-answer'));
+assert.ok(!JSON.stringify(observed).includes('tracking'));
+assert.ok(!JSON.stringify(observed).includes('telemetryCommit'));
+const {calendar,telemetryStatements,collector}=await import(analytics);
+assert.equal(calendar(Date.parse('2026-10-17T22:30:00Z')).day,'2026-10-18');
+assert.equal(calendar(Date.parse('2026-12-17T22:30:00Z')).day,'2026-12-17');
+// A deliberately stale CAS cannot leave an analytics event or a session behind.
+const c=collector('cinema',now);c.events.push({kind:'must_not_exist',at:now});
+await globalThis.__testDB.batch([
+ globalThis.__testDB.prepare('UPDATE rooms SET revision=revision+1 WHERE id=? AND revision=?').bind('cinema',-1),
+ ...telemetryStatements(globalThis.__testDB,c,{players:[]},99999,'wrong','',0)
+]);
+assert.ok(!allEvents().some(e=>e.kind==='must_not_exist'));
+assert.ok(sql.prepare('SELECT count(*) AS n FROM analytics_sessions WHERE ended IS NOT NULL').get().n>0);
+console.log('Passed: atomic analytics, duplicate answers, private pseudonyms, daily totals, sessions and Paris day/DST boundaries.');
+
+// A complete ten-word match reaches the podium once, including streaks and durations.
+let solo=await post('join','',{room:'animals',name:'Solo'});
+for(let round=1;round<=10;round++){
+ now+=round===1?10000:5000;
+ const started=await post('sync',solo.cookie,{room:'animals'});
+ assert.equal(started.body.round,round);
+ const stored=JSON.parse(sql.prepare("SELECT state FROM rooms WHERE id='animals'").get().state);
+ now+=1000;
+ const solved=await post('answer',solo.cookie,{room:'animals',game:stored.game,round,answer:QUESTIONS[stored.deck[round-1]].answer});
+ assert.equal(solved.body.result,'correct');assert.equal(solved.body.phase,'reveal');
+}
+now+=5000;const podium=await post('sync',solo.cookie,{room:'animals'});assert.equal(podium.body.phase,'podium');
+await post('sync',solo.cookie,{room:'animals'});
+const animalEvents=sql.prepare("SELECT events FROM analytics_commits WHERE room='animals'").all().flatMap(r=>JSON.parse(r.events));
+assert.equal(animalEvents.filter(e=>e.kind==='round_started').length,10);
+assert.equal(animalEvents.filter(e=>e.kind==='round_completed').length,10);
+assert.equal(animalEvents.filter(e=>e.kind==='match_completed').length,1);
+assert.equal(animalEvents.filter(e=>e.kind==='victory').length,1);
+assert.equal(Math.max(...animalEvents.filter(e=>e.kind==='streak').map(e=>e.value)),10);
+assert.equal(animalEvents.filter(e=>e.kind==='match_duration_ms').length,1);
+// Export/report reproduces the actual accepted metrics rather than UI snapshots.
+const {report}=await import('../scripts/analytics-report.mjs');
+const tables=['analytics_commits','analytics_daily','analytics_player_days','analytics_players','analytics_sessions'];
+const exported=Object.fromEntries(tables.map(t=>[t,sql.prepare('SELECT * FROM '+t).all()]));
+const stats=report(exported,'0000-00-00','9999-99-99','animals');
+assert.equal(stats.counts.match_completed,1);assert.equal(stats.counts.guess_correct,10);
+assert.equal(stats.solveMs.median,1000);assert.equal(stats.uniquePlayers,1);
+assert.ok(stats.sessionActiveMs.max>0);
+// Timeout is inferred from presence and finalized when the room is touched again.
+now+=13000;await post('join','',{room:'animals',name:'Next'});
+assert.ok(sql.prepare("SELECT * FROM analytics_sessions WHERE room='animals' AND reason='timeout'").all().length);
+console.log('Passed: complete match, ten rounds, winner, streak, durations, report export and expired session.');
