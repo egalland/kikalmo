@@ -46,3 +46,9 @@
 @media(max-width:650px){.topbar,.game-wrap,.site-footer{padding-left:10px;padding-right:10px}.profile-preview .avatar-stage{width:112px;height:112px;aspect-ratio:1}.profile-preview .avatar-stage>.felt-avatar{width:112px;height:112px}.part-options>button>.felt-avatar{max-width:43px;max-height:43px}.arena.revealing .reveal-content{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}.arena.revealing .puzzle{gap:7px;padding:8px 0}.arena.revealing .reveal-content p{font-size:11px}}
 
 .part-options>button>.felt-avatar{background:none;border-radius:0;padding:0;right:auto;top:auto}
+
+/* Solving takes precedence over the local player's neutral identity highlight. */
+.game-layout .leaderboard li.solved-player{background:#dceedd;border-color:#8db497;box-shadow:inset 0 0 0 1px #8db497;border-radius:10px}
+.game-layout .leaderboard li.solved-first{background:#ffe7a0;border-color:#c49a3b;box-shadow:inset 0 0 0 1px #c49a3b;border-radius:10px}
+.game-layout .leaderboard li.solved-player .player-name>span,.game-layout .leaderboard li.solved-player .solved-check{color:#245633}
+.game-layout .leaderboard li.solved-first .player-name>span,.game-layout .leaderboard li.solved-first .solved-check{color:#77500b}
