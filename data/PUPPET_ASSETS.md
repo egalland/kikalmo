@@ -21,7 +21,7 @@ Les illustrations de réponse occupent un cadre à hauteur bornée dans une gril
 
 ## Recalage des pièces
 
-Les zones source des trois rangées de pièces sont mesurées séparément : les dessins générés débordaient d’une division mathématique en tiers. Les petits fragments provenant d’un élément voisin sont retirés avant la mesure. Chaque silhouette et pose partage désormais un ancrage du nez à (128, 128) ; la jonction du cou est repérée avant de séparer la tête du buste. Les vêtements sont placés derrière la tête et le nez repasse devant les yeux. Les rangées du créateur réservent toutes sept cases et les vignettes gardent un canevas carré. Un test vérifie l’ancrage des dix-huit poses.
+Les zones source des trois rangées de pièces sont mesurées séparément : les dessins générés débordaient d’une division mathématique en tiers. Les petits fragments provenant d’un élément voisin sont retirés avant la mesure. Chaque silhouette et pose partage désormais un ancrage du nez à (128, 128) ; le cou est conservé intégralement au lieu de couper la tête à la ligne la plus étroite. Le buste d’origine conserve son cou et son ombre de menton. Les vêtements sont placés devant ce buste, avec le col à sa hauteur anatomique ; le nez repasse devant les yeux. Les rangées du créateur réservent toutes sept cases et les vignettes gardent un canevas carré. Un test vérifie l’ancrage des dix-huit poses.
 
 
 ## Reprise du 15 octobre — expressions et cadrage
@@ -29,3 +29,8 @@ Les zones source des trois rangées de pièces sont mesurées séparément : les
 Le rang de découverte `solveRank` est attribué côté serveur avec un compteur par manche, dans la même mise à jour atomique que les points. Les réponses simultanées ne produisent qu’un seul premier. Le départ d’un joueur ne change pas le rang des suivants. Le compteur est remis à zéro à la manche suivante. La couronne du match précédent ne déclenche pas l’expression de victoire pendant un nouveau match.
 
 Les sons d’émotes utilisent des enveloppes courtes, glissandos élastiques, filtres de formants et percussions douces avec compression de sortie. Ils restent soumis au bouton haut-parleur. Les nœuds audio sont déconnectés après lecture.
+
+
+## Correction du raccord du col
+
+Le découpage conserve le cou dessiné dans les sprites d’origine et écarte les épaules nues pour laisser la place aux vêtements. Le vêtement passe au premier plan, 26 unités plus bas dans le canevas commun, afin de laisser visible le cou sous le menton. Les rangées source de silhouettes sont mesurées individuellement : leur hauteur réelle n’était pas uniforme, ce qui rognait le sommet du visage ovale. Le test d’atlas vérifie la présence du cou pour les 18 poses ; 36 combinaisons visage / vêtement sont contrôlées dans les rendus du composant. Les illustrations et les expressions de réussite de la version précédente sont conservées.
