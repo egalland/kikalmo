@@ -1,0 +1,16 @@
+/* The puppet itself carries the reaction; no generic yellow face replaces it. */
+.personal-emote{position:relative;display:inline-block;width:100%;height:100%;vertical-align:middle;isolation:isolate}
+.personal-emote>.felt-avatar{display:block;width:100%;height:100%;max-width:none;max-height:none;background:none;padding:0;border-radius:0}
+.emote-badge{position:absolute;right:-3px;bottom:-1px;z-index:1;min-width:20px;max-width:100%;padding:2px 4px;border:1px solid #d3bd8b;border-radius:8px;background:#fff9e5;color:#674a27;font-family:'Trebuchet MS',sans-serif;font-size:9px;line-height:1.1;font-weight:900;white-space:nowrap;box-shadow:0 2px 0 #c9b58a40}
+.emote-heart{color:#bc5263;font-size:15px;padding:0 4px}
+.leaderboard .avatar>.personal-emote{width:100%;height:100%}
+.reaction-toggle>.felt-avatar{width:32px;height:32px;flex:none}
+.avatar-emotes{width:290px;max-width:calc(100vw - 32px);grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;left:0;right:auto;padding:8px}
+.avatar-emotes button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 2px;min-width:0;min-height:78px;border:1px solid transparent;color:#584d33}
+.avatar-emotes button:focus-visible{outline:3px solid #aa793d;outline-offset:1px}
+.avatar-emotes button:hover{border-color:#bca777;background:#e4ebd3}
+.avatar-emotes .personal-emote{width:46px;height:46px;flex:none}
+.avatar-emotes .emote-option-label{font-size:9px;line-height:1.1;min-height:20px;display:flex;align-items:center;text-align:center;white-space:normal}
+.avatar-emotes .emote-badge{font-size:8px;right:-2px;bottom:-1px;padding:2px 3px}
+.avatar-emotes .emote-heart{font-size:13px;padding:0 3px}
+@media(max-width:900px){.avatar-emotes{left:auto;right:0}.reaction-toggle>.felt-avatar{width:28px;height:28px}}

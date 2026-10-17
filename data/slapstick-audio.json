@@ -1,0 +1,16 @@
+{
+  "audition": "04-cartoon-slapstick.mp3",
+  "sampleRate": 44100,
+  "pcmSha256": {
+    "applaudissements": "e5d75c601e8b7692ccd9a821e5c95867dba3d24e711604f9258e459b406e6a77",
+    "rire": "fa66bc0cf2f0d27006e97f8581651e04c84b6dfa81b077a0b82471ea51177894",
+    "reflexion": "4d2375d50a324473bbf8e42feb9812bcb2f75fefd3299f765f9c9b2ff8b74c8e",
+    "feu": "36f592a46178196a2a16b4c09bee568936dfc921280d8f546cb2e5321148594c",
+    "fete": "427f08aa77438d082d0c750416fb170d753401a8c5949d14d4efe4cb26b1aafe",
+    "coeur": "20f604168c10529bfaac7c77514dbd678b76606a5a318a7b69633f4d3b04e130",
+    "pouce-haut": "277b6af3714d05c38ca3c9eeee8d69ea7200ab759c39367ce9e101f8a37eb40a",
+    "pouce-bas": "0cac5739da36375702854fe330c55f8c90286bcf5a2de93acf498693dedeec02",
+    "canard": "918bb37623f09be23aea645161a0baafe489f8fb952524756f568ce0a834a03b",
+    "chien": "d2623e3dee7bf3cf7bc254d6cceb152582cdf49395b97c70fa613056f8fb7b5a"
+  }
+}
