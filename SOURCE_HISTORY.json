@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "5a74c938f0aad5d8c3078a2d7fe89a2763fecb7d",
+  "source_head": "bc0978f48f4fd02150c8c15121e937019194a343",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top.",
   "commits": [
     {
@@ -271,6 +271,24 @@
       "source_author": "Codex",
       "source_author_email": "codex@openai.com",
       "source_date": "2026-10-17T18:45:07+02:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "7c1b11c63e7b79021437e593ff9836c8164acb61",
+      "github_sha": "31a08fa31b3cdefa86c7d729029a571aadffba44",
+      "tree_sha": "ffb9ccd09dc770186e5ec4b9e6c446887aa35429",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T11:41:31-06:00",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "bc0978f48f4fd02150c8c15121e937019194a343",
+      "github_sha": "43b2a6cdbb211258fb286d71686c6d3ec99f702d",
+      "tree_sha": "df5bac109b8b962c0ff849a0b0effdbf4290e055",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-17T11:43:04-06:00",
       "message": "Update Site source"
     }
   ]
