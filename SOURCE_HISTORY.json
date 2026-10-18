@@ -1,7 +1,7 @@
 {
   "source": "Sites",
-  "source_head": "70dfc089ee8f4d996fa54b9ae011402a5a5bcf64",
-  "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top.",
+  "source_head": "86b392f9ebd46c0e7281b665959bc84d748f64a9",
+  "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
       "source_sha": "f4bc2b2f733377705a6878b741896e5d5e2ee236",
@@ -343,6 +343,15 @@
       "source_author": "Codex",
       "source_author_email": "codex@openai.com",
       "source_date": "2026-10-18T08:08:17Z",
+      "message": "Update Site source"
+    },
+    {
+      "source_sha": "86b392f9ebd46c0e7281b665959bc84d748f64a9",
+      "github_sha": "5d4ca2883593e3b4906a4d0d0f978e687461fb73",
+      "tree_sha": "cfd34c813869cf5a24501f3e2ad56a80ce8379be",
+      "source_author": "Codex",
+      "source_author_email": "codex@openai.com",
+      "source_date": "2026-10-18T08:48:05Z",
       "message": "Update Site source"
     }
   ]
