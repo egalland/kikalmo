@@ -1,0 +1,101 @@
+/* Submission status is independent of the live chat and of polling snapshots. */
+.guess-feedback{flex-shrink:0;display:flex;align-items:center;gap:9px;margin:6px 0;padding:8px 10px;border:1px solid #c9c6ac;border-left:4px solid #8b9472;border-radius:10px;background:#f4efdf;color:#4b6045;min-height:48px;font-size:12px;line-height:1.35;overflow:auto;max-height:88px}
+.guess-feedback-icon{font-size:23px;font-weight:800;flex-shrink:0;width:22px;text-align:center}
+.guess-feedback>div{min-width:0;display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
+.guess-feedback strong{font-size:13px}
+.guess-feedback[data-kind="idle"]{display:none}
+.guess-feedback[data-kind="incorrect"],.guess-feedback[data-kind="error"]{background:#f9e3dc;border-color:#c88771;color:#813e2b}
+.guess-feedback[data-kind="close"]{background:#fff0bd;border-color:#c7a04c;color:#71511c}
+.guess-feedback[data-kind="correct"]{background:#e1f0dd;border-color:#87ac79;color:#2e632c}
+.guess-feedback[data-kind="sending"]{background:#e7eced;border-color:#9faeb0;color:#42595f}
+.room-chat:has(.guess-feedback:not([data-kind="idle"])) .composer-status{display:none}
+.mobile-keyboard,.keyboard-mode-switch,.daily-mobile-close{display:none}
+@media(max-width:900px){
+ .keyboard-mode-switch{display:flex;justify-content:center;flex-shrink:0;margin-top:5px}
+ .keyboard-mode-switch button,.keyboard-toolbar button{min-height:28px;padding:3px 7px;border:0;background:transparent;color:#5e604b;text-decoration:underline;font-size:11px;cursor:pointer}
+ .mobile-keyboard{display:flex;flex-direction:column;flex-shrink:0;gap:5px;width:100%;padding:4px 0 0;background:#e6dfce;border-radius:10px;user-select:none;-webkit-user-select:none}
+ .keyboard-toolbar{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:0 6px;min-height:25px}
+ .keyboard-toolbar>span{font-size:8px;letter-spacing:.7px;color:#7a7259;white-space:nowrap}
+ .keyboard-toolbar>div{display:flex;gap:0;align-items:center}
+ .keyboard-toolbar button{font-size:10px;min-height:27px;padding:2px 5px}
+ .keyboard-keys{display:flex;flex-direction:column;gap:5px;padding:0 4px 5px}
+ .keyboard-row{display:flex;justify-content:center;gap:4px;width:100%}
+ .keyboard-row>button{flex:1;min-width:0;max-width:50px;height:42px;border:1px solid #bcb39c;border-radius:7px;background:#fffaf0;box-shadow:0 2px 0 #b4a98d;color:#354d3b;font-size:17px;font-weight:650;touch-action:manipulation;cursor:pointer}
+ .keyboard-row>button:active{background:#d9e3c6;box-shadow:none}
+ .keyboard-row>button:focus-visible{outline:3px solid #637e46;outline-offset:1px}
+ .keyboard-row>button:disabled{opacity:.48;cursor:default}
+ .keyboard-bottom>button{max-width:none;flex:0 0 54px;font-size:13px}
+ .keyboard-bottom>.keyboard-space{flex:1}
+ .keyboard-bottom>.keyboard-submit{flex:0 0 91px;background:#d6b572;color:#543e20;border-color:#a7884e}
+ .game-session .composer-status{display:none!important}
+ /* The site keyboard reserves a known height; it never invokes the OS keyboard. */
+ body.game-session:has(.mobile-keyboard)>.topbar{display:none}
+ body.game-session:has(.mobile-keyboard) .game-layout{grid-template-areas:'puzzle' 'chat';grid-template-rows:minmax(0,1fr) auto;gap:6px}
+ body.game-session:has(.mobile-keyboard) .game-layout>.leaderboard{display:none}
+ body.game-session:has(.mobile-keyboard) .mobile-play-summary{display:flex;justify-content:space-between;font-size:11px;line-height:20px;flex-shrink:0;margin-bottom:3px;color:#536846}
+ body.game-session:has(.mobile-keyboard) .game-layout>.room-chat{height:auto;min-height:0;padding:5px 6px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;gap:4px;overflow:visible}
+ body.game-session:has(.mobile-keyboard) .chat-heading,body.game-session:has(.mobile-keyboard) .chat-log{display:none}
+ body.game-session:has(.mobile-keyboard) .guess-feedback{grid-row:1;display:flex;min-height:43px;max-height:64px;margin:0;padding:5px 8px;font-size:11px;line-height:1.3}
+ body.game-session:has(.mobile-keyboard) .guess-feedback strong{font-size:12px}
+ body.game-session:has(.mobile-keyboard) .chat-composer{grid-row:2;min-height:47px;margin:0;padding:2px}
+ body.game-session:has(.mobile-keyboard) .chat-composer input{min-height:40px;padding:7px 9px;font-size:17px}
+ body.game-session:has(.mobile-keyboard) .chat-composer>button{display:none}
+ body.game-session:has(.mobile-keyboard) .mobile-keyboard{grid-row:3}
+ body.game-session:has(.mobile-keyboard) .game-layout>.arena{padding:8px 10px}
+ body.game-session:has(.mobile-keyboard) .arena .round-dots{display:none}
+ body.game-session:has(.mobile-keyboard) .arena .puzzle{display:grid;grid-template-rows:auto minmax(34px,1fr) auto;justify-content:stretch;justify-items:center;align-content:stretch;gap:5px;overflow:auto;padding:5px 0}
+ body.game-session:has(.mobile-keyboard) .arena .masked{font-size:28px;line-height:1.2;min-height:34px;max-height:none;overflow:visible;align-self:stretch;align-content:center;padding:2px 0;width:100%}
+ body.game-session:has(.mobile-keyboard) .arena .round-clue{height:auto;min-height:0;max-height:82px;padding:6px 8px;margin:0;font-size:12px;line-height:1.4;overflow:auto;align-self:end}
+ body.game-session:has(.mobile-keyboard) .round-clue:has(.clue-wait){font-size:10px;max-height:34px;background:transparent}
+ body.game-session:has(.mobile-keyboard) .answer-reveal{overflow:auto;gap:5px;padding:4px 0}
+ body.game-session:has(.mobile-keyboard) .answer-reveal-layout{flex:1 0 auto;min-height:75px;grid-template-rows:auto;gap:10px}
+ body.game-session:has(.mobile-keyboard) .answer-media-slot{min-height:75px}
+ body.game-session:has(.mobile-keyboard) .answer-reveal-copy{align-self:start;max-height:none;overflow:visible;padding:3px 0}
+ body.game-session:has(.mobile-keyboard) .answer-reveal-copy>p,body.game-session:has(.mobile-keyboard) .answer-reveal-copy>.eyebrow,body.game-session:has(.mobile-keyboard) .answer-reveal-copy>small,body.game-session:has(.mobile-keyboard) .answer-reveal-copy>.image-credit{display:none}
+ body.game-session:has(.mobile-keyboard) .answer-reveal-copy h2{font-size:25px;line-height:1.15;margin:0}
+ body.game-session:has(.mobile-keyboard) .reveal-caption{min-height:24px;padding:4px 6px;flex-wrap:nowrap;justify-content:space-between;font-size:10px;white-space:nowrap}
+ body.game-session:has(.mobile-keyboard) .reveal-caption>svg{display:none}
+ body.game-session:has(.mobile-keyboard) .reveal-caption>span{width:auto;margin:0;white-space:nowrap;font-size:10px}
+ /* A daily challenge is a full mobile game screen until it is solved or closed. */
+ body:has(.daily-custom .daily-puzzle){overflow:hidden;overscroll-behavior:none}
+ .daily-custom .daily-puzzle{position:fixed;z-index:80;top:var(--play-top,0px);left:0;right:0;height:var(--play-height,100dvh);display:flex;flex-direction:column;overflow:hidden;margin:0;padding:10px 9px max(8px,env(safe-area-inset-bottom));border-radius:0;background:#faf7ef}
+ .daily-custom .daily-mobile-close,body.daily-typing .daily-mobile-close{display:block;position:absolute;right:8px;top:6px;min-height:32px;padding:4px 8px;border:1px solid #c8bca3;border-radius:8px;background:#fff8e8;color:#5d634d;font-size:12px}
+ .daily-custom .daily-meta{padding-right:69px;flex-shrink:0;min-height:30px;font-size:11px;gap:4px}
+ .daily-custom .daily-puzzle h3{display:none}
+ .daily-custom .daily-masked{flex-shrink:0;font-size:30px;line-height:1.2;text-align:center;max-height:110px;overflow:auto;padding:12px 0 4px}
+ .daily-custom .daily-count{flex-shrink:0;text-align:center;margin:7px 0;font-size:12px}
+ .daily-custom .daily-hints{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
+ .daily-custom .daily-hints p{font-size:12px;line-height:1.4;margin:4px 0;padding:7px 9px}
+ .daily-custom .daily-hints strong{display:inline;margin-right:7px}
+ .daily-custom .guess-feedback{order:8;display:flex;flex-shrink:0;min-height:43px;max-height:65px;margin:5px 0;padding:5px 8px;font-size:11px}
+ .daily-custom .daily-form{order:9;flex-shrink:0;margin:0}
+ .daily-custom .daily-form label,.daily-custom .daily-form button{display:none}
+ .daily-custom .daily-form>div{display:block}
+ .daily-custom .daily-form input{width:100%;font-size:17px;min-height:44px;padding:8px 10px}
+ .daily-custom .mobile-keyboard{order:10;flex-shrink:0;margin-top:5px}
+ .daily-custom .daily-help,.daily-custom .daily-history,.daily-custom>.notice.error{display:none}
+ body.daily-typing .daily-meta{padding-right:69px}
+ body.daily-typing .daily-puzzle .guess-feedback{order:9;flex-shrink:0}
+ body.daily-typing .daily-puzzle .keyboard-mode-switch{order:11}
+}
+@media(max-width:900px) and (max-height:650px){
+ .keyboard-row>button{height:36px;font-size:16px}
+ .keyboard-toolbar{min-height:21px}
+ .keyboard-toolbar button{min-height:23px}
+ .keyboard-keys{gap:4px}
+ body.game-session:has(.mobile-keyboard) .guess-feedback,.daily-custom .guess-feedback{min-height:37px;max-height:53px;font-size:10px}
+ body.game-session:has(.mobile-keyboard) .arena .masked{font-size:25px}
+ body.game-session:has(.mobile-keyboard) .arena .round-clue:has(.clue-wait){display:none}
+ .daily-custom .daily-masked{font-size:26px;max-height:75px;padding-top:6px}
+}
+@media(max-width:900px) and (orientation:landscape) and (max-height:500px){
+ body.game-session:has(.mobile-keyboard) .game-layout{grid-template-areas:'puzzle chat';grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:minmax(0,1fr)}
+ .keyboard-row>button{height:28px;font-size:14px}
+ .keyboard-toolbar>span{display:none}
+ .keyboard-toolbar{justify-content:flex-end;min-height:20px}
+ .keyboard-toolbar button{min-height:20px}
+ .keyboard-keys{gap:3px}
+ body.game-session:has(.mobile-keyboard) .chat-composer{min-height:40px}
+ body.game-session:has(.mobile-keyboard) .chat-composer input{min-height:34px;font-size:16px}
+ body.game-session:has(.mobile-keyboard) .guess-feedback{min-height:34px;max-height:45px}
+}
