@@ -38,3 +38,38 @@ Lire aussi `daily_challenges` et `daily_players` et inclure `daily_players` dans
 Une journée change à minuit à Paris, été/hiver inclus. Le même mot est figé en base pour tous les joueurs. Chaque joueur/jour conserve pseudo, avatar, progression, date de première ouverture, dernière action, chaque proposition et son horodatage, puis l’heure de résolution. Ces données métier servent au classement public ; seuls le pseudo, l’avatar, les essais et l’heure de résolution des gagnants sont exposés aux autres visiteurs. Ne pas inclure les identifiants ni les propositions privées dans un bilan. Les données ne se mélangent pas aux manches et matchs de dix manches. Pas de temps actif ni de chrono déduit de la durée entre deux actions. Un défi non résolu reste « en cours » jusqu’à minuit et ne constitue pas encore un abandon. Les indices sont automatiques après 3/6/9 erreurs ; le nombre débloqué est déduit des erreurs.
 
 Classement : nombre d’essais croissant, puis `solved_at` croissant (premier à trouver dans la journée). Si l’horodatage est identique à la milliseconde, l’identifiant interne stabilise l’ordre sans être exposé. Un succès ne peut plus être rejoué pour améliorer son score. Les requêtes répétées portent une clé d’idempotence ; les mutations concurrentes utilisent une révision atomique. Le navigateur conserve la même identité que les salons ; autre appareil ou suppression des cookies = autre participation. Historique des jours précédents conservé.
+
+## Administration intégrée
+
+Le lien discret « Administration » dans le footer ouvre `/admin`. L'identifiant est
+`admin` ; le mot de passe est configuré dans le secret runtime
+`KIKALMO_ADMIN_PASSWORD`. Le serveur signe les sessions de 12 heures avec
+`KIKALMO_ADMIN_SESSION_SECRET` (ne jamais committer ce secret). Le cookie est
+HttpOnly, Secure, SameSite=Strict et limité à `/api/admin`.
+
+Routes protégées : `/api/admin/stats?from=YYYY-MM-DD&to=YYYY-MM-DD` et
+`/api/admin/export?from=YYYY-MM-DD&to=YYYY-MM-DD`. Sans cookie signé valide, elles
+renvoient 401. Les dates sont inclusives en heure de Paris, avec gestion de
+l'heure d'été/hiver. Les uniques sont dédupliqués sur la période et ne sont pas
+la somme des uniques quotidiens. Le temps actif est rattaché au début de session.
+
+La page propose les périodes rapides, les dates personnalisées, un regroupement
+jour/semaine/mois, les courbes, les salons et le mot du jour. Les regroupements
+semaine/mois additionnent les uniques quotidiens et l'indiquent. Le classement
+est un aperçu borné aux 200 premières réussites de la période (dates récentes
+puis essais puis heure). Les totaux du mot du jour couvrent toutes les lignes.
+
+Les PDF sont créés côté serveur avec les données réelles, logo original,
+graphiques vectoriels, détail des salons, classement et résumé de chaque date.
+« PDF de la période » exporte la dernière période chargée ; « PDF total » relit
+l'historique complet jusqu'à aujourd'hui. Aucun service externe n'est requis.
+
+Le suivi des visites débute avec cette version, via `/api/visits` à l'ouverture
+du jeu. `site_visitor_days` conserve un identifiant de navigateur haché, une date,
+des horodatages et un compteur d'ouvertures ; aucune IP ni user-agent n'est
+stocké. Les visites passées ne sont pas reconstituées. Visiteurs, joueurs et
+participants au mot du jour sont distincts et ne doivent pas être additionnés.
+
+Validation : `node tests/admin-stats.test.mjs` couvre authentification, cookies,
+expiration, origine, accès refusé JSON/PDF, dates invalides, changements d'heure,
+déduplication multi-jours, durée de session, export PDF, vide et visites.

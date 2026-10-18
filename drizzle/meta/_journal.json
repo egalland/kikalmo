@@ -29,6 +29,13 @@
       "when": 1792258744679,
       "tag": "0003_natural_polaris",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1792312826339,
+      "tag": "0004_visitor_statistics",
+      "breakpoints": true
     }
   ]
 }

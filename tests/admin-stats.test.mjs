@@ -1,0 +1,50 @@
+import ts from 'typescript';
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {DatabaseSync} from 'node:sqlite';
+import assert from 'node:assert/strict';
+const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
+const uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
+const authURI=uri(compile(readFileSync('lib/admin-auth.ts','utf8')));
+const calendar=`const calendar=at=>({day:new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(at)});`;
+const statsURI=uri(compile(readFileSync('lib/stats.ts','utf8').replace("import {calendar} from './analytics';",calendar)));
+const logo=JSON.parse(readFileSync('lib/stats-logo.json','utf8'));
+const pdfURI=uri(compile(readFileSync('lib/stats-pdf.ts','utf8').replace("import {THEMES} from './themes';",'const THEMES=[];').replace("import logo from './stats-logo.json';",'const logo='+JSON.stringify(logo)+';')));
+const {period,readStats,parisMidnight}=await import(statsURI);
+const {statsPDF}=await import(pdfURI);
+const {issueSession,isAdmin}=await import(authURI);
+assert.equal(parisMidnight('2026-10-25'),Date.parse('2026-10-24T22:00:00Z'));
+assert.equal(parisMidnight('2026-10-26'),Date.parse('2026-10-25T23:00:00Z'));
+assert.equal(parisMidnight('2026-03-29'),Date.parse('2026-03-28T23:00:00Z'));
+assert.equal(parisMidnight('2026-03-30'),Date.parse('2026-03-29T22:00:00Z'));
+for(const s of ['from=2026-02-30','from=2026-10-19&to=2026-10-18','from=2026-1-01','to=9999-01-01'])assert.throws(()=>period(new URL('https://test.local/?'+s)));
+const sql=new DatabaseSync(':memory:');
+for(const file of ['0000_polite_next_avengers','0001_premium_miracleman','0002_giant_skrulls','0003_natural_polaris','0004_visitor_statistics'])sql.exec(readFileSync('drizzle/'+file+'.sql','utf8'));
+const db={async batch(list){return Promise.all(list.map(s=>s.all()));},prepare(query){let values=[];return {bind(...v){values=v;return this;},async all(){return {results:sql.prepare(query).all(...values)};},async run(){return sql.prepare(query).run(...values);}}}};
+globalThis.testAdminEnv={DB:db,KIKALMO_ADMIN_PASSWORD:'admin',KIKALMO_ADMIN_SESSION_SECRET:'test-secret-not-for-production'};
+function route(path){let source=readFileSync(path,'utf8').replace("import {env} from 'cloudflare:workers';",'const env=globalThis.testAdminEnv;').replaceAll("'../../../../lib/admin-auth'",JSON.stringify(authURI)).replaceAll("'../../../../lib/stats'",JSON.stringify(statsURI)).replaceAll("'../../../../lib/stats-pdf'",JSON.stringify(pdfURI));return import(uri(compile(source)));}
+const auth=await route('app/api/admin/auth/route.ts'),stats=await route('app/api/admin/stats/route.ts'),pdf=await route('app/api/admin/export/route.ts');
+const req=(path,method='GET',body,headers={})=>new Request('https://test.local'+path,{method,headers:{Origin:'https://test.local','Content-Type':'application/json',...headers},...(body?{body:JSON.stringify(body)}:{})});
+assert.equal((await stats.GET(req('/api/admin/stats'))).status,401);
+assert.equal((await pdf.GET(req('/api/admin/export'))).status,401);
+assert.equal((await auth.POST(req('/api/admin/auth','POST',{username:'admin',password:'wrong'}))).status,401);
+assert.equal((await auth.POST(req('/api/admin/auth','POST',{username:'admin',password:'admin'},{Origin:'https://evil.test'}))).status,403);
+const login=await auth.POST(req('/api/admin/auth','POST',{username:'admin',password:'admin'}));assert.equal(login.status,200);const cookie=login.headers.get('set-cookie').split(';')[0];assert.match(login.headers.get('set-cookie'),/HttpOnly; Secure; SameSite=Strict/);
+assert.equal(await isAdmin(req('/api/admin/stats','GET',null,{Cookie:cookie}),globalThis.testAdminEnv.KIKALMO_ADMIN_SESSION_SECRET),true);
+assert.equal(await isAdmin(req('/api/admin/stats','GET',null,{Cookie:cookie+'0'}),globalThis.testAdminEnv.KIKALMO_ADMIN_SESSION_SECRET),false);
+const now=Date.now;Date.now=()=>now()+45000000;assert.equal(await isAdmin(req('/api/admin/stats','GET',null,{Cookie:cookie}),globalThis.testAdminEnv.KIKALMO_ADMIN_SESSION_SECRET),false);Date.now=now;
+for(const day of ['2026-10-17','2026-10-18']){sql.prepare('INSERT INTO analytics_player_days VALUES (?,?,?,?,?,?)').run(day,day,'same-browser','cinema',1,2);sql.prepare('INSERT INTO analytics_daily VALUES (?,?,?,?,?,?,?)').run(day,day,'cinema','match_started',2,2,1);sql.prepare('INSERT INTO site_visitor_days VALUES (?,?,?,?,?,?)').run(day,day,'same-visitor',1,2,5);}
+sql.prepare('INSERT INTO analytics_sessions(id,player,room,started,last_seen,active_ms) VALUES (?,?,?,?,?,?)').run('a','same-browser','cinema',Date.parse('2026-10-17T22:30:00Z'),Date.parse('2026-10-17T22:31:00Z'),60000);
+sql.prepare('INSERT INTO daily_players(id,day,player,name,avatar,state,tries,solved_at) VALUES (?,?,?,?,?,?,?,?)').run('d','2026-10-18','daily','<Test>','{}','{}',2,Date.now());
+const data=await readStats(db,'2026-10-17','2026-10-18');assert.equal(data.players,1);assert.equal(data.visitors.visitors,1);assert.equal(data.visitors.views,10);assert.equal(data.totals.match_started.count,4);assert.equal(data.series.length,2);assert.equal(data.daily[0].errors,1);assert.equal(data.dailyPlayers,1);
+assert.equal((await readStats(db,'2026-10-17','2026-10-17')).sessions.sessions,0);assert.equal((await readStats(db,'2026-10-18','2026-10-18')).sessions.activeMs,60000);
+const response=await stats.GET(req('/api/admin/stats?from=2026-10-17&to=2026-10-18','GET',null,{Cookie:cookie}));assert.equal(response.status,200);const body=await response.json();assert.equal(body.players,1);assert.ok(!JSON.stringify(body).includes('same-browser'));assert.equal(response.headers.get('Cache-Control'),'private, no-store');
+assert.equal((await stats.GET(req('/api/admin/stats?from=invalid','GET',null,{Cookie:cookie}))).status,400);
+const pdfResponse=await pdf.GET(req('/api/admin/export?from=2026-10-17&to=2026-10-18','GET',null,{Cookie:cookie}));assert.equal(pdfResponse.status,200);assert.equal(pdfResponse.headers.get('content-type'),'application/pdf');
+mkdirSync('/workspace/scratch/e31208938a97/qa-admin',{recursive:true});const bytes=Buffer.from(await pdfResponse.arrayBuffer());assert.equal(bytes.subarray(0,8).toString(),'%PDF-1.4');writeFileSync('/workspace/scratch/e31208938a97/qa-admin/stats-export.pdf',bytes);
+const empty=await readStats(db,'2026-01-01','2026-01-02');assert.equal(empty.players,0);assert.equal(empty.sessions.activeMs,0);assert.equal(empty.daily.length,0);assert.ok(statsPDF(empty).length>1000);
+const logout=await auth.DELETE(req('/api/admin/auth','DELETE'));assert.match(logout.headers.get('set-cookie'),/Max-Age=0/);
+// Visits are browser-bound, counted once per opening, and aggregated by Paris date.
+let visitSource=readFileSync('app/api/visits/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env=globalThis.testAdminEnv;').replace("import {calendar,playerHash} from '../../../lib/analytics';",calendar+`const playerHash=async id=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(id))),b=>b.toString(16).padStart(2,'0')).join('');`).replace("'../../../lib/admin-auth'",JSON.stringify(authURI));
+const visits=await import(uri(compile(visitSource)));const first=await visits.POST(req('/api/visits','POST'));assert.equal(first.status,204);const visitCookie=first.headers.get('set-cookie').split(';')[0];assert.equal((await visits.POST(req('/api/visits','POST',null,{Cookie:visitCookie}))).status,204);assert.equal((await visits.POST(req('/api/visits','POST',null,{Origin:'https://evil.test'}))).status,403);const recorded=sql.prepare('SELECT * FROM site_visitor_days WHERE day=? AND visitor<>?').get(todayParis(),'same-visitor');assert.equal(recorded.views,2);assert.ok(!recorded.visitor.includes(visitCookie.split('=')[1]));
+function todayParis(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(Date.now());}
+console.log('Admin stats: authentication, origin, expiry, dates/DST, deduplication, filters, PDF, empty period and visits passed.');
