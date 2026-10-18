@@ -1,0 +1,11 @@
+# Saisie mobile — 18 octobre 2026
+
+Le jeu en salon tient désormais dans la hauteur réellement visible, et non dans trois panneaux verticaux de hauteur fixe. Le classement devient une bande compacte ; clavier ouvert ou en paysage court, le score, la place et le nombre de joueurs sont résumés au-dessus du mot. Catégorie, manche, chrono, mot et indice restent dans le panneau principal. L'historique de discussion défile indépendamment et la saisie reste à sa base, au-dessus du clavier. Le bouton d'envoi mesure 44 pixels et le champ conserve une police de 16 pixels.
+
+`useGameViewport` écoute les changements de `VisualViewport`, le redimensionnement de fenêtre et le focus. Il conserve une hauteur de référence pour les navigateurs qui redimensionnent aussi leur viewport de mise en page. Le déplacement vertical du viewport est pris en compte. Les mises à jour sont regroupées avec `requestAnimationFrame` ; tous les écouteurs, observateurs, classes et variables sont retirés au nettoyage. Le zoom tactile n'active pas le mode clavier et ne réduit pas le cadre pour compenser le grossissement.
+
+Pendant la saisie du mot du jour, le panneau de défi occupe la zone visible : catégorie, mot, compteur d'essais et indices au-dessus de la proposition. Les anciens essais et explications restent accessibles hors saisie ; les erreurs d'envoi restent visibles dans le panneau. Le champ reste présent et en lecture seule pendant l'envoi afin de conserver le focus. Le verrou existant et les identifiants de requête continuent d'empêcher les doublons.
+
+La présentation bureau conserve les trois panneaux. Aucun changement des règles, délais, scores ou statistiques serveur. `mobile-play.css`, importé après les autres feuilles, contient les règles limitées aux largeurs jusqu'à 900 pixels.
+
+Validation : scénarios unitaires de hauteur visuelle iOS, de mise en page Android redimensionnée, de fermeture du clavier, de saisie quotidienne, de paysage court, de bureau et de zoom ; tests du mot du jour et du chrono ; TypeScript et compilation de production. Ces simulations ne remplacent pas une vérification du clavier réel Safari/Chrome sur téléphone. Le contrôle navigateur n'est pas disponible dans cet environnement.
