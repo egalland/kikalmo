@@ -77,6 +77,9 @@ def from_page(q,p):
  if not candidates:return None
  return max(candidates)[2]
 
+expansion_file=Path('data/expansion-500.json')
+expansion=json.loads(expansion_file.read_text()) if expansion_file.exists() else {'entries':[]}
+expanded={key(q):q for q in expansion['entries']}
 clues={};audit={};missing=[];counts=collections.Counter()
 for index,q in enumerate(bank):
  k=key(q);title=q['wiki'].replace('_',' ');seen=set()
@@ -85,7 +88,10 @@ for index,q in enumerate(bank):
   if other in manual:manual[k]=manual[other]
  while title in redirects and title not in seen:seen.add(title);title=redirects[title]
  p=sources.get(title)
- if k in manual:
+ if k in expanded:
+  clue=expanded[k]['hint'];origin=expanded[k]['kind']
+  if not safe(clue,q):raise ValueError('Answer leak in expansion: '+q['answer'])
+ elif k in manual:
   clue=manual[k]
   if not safe(clue,q):raise ValueError('Answer leak in authored clue: '+q['answer'])
   origin='editorial'
@@ -97,8 +103,10 @@ for index,q in enumerate(bank):
   missing.append({'theme':q['theme'],'answer':q['answer'],'wiki':q['wiki'],'hint':q['hint'],'page':p.get('title') if p else None,'extract':p.get('extract','')[:450] if p else ''});continue
  clues[k]=clue;counts[q['theme']]+=1
  audit[k]={'kind':origin,**({'page':'https://fr.wikipedia.org/wiki/'+title.replace(' ','_'),'title':title,'license':'CC BY-SA 4.0'} if origin=='wikipedia' else {})}
-Path('lib/question-clue-sources.json').write_text(json.dumps({k:v['page'] for k,v in audit.items() if v['kind']=='wikipedia'},ensure_ascii=False,indent=2)+'\n')
+ if k in expanded:
+  entry=expanded[k];audit[k]={'kind':origin,**({'page':entry['source'],'title':entry['wiki'].replace('_',' '),'license':'CC BY-SA 4.0','retrieved':expansion['retrieved']} if entry.get('source') else {})}
+Path('lib/question-clue-sources.json').write_text(json.dumps({k:v['page'] for k,v in audit.items() if v['kind'] in ['wikipedia','wiktionary']},ensure_ascii=False,indent=2)+'\n')
 Path('lib/question-clues.json').write_text(json.dumps(clues,ensure_ascii=False,indent=2)+'\n')
-Path('data/clue-sources.json').write_text(json.dumps({'retrieved':'2026-10-16','attribution':'Wikipédia, contributeurs de chaque article ; adaptation pour le jeu. CC BY-SA 4.0. Historique et auteurs sur la page source.','license':'https://creativecommons.org/licenses/by-sa/4.0/','entries':audit},ensure_ascii=False,indent=2)+'\n')
+Path('data/clue-sources.json').write_text(json.dumps({'retrieved':'2026-10-16','expanded':expansion.get('retrieved'),'attribution':'Wikipédia et Wiktionnaire, contributeurs des pages citées ; adaptations pour le jeu. CC BY-SA 4.0. Historique et auteurs sur chaque page source.','license':'https://creativecommons.org/licenses/by-sa/4.0/','entries':audit},ensure_ascii=False,indent=2)+'\n')
 Path('.sites-runtime/clues-missing.json').write_text(json.dumps(missing,ensure_ascii=False,indent=2)+'\n')
 print('Clues',len(clues),'/',len(bank),dict(counts),'missing',len(missing))

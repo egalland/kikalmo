@@ -1,0 +1,472 @@
+[series]
+The 100|Après une catastrophe nucléaire, de jeunes délinquants sont envoyés sur Terre depuis une station spatiale.
+La Petite Maison dans la prairie|La famille Ingalls s'installe dans l'Ouest américain au XIXe siècle.
+Dallas|La famille Ewing se dispute le pouvoir et les affaires autour du pétrole au Texas.
+Dynastie|Les familles Carrington et Colby rivalisent dans une saga de richesse et de pouvoir.
+Santa Barbara|Les familles Capwell et Lockridge se croisent dans un feuilleton situé en Californie.
+Côte Ouest|Des voisins vivent leurs intrigues familiales dans une impasse de Californie.
+Amour gloire et beauté|Deux familles rivales se disputent l'amour et les affaires dans le milieu de la mode à Los Angeles.
+Les Feux de l'amour|Les familles Newman et Abbott font vivre leurs rivalités à Genoa City.
+Beverly Hills 90210|Brandon et Brenda Walsh découvrent un lycée aisé après leur arrivée en Californie.
+Melrose Place|De jeunes adultes partagent les intrigues d'un immeuble d'appartements à Los Angeles.
+Hartley cœurs à vif|Des lycéens australiens vivent leurs premières relations et leurs conflits au quotidien.
+Sept à la maison|Le pasteur Eric Camden et son épouse Annie élèvent une nombreuse famille.
+Docteur Quinn femme médecin|Une praticienne de Boston s'installe à Colorado Springs dans l'Ouest du XIXe siècle.
+Walker Texas Ranger|Un justicier incarné par Chuck Norris poursuit les criminels dans le sud des États-Unis.
+L'Agence tous risques|Des anciens soldats devenus mercenaires secourent des innocents à bord d'un van noir.
+MacGyver|Un agent ingénieux se sort de situations dangereuses grâce à la science et à des objets ordinaires.
+Supercopter|Un pilote accomplit des missions à bord d'un hélicoptère de combat expérimental.
+Tonnerre mécanique|Un ancien policier combat le crime avec une moto équipée d'une technologie de pointe.
+L'Homme qui tombe à pic|Colt Seavers est cascadeur à Hollywood et chasseur de primes à ses heures perdues.
+Magnum|Un détective privé moustachu mène ses enquêtes à Hawaï et conduit une Ferrari rouge.
+Deux flics à Miami|Sonny Crockett et Ricardo Tubbs enquêtent sous couverture dans une ambiance de néons.
+Starsky et Hutch|Deux policiers de Californie traquent les criminels au volant d'une Ford Torino rouge.
+Chips|Deux motards de la police patrouillent sur les routes de Californie.
+Shérif fais-moi peur|Les cousins Duke conduisent leur voiture orange dans le comté de Hazzard.
+L'Homme de l'Atlantide|Un survivant aux capacités amphibies explore les mystères des profondeurs.
+L'Homme qui valait trois milliards|L'astronaute Steve Austin reçoit des membres bioniques après un grave accident.
+Super Jaimie|Une ancienne joueuse de tennis devient agente secrète après avoir reçu des implants bioniques.
+Code Quantum|Sam Beckett voyage dans le passé en prenant temporairement la place d'autres personnes.
+Au-delà du réel|Anthologie fantastique et de science-fiction présentant des histoires indépendantes.
+La Quatrième Dimension|Anthologie de Rod Serling où des situations ordinaires basculent dans l'étrange.
+Les Contes de la crypte|Un gardien squelettique présente des histoires d'horreur souvent ponctuées d'humour noir.
+Chair de poule|De jeunes héros se confrontent à des événements effrayants adaptés de livres de R. L. Stine.
+Fais-moi peur|Des adolescents réunis autour d'un feu racontent chacun des histoires inquiétantes.
+Eerie Indiana|Un adolescent découvre les phénomènes paranormaux de sa nouvelle petite ville.
+Xena la guerrière|Une ancienne combattante parcourt le monde antique avec sa compagne Gabrielle.
+Hercule|Kevin Sorbo incarne un demi-dieu qui protège les humains dans un univers d'aventures antiques.
+Les Aventures de Sinbad|Un marin et son équipage affrontent des créatures fantastiques au cours de leurs voyages.
+Sydney Fox l'aventurière|Une professeure d'histoire et son assistant Nigel recherchent des reliques à travers le monde.
+Chasseurs de dragons|Deux aventuriers et leur compagnon Hector vivent de la capture de créatures volantes.
+Sanctuary|Helen Magnus protège des créatures extraordinaires au sein d'un réseau de refuges.
+Warehouse 13|Deux agents recherchent des objets aux pouvoirs mystérieux pour les enfermer dans un entrepôt.
+Eureka|Un shérif surveille une ville secrète dont les habitants sont des scientifiques de génie.
+Farscape|L'astronaute John Crichton rejoint l'équipage d'un vaisseau vivant très loin de la Terre.
+Andromeda|Le capitaine Dylan Hunt tente de restaurer une civilisation avec son vaisseau et son équipage.
+Lexx|Un groupe de fugitifs voyage dans un gigantesque vaisseau organique en forme d'insecte.
+Babylon 5|Une station spatiale accueille les représentants de plusieurs civilisations extraterrestres.
+Cosmos 1999|L'explosion de déchets nucléaires projette la Lune et les habitants d'une base hors de son orbite.
+Au cœur du temps|Deux chercheurs sont piégés dans un dispositif qui les transporte à différentes époques.
+Les Envahisseurs|David Vincent tente de convaincre le monde qu'une infiltration extraterrestre est en cours.
+Le Prisonnier|Un ancien agent se réveille dans un village mystérieux où on le désigne comme le numéro six.
+Chapeau melon et bottes de cuir|John Steed mène des enquêtes d'espionnage avec des partenaires dont Emma Peel.
+Amicalement vôtre|Un aristocrate britannique et un riche Américain forment un duo d'enquêteurs malgré leurs différences.
+Mission impossible|Une équipe d'agents prépare des opérations complexes sous l'autorité de messages qui s'autodétruisent.
+Le Saint|Simon Templar mène des aventures de justicier élégant et de gentleman cambrioleur.
+Les Mystères de l'Ouest|James West et Artemus Gordon accomplissent des missions secrètes dans l'Ouest américain.
+Zorro|Don Diego de la Vega cache son identité derrière un masque et signe ses exploits d'une lettre à l'épée.
+Rintintin|Un jeune garçon et un berger allemand vivent dans un fort de cavalerie après une attaque de train.
+Flipper le dauphin|Deux frères vivent des aventures marines avec leur compagnon à nageoires en Floride.
+Skippy|Un kangourou accompagne une famille de gardes dans un parc naturel australien.
+Lassie|Les aventures d'une chienne colley fidèle à ses jeunes compagnons humains.
+Daktari|Un vétérinaire dirige une réserve africaine avec le lion Clarence et la chimpanzée Judy.
+Belle et Sébastien|Un petit garçon des montagnes se lie d'amitié avec une grande chienne blanche.
+Poly|Un jeune garçon et un petit cheval vivent des aventures dans une série française familiale.
+Thierry la Fronde|Un jeune noble résiste aux Anglais en Sologne pendant la guerre de Cent Ans.
+Les Brigades du Tigre|Des policiers modernisent leurs méthodes au début du XXe siècle dans la France de Clemenceau.
+Vidocq|Un ancien forçat devenu enquêteur résout des affaires dans la France du XIXe siècle.
+Arsène Lupin|Un gentleman cambrioleur multiplie les déguisements pour mener ses coups avec élégance.
+Commissaire Moulin|Un policier parisien interprété par Yves Rénier dirige des enquêtes criminelles.
+Navarro|Un commissaire incarné par Roger Hanin travaille avec son équipe à Paris.
+Julie Lescaut|Une commissaire élève ses deux filles tout en dirigeant des enquêtes policières.
+Une femme d'honneur|Isabelle Florent mène des enquêtes au sein de la gendarmerie française.
+Joséphine ange gardien|Une envoyée bienveillante incarnée par Mimie Mathy vient aider des personnes en difficulté.
+Louis la Brocante|Un antiquaire au grand cœur sillonne la région lyonnaise à bord de sa camionnette.
+Père et Maire|Un prêtre et un élu d'une petite ville s'opposent tout en aidant leurs administrés.
+Camping Paradis|Tom Delormes accueille des vacanciers et règle leurs soucis dans un établissement du sud de la France.
+Clem|Une adolescente devient mère et tente de concilier famille, études et vie sentimentale.
+Nos chers voisins|Les habitants d'un immeuble multiplient les petites querelles de palier dans des scènes courtes.
+Scènes de ménages|Plusieurs couples de générations différentes partagent leurs disputes et leurs complicités.
+En famille|La famille Le Kervelec traverse les petits conflits et les retrouvailles du quotidien.
+Soda|Un lycéen et ses proches vivent des situations comiques en formats courts.
+Parents mode d'emploi|Gaby et Isa cherchent comment élever leurs trois enfants sans perdre leur calme.
+Les Filles d'à côté|Des amies partagent un immeuble avec des voisins dans une sitcom française des années 1990.
+Hélène et les Garçons|Des étudiants partagent leurs histoires sentimentales autour d'une cafétéria et d'un groupe de musique.
+Premiers Baisers|Des lycéens vivent leurs aventures sentimentales autour des personnages de Justine et Jérôme.
+Le Miracle de l'amour|Les amis d'un groupe de musique poursuivent leur vie sentimentale dans une grande maison.
+Sous le soleil|Trois amies, Laure, Caroline et Jessica, partagent leur quotidien à Saint-Tropez.
+Une famille formidable|Catherine et Jacques Beaumont traversent les joies et les crises d'une grande famille.
+Les Cordier juge et flic|Un commissaire et son fils magistrat travaillent sur les mêmes affaires.
+Avocats et Associés|Les membres d'un cabinet parisien défendent leurs clients et vivent leurs relations personnelles.
+Central Nuit|Une équipe de policiers prend en charge les enquêtes et interventions après la tombée du jour.
+Boulevard du Palais|Une magistrate et un commandant de police mènent ensemble des enquêtes criminelles.
+Un village français|Les habitants de Villeneuve traversent l'Occupation pendant la Seconde Guerre mondiale.
+Les Hommes de l'ombre|Des conseillers en communication s'affrontent dans les coulisses d'une campagne présidentielle.
+Baron noir|Un élu du Nord interprété par Kad Merad manœuvre dans les coulisses de la politique.
+Marseille|Un maire vieillissant et son ancien protégé s'affrontent pour le contrôle de leur ville.
+Flics|Des enquêteurs parisiens, dont ceux incarnés par Frédéric Diefenthal et Yann Sundberg, traquent le crime.
+Les Bleus premiers pas dans la police|De jeunes recrues découvrent le quotidien d'un commissariat français.
+[food]
+Sirop d'érable|Liquide sucré obtenu en concentrant la sève d'un arbre emblématique du Canada.
+Crème chantilly|Préparation de crème fouettée et sucrée, utilisée pour garnir les desserts.
+Tamina|Dessert maghrébin à base de semoule grillée, de beurre et de miel.
+Bsissa|Mélange de céréales et de légumineuses grillées et moulues, consommé notamment en Afrique du Nord.
+Feqqas|Petits biscuits marocains souvent garnis d'amandes, découpés et cuits une seconde fois.
+[expressions]
+En boucher un coin|Surprendre fortement quelqu'un par une action ou une révélation inattendue.
+Arrondir les angles|Adoucir un conflit en évitant les positions trop tranchées.
+Sortir par la grande porte|Quitter une fonction ou une situation avec honneur et succès.
+Ravaler la façade|Se refaire une beauté ou rénover l'apparence extérieure d'un bâtiment.
+Rubis sur l'ongle|Payer immédiatement et intégralement, sans laisser de dette.
+Botter en touche|Éviter de répondre à une question embarrassante ou repousser une décision.
+Bête comme ses pieds|Manquer singulièrement d'intelligence ou de jugement.
+Mettre sur pied|Organiser et préparer quelque chose pour le rendre opérationnel.
+Rendre gorge|Restituer de force ce que l'on avait acquis de façon malhonnête.
+Dominer de la tête et des épaules|Être très nettement supérieur aux autres dans un domaine.
+Chant du cygne|Dernière grande œuvre ou manifestation de talent avant une disparition.
+À la légère|Agir sans assez de prudence, de réflexion ou de sérieux.
+Rendre à César ce qui est à César|Attribuer à chacun le mérite ou la responsabilité qui lui revient.
+Cheval de bataille|Sujet favori sur lequel on revient souvent pour défendre une cause.
+Bouc émissaire|Personne à qui l'on fait porter la faute pour les autres.
+Sentiers battus|Voies habituelles et sans originalité dont on peut chercher à s'écarter.
+Prendre la tangente|S'éloigner discrètement ou éviter de poursuivre une situation gênante.
+Tirer sa révérence|Prendre congé, se retirer ou mettre fin à une carrière.
+Se prendre les pieds dans le tapis|Se tromper et se retrouver embarrassé dans une explication ou une manœuvre.
+Percer à jour|Découvrir les intentions cachées ou le vrai caractère de quelqu'un.
+Battre son plein|Atteindre son moment le plus intense, en parlant d'une activité ou d'une fête.
+Faire le point|Examiner une situation pour établir où l'on en est.
+Battre la campagne|Tenir des propos incohérents ou laisser son esprit divaguer.
+Battre en brèche|Attaquer vivement une idée pour en montrer les faiblesses.
+Marquer le pas|Cesser de progresser ou ralentir nettement dans une entreprise.
+Avoir une idée derrière la tête|Poursuivre un projet que l'on ne dévoile pas complètement.
+Avoir des yeux de lynx|Repérer les détails avec une grande acuité visuelle.
+Conter fleurette|Adresser des propos galants à quelqu'un que l'on cherche à séduire.
+Taper dans l'œil|Plaire vivement dès la première rencontre ou le premier regard.
+Faire de l'œil|Chercher à séduire par un regard ou des signes discrets.
+Avoir du plomb dans l'aile|Voir sa réussite ou sa solidité compromise par des difficultés.
+Avoir un fil à la patte|Être retenu par un engagement qui empêche d'agir librement.
+Graisser la patte|Donner de l'argent à quelqu'un pour obtenir illicitement une faveur.
+Ne pas casser trois pattes à un canard|N'avoir rien de très remarquable ou d'exceptionnel.
+En garder sous le coude|Conserver une réserve ou un avantage pour l'utiliser plus tard.
+Lever le coude|Boire volontiers des boissons alcoolisées.
+Rester les bras croisés|Ne rien faire alors qu'une intervention serait possible.
+Se retrousser les manches|Se préparer à travailler activement et avec détermination.
+Faire contre mauvaise fortune bon cœur|Accepter les difficultés en essayant de garder courage.
+Avoir le cœur brisé|Éprouver une très grande peine, notamment après une rupture.
+Avoir un cœur d'artichaut|Tomber amoureux facilement et souvent.
+Avoir un cœur de pierre|Se montrer insensible à la souffrance ou aux émotions.
+Ouvrir son cœur|Confier sincèrement ses sentiments ou ses préoccupations.
+Prendre à cœur|Accorder une grande importance personnelle à une tâche ou à une remarque.
+Avoir des doigts de fée|Faire preuve d'une grande habileté dans les travaux délicats.
+Donner un coup de pouce|Apporter une petite aide qui facilite la réussite.
+Mettre le doigt dans l'engrenage|S'engager dans une suite d'événements dont il devient difficile de sortir.
+Se tourner les pouces|Rester sans rien faire, dans l'oisiveté.
+S'en mordre les doigts|Regretter vivement une décision ou une occasion manquée.
+Avoir les chevilles qui enflent|Prendre une importance excessive à ses propres yeux.
+Avoir les jambes en coton|Se sentir faible et instable sous l'effet de la peur ou de la fatigue.
+Faire une belle jambe|N'apporter aucune aide ni aucun avantage utile dans la situation présente.
+Traiter par-dessus la jambe|S'occuper de quelque chose sans le sérieux ni l'attention nécessaires.
+Avoir la dent dure|Critiquer sévèrement et sans indulgence.
+Avoir la langue bien pendue|Parler avec aisance et parfois beaucoup.
+Avoir le dernier mot|Clore une discussion en imposant finalement son point de vue.
+Être sur les dents|Être très tendu, inquiet ou surchargé de travail.
+Faire la fine bouche|Se montrer difficile et refuser ce qui est proposé avec dédain.
+Mordre la poussière|Subir une défaite ou un échec cuisant.
+Prendre son courage à deux mains|Surmonter sa peur pour agir avec détermination.
+Avoir la tête sur les épaules|Faire preuve de bon sens et d'équilibre dans ses décisions.
+Avoir les deux pieds dans le même sabot|Manquer d'initiative et ne pas savoir se débrouiller.
+Mettre au pied du mur|Contraindre quelqu'un à agir ou à faire un choix sans échappatoire.
+Ne pas arriver à la cheville de quelqu'un|Être très inférieur à une autre personne dans une comparaison.
+Reprendre du poil de la bête|Retrouver de l'énergie et du courage après une période difficile.
+Tirer le diable par la queue|Vivre avec des ressources insuffisantes et peiner à joindre les deux bouts.
+Avoir quelqu'un dans le nez|Éprouver une antipathie tenace envers une personne.
+Avoir le compas dans l'œil|Évaluer très précisément une distance ou une dimension sans instrument.
+Dévorer des yeux|Regarder quelque chose ou quelqu'un avec beaucoup de désir ou d'admiration.
+Être dans l'œil du cyclone|Se trouver au centre d'une crise ou d'une forte attention publique.
+Avoir des étoiles dans les yeux|Montrer un grand émerveillement ou un bonheur visible.
+Se voiler la face|Refuser de regarder une réalité désagréable en toute lucidité.
+Mettre les points sur les i|Expliquer très clairement une chose pour éviter toute ambiguïté.
+Être à couteaux tirés|Entretenir des relations très hostiles et tendues.
+Couper la poire en deux|Trouver un compromis en partageant les concessions de façon égale.
+Accorder ses violons|Se mettre d'accord avant de parler ou d'agir ensemble.
+Faire cavalier seul|Agir isolément en refusant de s'associer aux autres.
+Prendre la balle au bond|Saisir immédiatement une occasion favorable qui se présente.
+Renvoyer la balle|Répondre à une action en retournant la responsabilité ou la question à l'autre.
+Être dans les starting-blocks|Être prêt à commencer dès que le signal est donné.
+Changer son fusil d'épaule|Modifier sa stratégie ou son opinion pour s'adapter à la situation.
+Passer entre les gouttes|Échapper aux ennuis qui touchent les autres.
+Mettre les petits plats dans les grands|Déployer des efforts particuliers pour bien recevoir quelqu'un.
+Avoir le melon|Se croire plus important ou plus talentueux que les autres.
+Manger son chapeau|Accepter une humiliation en renonçant à ce que l'on avait affirmé.
+Être au ras des pâquerettes|Manquer de hauteur intellectuelle ou d'ambition.
+Être dans de beaux draps|Se retrouver dans une situation embarrassante ou difficile.
+Tailler une bavette|Discuter tranquillement et longuement de choses et d'autres.
+Casser sa pipe|Mourir, dans une formulation familière.
+Passer l'arme à gauche|Mourir, dans une formule figurée familière.
+Faire chou blanc|Échouer dans une recherche ou une tentative.
+Faire chou gras|Tirer un grand profit d'un événement ou d'une situation.
+Faire long feu|Ne pas produire l'effet attendu et finir par échouer.
+Faire feu de tout bois|Utiliser tous les moyens disponibles pour atteindre son objectif.
+Prêcher le faux pour savoir le vrai|Avancer volontairement une erreur pour provoquer une correction révélatrice.
+Se vendre comme des petits pains|Trouver très rapidement de nombreux acheteurs.
+Avoir plusieurs cordes à son arc|Disposer de plusieurs compétences ou possibilités d'action.
+Ajouter de l'eau à son moulin|Fournir de nouveaux arguments en faveur d'une idée.
+Mettre la poudre aux yeux|Chercher à impressionner en donnant une apparence trompeuse de réussite.
+Jeter de la poudre aux yeux|Éblouir par des apparences pour masquer une réalité moins flatteuse.
+Être une poule mouillée|Manquer de courage et se laisser facilement effrayer.
+Passer du coq à l'âne|Changer brusquement de sujet sans transition logique.
+Donner sa chemise|Se montrer extrêmement généreux, jusqu'à se priver soi-même.
+Ne pas être né de la dernière pluie|Avoir assez d'expérience pour ne pas se laisser tromper facilement.
+Être aux anges|Éprouver un bonheur très intense.
+Prendre pour argent comptant|Croire immédiatement une affirmation sans la vérifier.
+Jouer cartes sur table|Agir ouvertement en dévoilant ses intentions.
+Abattre ses cartes|Révéler ses intentions ou les moyens dont on dispose.
+Brouiller les pistes|Rendre une recherche plus difficile en créant de fausses directions.
+Faire table rase|Écarter tout ce qui existait pour repartir sur de nouvelles bases.
+Remettre les pendules à l'heure|Rétablir clairement les faits et dissiper un malentendu.
+Être dans le pétrin|Se trouver dans des difficultés embarrassantes.
+Mettre du plomb dans la tête|Rendre quelqu'un plus réfléchi et plus raisonnable.
+Couper le cordon|Prendre son indépendance à l'égard d'une personne ou d'une origine.
+Crever l'abcès|Aborder franchement un problème douloureux pour tenter de le résoudre.
+Défrayer la chronique|Faire beaucoup parler de soi dans l'actualité.
+Enfoncer une porte ouverte|Affirmer avec insistance une évidence que personne ne conteste.
+Être sur la corde raide|Se trouver dans une situation instable où un échec est possible à tout moment.
+Jouer les trouble-fête|Perturber une ambiance agréable ou une réussite attendue.
+Mettre les compteurs à zéro|Repartir sans tenir compte des erreurs ou des résultats précédents.
+Ne pas faire de vieux os|Ne pas rester longtemps dans un lieu ou une situation.
+Payer les pots cassés|Subir les conséquences dommageables d'une faute, parfois commise par autrui.
+Remonter la pente|Retrouver progressivement une situation meilleure après des difficultés.
+Tenir le cap|Poursuivre sa direction et ses objectifs malgré les obstacles.
+[objects]
+Passoire à thé|Petit filtre retenant les feuilles pendant l'infusion dans une tasse.
+Boule à thé|Sphère perforée dans laquelle on enferme des feuilles avant de les infuser.
+Infuseur|Accessoire perforé qui retient les feuilles dans une boisson chaude.
+Porte-filtre|Pièce recevant le café moulu avant le passage de l'eau sous pression.
+Mousseur à lait|Petit appareil qui transforme le liquide blanc en écume pour les boissons chaudes.
+Moulin à café|Appareil qui réduit les grains torréfiés en poudre.
+Cafetière italienne|Ustensile à deux réservoirs qui fait monter l'eau chaude à travers la mouture.
+Cafetière à piston|Récipient dans lequel on abaisse un filtre pour séparer la mouture de la boisson.
+Bac à glaçons|Moule compartimenté placé au congélateur pour obtenir de petits cubes froids.
+Pince à glaçons|Petit ustensile qui permet de saisir les cubes sans les toucher.
+Seau à champagne|Récipient rempli de glace pour maintenir une bouteille au frais.
+Shaker|Récipient fermé que l'on secoue pour mélanger les ingrédients d'un cocktail.
+Doseur à cocktail|Petit récipient gradué pour mesurer les quantités avant de mélanger une boisson.
+Cuillère à glace|Ustensile arrondi qui forme des boules de dessert congelé.
+Siphon de cuisine|Récipient sous pression utilisé pour obtenir des mousses et des chantilly.
+Chalumeau de cuisine|Petit brûleur qui caramélise notamment le dessus des crèmes brûlées.
+Poche à douille|Sac souple muni d'un embout servant à dresser ou décorer les pâtisseries.
+Corne de pâtissier|Petite plaque souple permettant de racler un bol et de manipuler une pâte.
+Maryse|Spatule à tête souple utilisée pour racler les préparations dans les récipients.
+Batteur électrique|Appareil à deux fouets tournants qui monte les blancs et mélange les pâtes.
+Tamis|Cadre garni d'un fin grillage qui sépare les particules selon leur taille.
+Mandoline de cuisine|Planche munie d'une lame qui coupe les légumes en tranches régulières.
+Essoreuse à salade|Panier rotatif qui chasse l'eau des feuilles lavées par force centrifuge.
+Centrifugeuse|Appareil qui extrait le jus des fruits par rotation rapide.
+Extracteur de jus|Appareil qui presse lentement les fruits pour séparer liquide et fibres.
+Cuiseur à riz|Appareil qui adapte automatiquement la cuisson de cette céréale dans l'eau.
+Cuiseur vapeur|Appareil à paniers perforés où les aliments cuisent au-dessus de l'eau chaude.
+Déshydrateur|Appareil qui retire progressivement l'humidité des aliments pour les conserver.
+Machine à pain|Appareil qui pétrit, fait lever puis cuit une pâte dans sa cuve.
+Trancheuse|Appareil à lame circulaire permettant de couper finement du jambon ou du saucisson.
+Dénoyauteur|Ustensile qui retire le cœur dur des cerises ou des olives.
+Zesteur|Petit outil qui prélève de fines lanières sur l'écorce des agrumes.
+Vide-pomme|Tube coupant permettant de retirer le trognon d'un fruit sans le découper.
+Fusil à aiguiser|Tige en acier ou en céramique servant à entretenir le fil des couteaux.
+Pierre à aiguiser|Bloc abrasif sur lequel on frotte une lame pour lui rendre son tranchant.
+Billot|Épais support de bois utilisé pour découper la viande.
+Attendrisseur|Ustensile à pointes ou à reliefs qui assouplit les morceaux de viande.
+Cloche alimentaire|Couvercle bombé protégeant les plats posés sur la table.
+Dessous-de-plat|Support isolant que l'on pose entre une casserole chaude et la table.
+Plat à gratin|Récipient allant au four où l'on fait dorer une préparation.
+Terrine|Récipient profond, souvent en terre cuite, utilisé pour certains pâtés.
+Ramequin|Petit récipient individuel allant souvent au four pour les crèmes et les soufflés.
+Saucière|Petit récipient à bec verseur présenté à table avec un accompagnement liquide.
+Soupière|Grand récipient de service muni d'un couvercle, destiné au potage.
+Plateau de service|Surface transportable à rebords permettant de porter plusieurs verres ou assiettes.
+Banneton|Corbeille dans laquelle repose la pâte avant son passage au four.
+Grille de refroidissement|Support ajouré sur lequel les gâteaux évacuent leur chaleur après cuisson.
+Cercle à pâtisserie|Anneau métallique qui maintient les bords d'un entremets pendant le montage.
+Brosse à vaisselle|Ustensile à poils fixé sur un manche qui nettoie les assiettes.
+Goupillon|Brosse étroite et allongée permettant de nettoyer l'intérieur des bouteilles.
+Tableau blanc|Panneau lisse réutilisable sur lequel on écrit au feutre effaçable.
+Ardoise|Petite plaque sur laquelle on écrit traditionnellement à la craie.
+Craie|Bâtonnet friable utilisé pour écrire sur un tableau noir.
+Porte-mine|Instrument d'écriture qui avance une fine tige de graphite par pression.
+Stylo-plume|Instrument d'écriture dont la pointe métallique reçoit de l'encre liquide.
+Cartouche d'encre|Petit réservoir remplaçable qui alimente une pointe ou une imprimante.
+Correcteur|Produit blanc ou ruban opaque qui masque une erreur sur une feuille.
+Buvard|Papier absorbant utilisé pour sécher l'encre fraîche.
+Sous-main|Protection plate que l'on installe sur un bureau pour écrire.
+Presse-papier|Petit objet lourd qui empêche les feuilles de s'envoler.
+Serre-livres|Support calant des ouvrages à la verticale sur une étagère.
+Marque-page|Bande fine glissée entre deux feuillets pour retrouver l'endroit où l'on s'est arrêté.
+Protège-cahier|Couverture souple qui préserve les pages et la reliure d'un carnet scolaire.
+Chemise cartonnée|Pochette rigide permettant de ranger et de transporter des documents.
+Porte-documents|Étui ou sac plat destiné au transport de dossiers professionnels.
+Porte-cartes|Petit étui compartimenté pour ranger des titres de paiement ou de fidélité.
+Plastifieuse|Machine qui enferme un document dans une pellicule protectrice transparente.
+Massicot|Appareil à lame permettant de couper des piles de feuilles bien droites.
+Relieuse|Machine qui assemble des feuillets avec une spirale ou un dos.
+Destructeur de documents|Machine qui découpe les feuilles en bandes ou en confettis pour les rendre illisibles.
+Calculatrice|Petit appareil destiné à effectuer des opérations arithmétiques.
+Boulier|Cadre garni de tiges et de boules utilisé pour effectuer des calculs.
+Globe terrestre|Représentation sphérique de notre planète, souvent montée sur un axe.
+Planisphère|Représentation de toute la surface de notre planète sur un support plat.
+Boussole|Instrument à aiguille aimantée indiquant le nord.
+Sextant|Instrument permettant de mesurer la hauteur d'un astre pour la navigation.
+Sablier|Instrument dans lequel des grains s'écoulent pour mesurer une durée.
+Baromètre|Instrument qui mesure la pression atmosphérique.
+Hygromètre|Instrument qui mesure la quantité d'humidité présente dans l'air.
+Anémomètre|Instrument qui mesure la vitesse du vent.
+Pluviomètre|Récipient gradué permettant de mesurer la quantité de pluie tombée.
+Girouette|Pièce mobile placée en hauteur qui indique d'où souffle le vent.
+Station météo|Appareil qui rassemble plusieurs mesures de l'atmosphère à un même endroit.
+Ventilateur|Appareil à pales tournantes qui met l'air en mouvement.
+Radiateur|Appareil ou élément métallique qui diffuse la chaleur dans une pièce.
+Humidificateur|Appareil qui ajoute de la vapeur ou de fines gouttelettes à l'air d'une pièce.
+Déshumidificateur|Appareil qui retire l'excès d'eau contenu dans l'air intérieur.
+Purificateur d'air|Appareil muni de filtres destiné à retenir les particules en suspension.
+Détecteur de fumée|Boîtier qui émet une alarme lorsqu'il perçoit les particules d'un incendie.
+Extincteur|Appareil portatif projetant un agent pour éteindre un début d'incendie.
+Couverture anti-feu|Étoffe résistante à la chaleur utilisée pour étouffer un départ d'incendie.
+Sonnette|Dispositif sonore actionné à l'entrée pour annoncer une visite.
+Interphone|Appareil permettant de parler à quelqu'un situé devant l'entrée d'un bâtiment.
+Visiophone|Dispositif d'entrée qui permet de voir et d'entendre les visiteurs à distance.
+Judas de porte|Petit œilleton permettant de regarder le palier sans ouvrir.
+Cale-porte|Petit objet qui maintient un battant ouvert ou l'empêche de bouger.
+Butée de porte|Pièce qui arrête un battant pour éviter qu'il ne frappe le mur.
+Verrou|Pièce coulissante permettant de bloquer un accès.
+Cadenas|Petite serrure indépendante à anse, utilisée sur des casiers ou des chaînes.
+Serrure|Mécanisme qui bloque un battant et se commande généralement avec une clé.
+Poignée de porte|Pièce que l'on abaisse ou tourne pour actionner un pêne.
+Boîte aux lettres|Réceptacle dans lequel on dépose le courrier des habitants.
+Numéro de maison|Plaque ou inscription permettant de repérer une habitation dans une rue.
+Store vénitien|Protection de fenêtre composée de lamelles horizontales orientables.
+Volet roulant|Tablier articulé qui s'enroule au-dessus d'une ouverture.
+Moustiquaire|Filet fin qui laisse passer l'air tout en arrêtant les insectes.
+Paravent|Cloison légère et mobile formée de panneaux articulés.
+Chauffe-eau|Appareil qui élève la température de l'eau destinée aux usages domestiques.
+Adoucisseur d'eau|Appareil qui réduit notamment la teneur en calcium du réseau domestique.
+Mitigeur|Robinet à commande unique permettant de régler température et débit.
+Siphon|Pièce courbée de canalisation contenant de l'eau pour bloquer les mauvaises odeurs.
+Bouchon d'évier|Pièce amovible qui empêche l'eau de s'évacuer d'un bac.
+Bonde|Pièce fixée sur l'ouverture d'évacuation d'une baignoire ou d'un lavabo.
+Porte-serviettes|Support mural ou sur pied destiné à faire sécher le linge de bain.
+Distributeur de savon|Récipient muni d'une pompe qui délivre une dose de produit lavant.
+Trousse de toilette|Petit sac dans lequel on transporte les produits d'hygiène.
+Bonnet de douche|Coiffe imperméable qui protège les cheveux pendant la toilette.
+Brosse de massage|Accessoire à picots ou à poils utilisé pour stimuler la peau.
+Pierre ponce|Roche abrasive légère utilisée pour éliminer les peaux épaissies des pieds.
+Râpe à pieds|Outil abrasif permettant de réduire les callosités de la plante.
+Recourbe-cils|Petite pince qui relève les poils bordant la paupière.
+Épilateur|Appareil qui retire les poils en les arrachant mécaniquement.
+Tondeuse à cheveux|Appareil à lames qui raccourcit la chevelure à une hauteur réglable.
+Fer à boucler|Appareil chauffant autour duquel on enroule une mèche pour l'onduler.
+Bigoudi|Petit rouleau autour duquel on enroule une mèche pour lui donner une forme.
+Barrette|Petit accessoire qui maintient une mèche en place.
+Élastique à cheveux|Anneau extensible utilisé pour attacher une queue-de-cheval.
+Serre-tête|Arceau porté sur la tête pour retenir les mèches.
+Bandeau|Bande de tissu portée autour du front ou pour maintenir les cheveux.
+Lunettes de soleil|Accessoire à verres teintés qui protège les yeux de la lumière vive.
+Étui à lunettes|Boîte rigide ou pochette protégeant une monture et ses verres.
+Lentilles de contact|Petites coupelles transparentes posées directement sur l'œil.
+Montre connectée|Accessoire de poignet qui reçoit des notifications et mesure l'activité.
+Bracelet d'activité|Accessoire porté au poignet qui compte notamment les pas.
+Podomètre|Appareil qui compte les pas effectués pendant la marche.
+Tensiomètre|Instrument muni d'un brassard qui mesure la pression artérielle.
+Oxymètre|Petit appareil placé au bout du doigt pour estimer l'oxygénation du sang.
+Stéthoscope|Instrument à pavillon et tuyaux qui permet d'écouter les sons du corps.
+Pilulier|Boîte compartimentée servant à organiser les médicaments par prise ou par jour.
+Compresse|Pièce de gaze utilisée pour nettoyer ou protéger une plaie.
+Bandage|Bande appliquée autour d'une partie du corps pour la maintenir ou la protéger.
+Attelle|Support rigide qui immobilise temporairement une articulation ou un membre.
+Béquille|Appui individuel utilisé sous le bras ou à l'avant-bras pour aider à marcher.
+Déambulateur|Cadre à poignées utilisé comme appui par les personnes ayant du mal à marcher.
+Masque chirurgical|Protection du nez et de la bouche utilisée notamment dans les soins.
+Gants jetables|Protections des mains à usage unique pour l'hygiène ou les manipulations.
+Bouchons d'oreilles|Petits éléments insérés dans le conduit auditif pour atténuer le bruit.
+Masque de sommeil|Bande opaque portée devant les yeux pour dormir dans l'obscurité.
+Coussin de voyage|Support souvent en forme de U qui maintient la nuque en position assise.
+Sac de couchage|Enveloppe isolante dans laquelle on se glisse pour dormir en camping.
+Tente|Abri démontable en toile tendue sur des piquets ou des arceaux.
+Matelas gonflable|Support de couchage souple dont le volume est obtenu en y insufflant de l'air.
+Pompe à air|Appareil qui envoie du gaz dans un pneu ou un équipement gonflable.
+Réchaud|Petit appareil portable servant à chauffer une casserole en camping.
+Gamelle|Récipient de repas robuste et transportable utilisé notamment en randonnée.
+Gourde|Récipient réutilisable destiné à transporter une boisson.
+Flasque|Petit récipient plat et transportable, traditionnellement glissé dans une poche.
+Glacière|Coffre isolant permettant de conserver des aliments au frais pendant un trajet.
+Accumulateur de froid|Bloc que l'on congèle avant de le placer dans un sac isotherme.
+Lampe frontale|Éclairage porté sur le front pour garder les mains libres.
+Lanterne|Éclairage transportable protégé par un boîtier et souvent muni d'une poignée.
+Sac étanche|Pochette résistante à l'eau destinée à protéger son contenu.
+Poncho de pluie|Vêtement imperméable ample avec une ouverture pour la tête.
+Bâton de randonnée|Appui tenu à la main pour stabiliser la marche sur les sentiers.
+Mousqueton|Anneau métallique à ouverture mobile utilisé pour attacher rapidement du matériel.
+Hamac|Toile suspendue entre deux points dans laquelle on peut s'allonger.
+Sifflet|Petit instrument dans lequel on souffle pour produire un son aigu.
+Talkie-walkie|Appareil radio portatif permettant de communiquer sans réseau téléphonique.
+Batterie externe|Réserve d'énergie portable permettant de recharger un téléphone en déplacement.
+Panneau solaire|Surface qui transforme le rayonnement de notre étoile en électricité ou en chaleur.
+Onduleur|Appareil qui maintient temporairement l'alimentation électrique en cas de coupure.
+Routeur|Équipement qui dirige les paquets de données entre plusieurs réseaux.
+Modem|Appareil qui adapte un signal pour établir une connexion de données.
+Répéteur Wi-Fi|Boîtier qui relaie un réseau sans fil pour étendre sa couverture.
+Câble Ethernet|Cordon muni de prises RJ45 utilisé pour relier des appareils en réseau.
+Câble HDMI|Cordon transportant le son et l'image numériques entre des appareils.
+Câble USB|Cordon qui transporte de l'énergie et des données entre périphériques.
+Adaptateur secteur|Bloc qui transforme l'électricité d'une prise pour alimenter un appareil.
+Lecteur de carte|Petit appareil permettant de consulter le contenu d'un support mémoire amovible.
+Hub USB|Boîtier qui ajoute plusieurs prises de connexion à un ordinateur.
+Station d'accueil|Support qui relie un ordinateur portable à plusieurs périphériques en un geste.
+Tapis de souris|Surface placée sous un périphérique de pointage pour faciliter son déplacement.
+Repose-poignet|Support qui soulage l'appui des mains devant un clavier.
+Pavé numérique|Petit ensemble de touches destiné à la saisie rapide de chiffres.
+Vidéoprojecteur|Appareil qui envoie une image agrandie sur un mur ou une toile.
+Écran de projection|Surface claire tendue pour recevoir l'image d'un appareil optique.
+Téléobjectif|Accessoire optique permettant de photographier un sujet éloigné en le grossissant.
+Flash photographique|Dispositif qui émet une lumière très brève au moment de la prise de vue.
+Perche à selfie|Support télescopique qui éloigne le téléphone pour se photographier.
+Stabilisateur|Accessoire qui compense les mouvements pour rendre une vidéo plus fluide.
+Micro-cravate|Petit capteur sonore fixé près du col d'une personne qui parle.
+Carte son|Composant ou boîtier qui gère les entrées et sorties audio d'un ordinateur.
+Table de mixage|Console à plusieurs canaux qui combine et règle des signaux audio.
+Pédale d'effet|Boîtier commandé au pied qui modifie le son d'un instrument.
+Médiator|Petite lamelle utilisée pour pincer les cordes d'une guitare.
+Diapason|Tige métallique en U qui donne une note de référence lorsqu'on la frappe.
+Métronome|Appareil qui produit des battements réguliers pour guider le tempo.
+Pupitre|Support incliné destiné à maintenir une partition ou un texte à hauteur de lecture.
+Accordeur|Appareil qui indique si une note jouée est trop haute ou trop basse.
+Archet|Baguette garnie de crins que l'on frotte sur les cordes d'un violon.
+Baguette de batterie|Tige tenue à la main pour frapper les peaux et les cymbales.
+Capodastre|Accessoire qui serre les cordes sur le manche d'une guitare pour en changer la tonalité.
+Raquette de tennis|Instrument à manche et tamis cordé permettant de frapper une balle jaune.
+Raquette de ping-pong|Petite palette utilisée pour échanger une balle légère au-dessus d'un filet.
+Volant de badminton|Projectile composé d'un embout et d'une jupe de plumes ou de plastique.
+Ballon de football|Objet sphérique que l'on pousse principalement avec les pieds sur un terrain.
+Ballon de basket|Objet rond et rebondissant que l'on lance dans un panier surélevé.
+Ballon de rugby|Objet ovale porté ou frappé au pied sur un terrain à poteaux en H.
+[myths]
+Tangaroa|Divinité des océans dans plusieurs traditions polynésiennes.
+Tāne|Divinité māorie associée aux forêts et aux oiseaux, qui sépare le ciel et la terre.
+Ranginui|Père céleste de la tradition māorie, autrefois uni à la Terre dans une étreinte.
+Papatūānuku|Mère terrestre dans la tradition māorie, séparée du Ciel par ses enfants.
+Rongo|Divinité māorie associée à la paix et aux cultures alimentaires.
+Tūmatauenga|Divinité māorie de la guerre et des activités humaines.
+Tāwhirimātea|Divinité māorie des vents et des tempêtes.
+Kanaloa|Divinité hawaïenne associée notamment à l'océan.
+Kāne|Grande divinité hawaïenne associée à la création et à la vie.
+Kū|Grande divinité hawaïenne associée notamment à la guerre.
+Lono|Divinité hawaïenne liée à la fertilité, aux récoltes et à la fête du Makahiki.
+Pélé|Divinité hawaïenne des volcans et du feu.
+Namaka|Divinité hawaïenne de la mer, souvent présentée comme la sœur de l'esprit des volcans.
+Hauméa|Divinité hawaïenne de la fécondité et des naissances.
+Hina|Nom porté par plusieurs figures féminines de Polynésie, dont certaines sont associées à la Lune.
+Māui|Héros polynésien rusé auquel on attribue notamment le ralentissement du Soleil.
+Ta'aroa|Divinité créatrice de la tradition tahitienne.
+Virbius|Divinité romaine liée au sanctuaire de Diane à Aricie.
+Clotho|La plus jeune des trois fileuses du destin grec, chargée de produire le fil de la vie.
+Lachésis|L'une des trois divinités grecques du destin, qui attribue ou mesure la part de chacun.
+Atropos|L'une des trois divinités grecques du destin, qui coupe le fil de la vie.
+Alecto|L'une des vengeresses grecques chargées de punir les crimes familiaux.
+Tisiphone|Vengeresse de la mythologie grecque dont le nom évoque la punition du meurtre.
+Mégère|L'une des trois déesses grecques de la vengeance, aux côtés d'Alecto et de Tisiphone.
+Clio|Muse grecque qui inspire les récits du passé et l'étude de l'histoire.
+Euterpe|Muse grecque associée à la musique, souvent représentée avec une flûte.
+Thalie|Muse grecque liée à la comédie, que l'on représente avec un masque rieur.
+Melpomène|Muse grecque de la tragédie, souvent accompagnée d'un masque dramatique.
+Terpsichore|Muse grecque associée à la danse et aux chœurs.
+Érato|Muse grecque de la poésie amoureuse et lyrique.
+Polymnie|Muse grecque des chants sacrés et de l'éloquence.
+Uranie|Muse grecque de l'astronomie, représentée avec un globe céleste.
+Calliope|Muse grecque de la poésie épique, souvent présentée comme la mère d'Orphée.

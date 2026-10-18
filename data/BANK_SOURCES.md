@@ -2,7 +2,7 @@
 
 ## Objectif
 
-La banque contient 4 382 réponses réparties dans douze salons thématiques, plus un salon généraliste qui les mélange. Cinéma, personnalités, lieux et animaux conservent leurs 500 réponses chacun. Les 2 000 entrées d’origine restent dans le même ordre pour préserver les parties déjà lancées.
+La banque contient désormais 6 000 réponses : exactement 500 dans chacun des douze salons thématiques, plus le salon généraliste qui les mélange toutes. Les 4 382 entrées déjà publiées restent strictement identiques et dans le même ordre pour préserver les parties déjà lancées. Les ajouts sont placés à la fin de la banque.
 
 ## Sélection des quatre banques d’origine
 
@@ -63,3 +63,42 @@ Les indices de manche sont désormais séparés de la banque des réponses : `li
 Les détails de lieu, d’usage, d’ingrédients, d’intrigue ou d’apparence sont privilégiés. Les descriptions sont limitées à 190 caractères. Aucune formulation n’est répétée plus de deux fois au sein d’un même salon. Les joueurs voient toujours l’indice uniquement lorsqu’il reste dix secondes ; la réponse et le lien source, dont le titre pourrait trahir la solution, ne sont envoyés qu’à la révélation. Les crédits Wikipédia et CC BY-SA apparaissent alors sous le texte concerné.
 
 Les tests parcourent toute la banque, vérifient la couverture, la longueur, les doublons, l’absence de réponse et d’alias, des exemples sémantiques représentatifs, ainsi que le seuil de dix secondes et la non-divulgation des liens sources. Les introductions externes ont été reformulées et filtrées automatiquement, avec des corrections éditoriales ; elles ne constituent pas une vérification humaine indépendante de chaque fait.
+
+## Extension à 500 réponses par thème — 18 octobre 2026
+
+1 618 réponses ont été ajoutées sans modifier les 4 382 précédentes : jeux vidéo
+260, séries 208, cuisine 247, musique 179, personnages 147, expressions 264,
+objets 208 et mythes 105. Les quatre autres thèmes étaient déjà à 500.
+
+`expansion-500.json` conserve la sélection finale, les indices, les liens
+individuels et la provenance. Elle mélange 467 formulations éditoriales,
+1 011 adaptations d'introductions Wikipédia et 140 définitions du Wiktionnaire.
+Les formulations éditoriales retenues sont aussi conservées dans
+`expansion-500-editorial.txt`. Les fiches encyclopédiques ont été recherchées
+par famille d'infobox ; les expressions proviennent de l'annexe et des entrées
+individuelles du Wiktionnaire. Les pistes de recherche ont ensuite été filtrées
+pour retirer les doublons, homonymies évidentes, titres non jouables, indices
+incomplets et formulations révélant la réponse. Ce n'est pas un classement
+universel de popularité ni un audit humain indépendant de chaque fait.
+
+Sources de découverte :
+- https://fr.wikipedia.org/w/api.php
+- https://fr.wiktionary.org/wiki/Annexe:Expressions_en_français
+
+Les sources externes sont réutilisées sous CC BY-SA 4.0. Le lien individuel
+vers chaque article et son historique est disponible à la révélation ; le
+crédit distingue désormais Wikipédia du Wiktionnaire. Aucun lien de source
+n'est envoyé pendant la phase de devinette. Les introductions ne sont pas
+chargées pendant les parties. Les expressions restent sans illustration ;
+les autres titres utilisent la recherche d'image habituelle avec état sans
+image lorsque aucune illustration n'est disponible.
+
+Reconstruction : `node scripts/expand-bank.mjs` ajoute la sélection sans
+réordonner les entrées, met à jour les compteurs et les indices, et peut être
+relancé sans duplication. `python3 scripts/build-clues.py` tient également
+compte de la sélection éditée, ce qui préserve la couverture complète lors
+d'une reconstruction des indices.
+
+Les tests exigent désormais exactement 500 réponses par thème, vérifient
+les 6 000 indices et les compteurs publics, et figent aussi le contenu et
+l'ordre des 4 382 questions de la version précédente.
