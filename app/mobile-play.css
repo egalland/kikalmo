@@ -115,3 +115,37 @@
  body.game-session .reaction-toggle .reaction-label{display:none}
  body.game-session .reaction-toggle .reaction-short{display:block;font-size:10px;line-height:14px}
 }
+
+/* Keyboard correction from Android captures: the word gets all remaining space.
+   History and descriptive copy must never compete with the answer or clue. */
+@media(max-width:900px){
+ body.game-session:is(.keyboard-open,.viewport-short) .game-layout{grid-template-rows:minmax(0,1fr) auto}
+ body.game-session:is(.keyboard-open,.viewport-short) .game-layout>.room-chat{height:auto;min-height:0;padding:5px 7px}
+ body.game-session:is(.keyboard-open,.viewport-short) .room-chat .chat-log{display:none}
+ body.game-session:is(.keyboard-open,.viewport-short) .room-chat .chat-composer{margin-top:0}
+ body.game-session:is(.keyboard-open,.viewport-short) .composer-status:not(.has-feedback){display:none}
+ body.game-session:is(.keyboard-open,.viewport-short) .composer-status.has-feedback{height:auto;max-height:30px;white-space:normal;font-size:11px;line-height:1.3}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .puzzle{display:grid;grid-template-rows:auto minmax(34px,1fr) auto;align-content:stretch;justify-content:stretch;justify-items:center;gap:5px;overflow:auto;padding:4px 0}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .masked{min-height:34px;max-height:none;height:auto;overflow:visible;align-content:center;align-self:stretch;margin:0;padding:3px 0;font-size:26px;line-height:1.2;width:100%}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .round-clue{align-self:end;height:auto;min-height:0;max-height:88px;padding:7px 8px;font-size:12px;line-height:1.4;overflow:auto;margin:0}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .round-clue:has(.clue-wait){display:none}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal{min-height:0;overflow:auto;gap:5px;padding:5px 0}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal-layout{flex:1 0 auto;grid-template-columns:minmax(0,.65fr) minmax(0,1fr);grid-template-rows:auto;min-height:75px;gap:10px;align-items:start}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-text-only{grid-template-columns:minmax(0,1fr)}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-media-slot{height:100%;min-height:75px}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal-copy{align-self:start;max-height:none;overflow:visible;padding:3px 0}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal-copy>.eyebrow,
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal-copy>p,
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal-copy>small,
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal-copy>.image-credit{display:none}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .answer-reveal-copy h2{font-size:25px;line-height:1.15;margin:0;overflow:visible;overflow-wrap:anywhere}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .reveal-caption{min-height:24px;display:flex;justify-content:space-between;align-items:center;gap:4px;flex-wrap:nowrap;padding:4px 6px;font-size:10px;line-height:1.3}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .reveal-caption>svg{display:none}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .reveal-caption>span{margin:0;font-size:10px}
+ body.game-session.viewport-tight .arena .masked{font-size:23px}
+ body.game-session.viewport-tight .arena .answer-reveal-copy h2{font-size:22px}
+}
+@media(max-width:900px){
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .reveal-caption{white-space:nowrap}
+ body.game-session:is(.keyboard-open,.viewport-short) .arena .reveal-caption>span{width:auto;flex:0 0 auto;white-space:nowrap;text-align:right}
+}
