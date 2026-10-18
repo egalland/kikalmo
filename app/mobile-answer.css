@@ -1,0 +1,15 @@
+/* One centered reveal card on mobile, regardless of the chosen keyboard. */
+@media(max-width:900px){
+ .game-session .arena.revealing .answer-reveal{gap:7px;padding:7px 0;overflow:auto}
+ .game-session .arena.revealing .answer-reveal-layout{display:flex;flex-direction:column;flex:1 1 0;min-height:0;align-items:stretch;gap:9px}
+ .game-session .arena.revealing .answer-reveal-copy{order:0;flex:0 0 auto;align-self:center;width:100%;max-width:100%;max-height:none;overflow:visible;padding:0;text-align:center}
+ .game-session .arena.revealing .answer-reveal-copy h2{margin:0;font-size:clamp(23px,6.3vw,30px);line-height:1.12;letter-spacing:-.5px;text-align:center;overflow-wrap:anywhere}
+ .game-session .arena.revealing .answer-media-slot{order:1;flex:1 1 0;min-height:64px;height:auto;width:100%;border:1px solid #e0d4ba;border-radius:13px;background:linear-gradient(140deg,#fffdf7,#f2ead9);overflow:hidden}
+ .game-session .arena.revealing .answer-media-button{border-radius:12px;box-shadow:none}
+ .game-session .arena.revealing .answer-media-button>img{padding:8px 8px 32px;object-fit:contain;object-position:50% 50%}
+ .game-session .arena.revealing .answer-media-expand{right:7px;bottom:6px;left:auto;top:auto;padding:4px 7px;gap:4px;font-size:9px;line-height:14px;border-radius:7px;box-shadow:none;background:#fffaf0ed}
+ .game-session .arena.revealing .answer-media-expand svg{width:12px;height:12px}
+ .game-session .arena.revealing .answer-text-only{justify-content:center}
+ .game-session .arena.revealing .answer-reveal>.category-chip{font-size:10px;padding:3px 8px}
+ .game-session .arena.revealing .reveal-caption{background:transparent;border-top:1px dashed #d4c5a6;border-radius:0;padding:6px 0 1px;min-height:25px;color:#657455}
+}
