@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "aa48cdb91f90d014c3db5586d10b632df4f2d738",
+  "source_head": "9eeae4c93a4e8335cff84e70e2bcd1e42342ad01",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -381,6 +381,11 @@
       "source_sha": "aa48cdb91f90d014c3db5586d10b632df4f2d738",
       "source_author": "Codex",
       "message": "Fix privacy dialog initialization and stale close events"
+    },
+    {
+      "source_sha": "9eeae4c93a4e8335cff84e70e2bcd1e42342ad01",
+      "source_author": "Codex",
+      "message": "Integrate consent choices into the home page with shared preferences"
     }
   ]
 }
