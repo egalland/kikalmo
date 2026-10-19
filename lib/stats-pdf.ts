@@ -41,6 +41,7 @@ export function statsPDF(d:StatsData){
  [time(d.sessions.activeMs),'Temps actif cumule','Sessions debutees sur la periode'],[c('solve_ms')?(t('solve_ms')/c('solve_ms')/1000).toFixed(1).replace('.',',')+' s':'-','Resolution moyenne','Bonnes reponses uniquement'],[num(m('concurrent')),'Pic simultane','Maximum observe en salon']
  ];cards.forEach(([v,l,note],i)=>pdf.card(34+(i%3)*180,200+Math.floor(i/3)*100,167,v,l,note));
  pdf.chart(34,516,257,'Visiteurs et joueurs',daily,['Visiteurs / jour','Joueurs / jour'],[GOLD,'#526c48']);pdf.chart(306,516,255,'Les parties',game,['Lancees','Terminees'],[GOLD,'#526c48']);
+ pdf.text(34,708,'Depuis le 19/10/2026 : visites et sessions detaillees sur consentement uniquement.',8,false,MUTED);
  pdf.text(34,724,'Un meme navigateur peut apparaitre plusieurs jours dans les courbes.',8,false,MUTED);
  pdf.text(34,740,'Les totaux uniques le dedupliquent sur toute la periode. Les tests sont inclus.',8,false,MUTED);
  pdf.text(34,754,'Jeu : '+(d.trackingSince?new Date(d.trackingSince).toLocaleDateString('fr-FR',{timeZone:'Europe/Paris'}):'-')+' - visites : '+(d.visitorsSince?new Date(d.visitorsSince).toLocaleString('fr-FR',{timeZone:'Europe/Paris'}):'pas encore de suivi'),7,false,MUTED);

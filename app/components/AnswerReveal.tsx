@@ -12,7 +12,7 @@ export default function AnswerReveal({question,label,art,onImageError}:{question
   <div className={'answer-reveal-layout '+(!hasImage&&!loading?'answer-text-only':'')}>
    {(hasImage||loading)&&<div className="answer-media-slot">
     {hasImage?<button type="button" className="answer-media-button" onClick={()=>dialog.current?.showModal()} aria-label={'Agrandir l’illustration : '+question?.answer}>
-     <img key={art!.url} src={art!.url!} alt={question?.answer||'Illustration de la réponse'} onError={onImageError}/>
+     <img referrerPolicy="no-referrer" key={art!.url} src={art!.url!} alt={question?.answer||'Illustration de la réponse'} onError={onImageError}/>
      <span className="answer-media-expand"><Expand size={14}/> Agrandir</span>
     </button>:<div className="answer-media-loading" role="status"><span className="image-loading"/><span>Chargement de l’illustration…</span></div>}
    </div>}
@@ -24,7 +24,7 @@ export default function AnswerReveal({question,label,art,onImageError}:{question
   </div>
   {hasImage&&<dialog className="answer-image-dialog" ref={dialog} aria-label={'Illustration : '+question?.answer} onClick={e=>{if(e.target===e.currentTarget)dialog.current?.close()}}>
    <form method="dialog"><button autoFocus type="submit" className="answer-image-close" aria-label="Fermer l’illustration"><X size={22}/></button></form>
-   <img src={art!.url!} alt={question?.answer||'Illustration de la réponse'}/><p>{question?.answer}</p>
+   <img referrerPolicy="no-referrer" src={art!.url!} alt={question?.answer||'Illustration de la réponse'}/><p>{question?.answer}</p>
   </dialog>}
  </div>;
 }

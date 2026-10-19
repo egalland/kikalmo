@@ -1,0 +1,42 @@
+import ts from 'typescript';
+import {readFileSync,readdirSync} from 'node:fs';
+import {DatabaseSync} from 'node:sqlite';
+import assert from 'node:assert/strict';
+const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
+const uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
+const game=uri("export const fresh=()=>({players:[],phase:'empty',deadline:0,started:0,round:0,deck:[],game:''});");
+const analytics=uri(compile(readFileSync('lib/analytics.ts','utf8').replace("import {QUESTIONS, type State, type Player} from './game';",'const QUESTIONS=[];')));
+const privacyURI=uri(compile(readFileSync('lib/privacy.ts','utf8').replace("'./analytics'",JSON.stringify(analytics)).replace("'./game'",JSON.stringify(game))));
+const authURI=uri(compile(readFileSync('lib/admin-auth.ts','utf8')));
+const {statsAllowed,cookieValue,purgeExpired}=await import(privacyURI);
+const {playerHash,collector}=await import(analytics);
+const sql=new DatabaseSync(':memory:');for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+file,'utf8'));
+const db={async batch(list){sql.exec('BEGIN');try{const out=[];for(const s of list)out.push(await s.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}},prepare(query){let values=[];return {bind(...v){values=v;return this;},async first(){return sql.prepare(query).get(...values)||null;},async all(){return {results:sql.prepare(query).all(...values)};},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}};}}}};
+globalThis.privacyDB=db;
+function route(path){const source=readFileSync(path,'utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.privacyDB};').replaceAll("'../../../lib/privacy'",JSON.stringify(privacyURI)).replaceAll("'../../../lib/admin-auth'",JSON.stringify(authURI)).replaceAll("'../../../lib/analytics'",JSON.stringify(analytics));return import(uri(compile(source)));}
+const privacy=await route('app/api/privacy/route.ts'),visits=await route('app/api/visits/route.ts');
+const req=(cookie='',method='GET',body,path='/api/privacy',origin='https://test.local')=>new Request('https://test.local'+path,{method,headers:{Cookie:cookie,Origin:origin,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
+assert.equal(statsAllowed(req()),false);assert.equal(statsAllowed(req('other=x; kk_consent=v1-yes; sv_player=no')),true);assert.equal(statsAllowed(req('kk_consent=v0-yes')),false);assert.equal(cookieValue(req('x=a; kk_consent=v1-no'),'kk_consent'),'v1-no');
+let r=await privacy.GET(req());assert.equal(r.status,200);assert.equal((await r.json()).choice,null);assert.equal(r.headers.get('set-cookie'),null);
+r=await visits.POST(req('','POST',null,'/api/visits'));assert.equal(r.status,204);assert.match(r.headers.get('set-cookie'),/Max-Age=0/);assert.equal(sql.prepare('SELECT count(*) n FROM site_visitor_days').get().n,0);
+r=await privacy.POST(req('','POST',{statistics:true}));assert.match(r.headers.get('set-cookie'),/kk_consent=v1-yes/);assert.match(r.headers.get('set-cookie'),/HttpOnly/);
+r=await privacy.POST(req('','POST',{statistics:true},'/api/privacy','https://evil.test'));assert.equal(r.status,403);
+assert.equal((await privacy.DELETE(req('','DELETE',null,'/api/privacy','https://evil.test'))).status,403);
+r=await visits.POST(req('kk_consent=v1-yes','POST',null,'/api/visits'));assert.equal(r.status,204);assert.match(r.headers.get('set-cookie'),/kk_visitor=/);assert.equal(sql.prepare('SELECT count(*) n FROM site_visitor_days').get().n,1);
+const a=crypto.randomUUID(),b=crypto.randomUUID(),v=crypto.randomUUID(),ha=await playerHash(a),hb=await playerHash(b),hv=await playerHash('visit:'+v),now=Date.now(),day=new Date().toISOString().slice(0,10);
+const state={players:[{id:a,name:'Alice',seen:now,tracking:{hash:ha}},{id:b,name:'Bob',seen:now,tracking:{hash:hb}}],messages:[{player:a,text:'Alice message'},{player:b,text:'Bob message'}],champion:a,phase:'guess'};
+sql.prepare('INSERT INTO rooms(id,state,revision) VALUES (?,?,0)').run('cinema',JSON.stringify(state));
+for(const [id,name,hash] of [[a,'Alice',ha],[b,'Bob',hb]]){
+ sql.prepare('INSERT INTO daily_players(id,day,player,name,avatar,state,last_seen) VALUES (?,?,?,?,?,?,?)').run(day+':'+id,day,id,name,'{}','{"guesses":[]}',now);
+ sql.prepare('INSERT INTO analytics_sessions(id,player,room,started,last_seen) VALUES (?,?,?,?,?)').run(id,hash,'cinema',now,now);
+}
+sql.prepare('INSERT INTO site_visitor_days(id,day,visitor,first_seen,last_seen) VALUES (?,?,?,?,?)').run('visit-a',day,hv,now,now);
+const events=[{kind:'presence',player:ha,at:now,day,hour:'12'},{kind:'presence',player:hb,at:now,day,hour:'12'}];sql.prepare('INSERT INTO analytics_commits VALUES (?,?,?,?,?)').run('shared',now,day,'cinema',JSON.stringify(events));
+const cookies=`sv_player=${a}; kk_visitor=${v}; kk_consent=v1-yes`;
+r=await privacy.GET(req(cookies,'GET',null,'/api/privacy?export=1'));assert.equal(r.status,200);const exported=await r.json();assert.equal(exported.daily.length,1);assert.equal(exported.daily[0].name,'Alice');assert.equal(exported.sessions.length,1);assert.ok(!JSON.stringify(exported).includes('Bob'));assert.match(r.headers.get('content-disposition'),/attachment/);
+r=await privacy.POST(req(cookies,'POST',{statistics:false}));assert.equal(r.status,200);assert.match(r.headers.get('set-cookie'),/kk_consent=v1-no/);assert.equal(sql.prepare('SELECT count(*) n FROM analytics_sessions WHERE player=?').get(ha).n,0);assert.equal(sql.prepare('SELECT count(*) n FROM analytics_sessions WHERE player=?').get(hb).n,1);assert.equal(sql.prepare('SELECT count(*) n FROM daily_players WHERE player=?').get(a).n,1,'withdrawal must preserve gameplay');
+const shared=JSON.parse(sql.prepare("SELECT events FROM analytics_commits WHERE id='shared'").get().events);assert.equal(shared.length,1);assert.equal(shared[0].player,hb,'other participant must survive shared-event cleanup');
+r=await privacy.DELETE(req(cookies,'DELETE'));assert.equal(r.status,200);assert.equal((await r.json()).deleted,true);assert.equal(sql.prepare('SELECT count(*) n FROM daily_players WHERE player=?').get(a).n,0);assert.equal(sql.prepare('SELECT count(*) n FROM daily_players WHERE player=?').get(b).n,1);const after=JSON.parse(sql.prepare("SELECT state FROM rooms WHERE id='cinema'").get().state);assert.deepEqual(after.players.map(p=>p.id),[b]);assert.equal(after.messages.length,1);assert.equal(after.champion,undefined);
+const c=collector('cinema',now),p={id:a};await c.attach(p,{players:[]},false,false);assert.equal(p.tracking,undefined);assert.equal(c.events.length,0);c.emit('guess_correct',{players:[],deck:[],round:0},p);assert.equal(c.events.length,0);
+sql.prepare('INSERT INTO daily_players(id,day,player,name,avatar,state,last_seen) VALUES (?,?,?,?,?,?,?)').run('expired','2020-01-01',a,'old','{}','{}',1);await purgeExpired(db);assert.equal(sql.prepare("SELECT count(*) n FROM daily_players WHERE id='expired'").get().n,0);
+console.log('Passed privacy: default refusal, server-side cookie gate, prior consent, CSRF, export isolation, withdrawal preserving game state, erasure preserving other players and shared events, retention.');

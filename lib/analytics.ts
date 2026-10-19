@@ -14,6 +14,7 @@ export function collector(room:string,now:number){
  const ended:{tracking:Tracking;seen:number;reason:string}[]=[];
  const emit=(kind:string,s:State,p?:Player,value?:number,detail?:string,at=now)=>{
   const q=QUESTIONS[s.deck[s.round-1]];
+  if(p&&!p.tracking)return;
   events.push({kind,at,...(p?.tracking?{player:p.tracking.hash}:{}),game:s.game,round:s.round,...(q?{word:q.theme+':'+q.answer}:{}),...(value!==undefined?{value}:{}),...(detail?{detail}: {})});
  };
  function transition(before:State,after:State){
@@ -44,7 +45,8 @@ export function collector(room:string,now:number){
    for(const p of after.players)emit('round_participation',after,p);
   }
  }
- async function attach(p:Player,s:State,invited=false){
+ async function attach(p:Player,s:State,invited=false,allowed=true){
+  if(!allowed){delete p.tracking;return;}
   if(!p.tracking){p.tracking={session:crypto.randomUUID(),started:now,pulse:now,hash:await playerHash(p.id),streak:0};emit('session_started',s,p);if(invited)emit('invitation_join',s,p);emit('presence',s,p);}
  }
  function pulse(p:Player,s:State){if(p.tracking&&(now-p.tracking.pulse>=60000||calendar(now).day!==calendar(p.tracking.pulse).day)){emit('presence',s,p);p.tracking.pulse=now;}}

@@ -41,3 +41,8 @@ export const siteVisitorDays = sqliteTable('site_visitor_days', {
  firstSeen:integer('first_seen').notNull(), lastSeen:integer('last_seen').notNull(),
  views:integer('views').notNull().default(1),
 });
+
+// Short-lived HMAC pseudonyms, not raw IP addresses.
+export const adminLoginLimits = sqliteTable('admin_login_limits', {
+ id:text('id').primaryKey(), attempts:integer('attempts').notNull().default(0), expiresAt:integer('expires_at').notNull(),
+});
