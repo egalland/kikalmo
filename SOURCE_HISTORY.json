@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "f97b3dd063025101830e8948aa737c53327db6a3",
+  "source_head": "aa48cdb91f90d014c3db5586d10b632df4f2d738",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -376,6 +376,11 @@
       "source_sha": "f97b3dd063025101830e8948aa737c53327db6a3",
       "source_author": "Codex",
       "message": "Prepare publication: consent, data rights, retention and admin protection"
+    },
+    {
+      "source_sha": "aa48cdb91f90d014c3db5586d10b632df4f2d738",
+      "source_author": "Codex",
+      "message": "Fix privacy dialog initialization and stale close events"
     }
   ]
 }
