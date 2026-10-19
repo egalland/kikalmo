@@ -1,0 +1,45 @@
+import {env} from 'cloudflare:workers';
+import {playerHash,calendar} from '../../../lib/analytics';
+import {browserId,cookieValue,statsAllowed,scrubRooms,expireCookie} from '../../../lib/privacy';
+import {privateHeaders,sameOrigin} from '../../../lib/admin-auth';
+import {collectArchive,summarize,validateArchive,importArchive} from '../../../lib/player-stats';
+import {period} from '../../../lib/stats';
+export const dynamic='force-dynamic';
+const keyCookie=(key:string)=>`kk_stats=${key}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=34128000`;
+const validKey=(key:unknown):key is string=>typeof key==='string'&&/^KK1_[a-zA-Z0-9_-]{43}$/.test(key);
+function reply(data:unknown,status=200,token?:string,key?:string){const headers=new Headers(privateHeaders);if(token)headers.append('Set-Cookie',`sv_player=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`);if(key!==undefined)headers.append('Set-Cookie',key?keyCookie(key):expireCookie('kk_stats'));return Response.json(data,{status,headers});}
+async function identity(req:Request){const id=browserId(req,'sv_player'),key=cookieValue(req,'kk_stats');let vault:string|null=null;if(validKey(key)){const hash=await playerHash('stats-key:'+key);const row=await env.DB!.prepare('SELECT id FROM personal_stat_keys WHERE id=? AND last_seen>=?').bind(hash,Date.now()-395*86400000).first<{id:string}>();if(row)vault=row.id;}return {id,player:id?await playerHash(id):null,vault,key:vault?key:undefined};}
+async function owners(db:D1Database,player:string|null,vault:string|null){const rows=vault?(await db.prepare('SELECT player FROM player_stat_links WHERE vault=?').bind(vault).all<{player:string}>()).results:[];return [...new Set([...(player?[player]:[]),...rows.map(r=>r.player)])];}
+export async function GET(req:Request){try{
+ const who=await identity(req);if(!statsAllowed(req)&&new URL(req.url).searchParams.get('export')!=='1')return reply({allowed:false,hasKey:!!who.vault});
+ const db=env.DB!,cutoff=Date.now()-395*86400000;await db.batch([db.prepare('DELETE FROM personal_events WHERE at<?').bind(cutoff),db.prepare('DELETE FROM personal_sessions WHERE last_seen<?').bind(cutoff),db.prepare('DELETE FROM personal_daily WHERE at<?').bind(cutoff),db.prepare('DELETE FROM player_stat_links WHERE linked_at<?').bind(cutoff),db.prepare('DELETE FROM personal_stat_keys WHERE last_seen<?').bind(cutoff)]);if(who.vault)await db.prepare('UPDATE personal_stat_keys SET last_seen=? WHERE id=?').bind(Date.now(),who.vault).run();
+ const mine=who.player?await db.prepare('SELECT vault FROM player_stat_links WHERE player=?').bind(who.player).first<{vault:string}>():null;
+ const players=await owners(db,who.player,who.vault);const archive=await collectArchive(db,players);const url=new URL(req.url);
+ if(url.searchParams.get('export')==='1'){const body={...archive,exportedAt:new Date().toISOString()};if(archive.events.length+archive.sessions.length+archive.daily.length>20000||new TextEncoder().encode(JSON.stringify(body)).length>3000000)return reply({error:'Cet historique dépasse la limite de sauvegarde (3 Mo / 20 000 entrées).'},413);const r=reply(body);r.headers.set('Content-Disposition','attachment; filename="Kikalmo_mes_statistiques.json"');return r;}
+ let range;try{range=period(url);}catch{return reply({error:'Choisis des dates valides, dans le bon ordre.'},400);}return reply({allowed:true,hasKey:!!who.vault,linked:!!who.vault&&mine?.vault===who.vault,linkedElsewhere:!!mine&&mine.vault!==who.vault,devices:who.vault?(await db.prepare('SELECT count(*) AS n FROM player_stat_links WHERE vault=?').bind(who.vault).first<{n:number}>())?.n||0:0,...summarize(archive,range.from,range.to),today:calendar(Date.now()).day});
+ }catch{return reply({error:'Impossible de charger les statistiques. Réessaie.'},503);}}
+export async function POST(req:Request){if(!sameOrigin(req))return reply({error:'Origine refusée.'},403);if(!statsAllowed(req))return reply({error:'Accepte les statistiques dans les préférences pour activer cette fonction.'},403);try{
+ const length=Number(req.headers.get('content-length')||0);if(length>3000000)return reply({error:'Fichier trop volumineux (3 Mo maximum).'},413);let raw='',size=0;const reader=req.body?.getReader(),decoder=new TextDecoder();if(reader){while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>3000000){await reader.cancel();return reply({error:'Fichier trop volumineux.'},413);}raw+=decoder.decode(value,{stream:true});}raw+=decoder.decode();}const b=JSON.parse(raw) as {action:string;archive?:unknown;key?:unknown};const who=await identity(req),id=who.id||crypto.randomUUID(),player=who.player||await playerHash(id),db=env.DB!;
+ if(b.action==='create-key'||b.action==='import-key'){
+  let key=who.key,vault=who.vault;
+  if(b.action==='import-key'){key=typeof b.key==='string'?b.key.trim():undefined;if(!validKey(key))return reply({error:'Clé Kikalmo invalide.'},400);vault=await playerHash('stats-key:'+key);const found=await db.prepare('SELECT id FROM personal_stat_keys WHERE id=? AND last_seen>=?').bind(vault,Date.now()-395*86400000).first();if(!found)return reply({error:'Clé invalide ou expirée.'},400);}
+  const existing=await db.prepare('SELECT vault FROM player_stat_links WHERE player=?').bind(player).first<{vault:string}>();if(existing&&existing.vault!==vault)return reply({error:'Ce navigateur utilise déjà une autre clé. Dissocie-le avant d’importer ou de créer une nouvelle clé.'},409);
+  if(!key||!vault){const bytes=crypto.getRandomValues(new Uint8Array(32));key='KK1_'+btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');vault=await playerHash('stats-key:'+key);await db.prepare('INSERT INTO personal_stat_keys(id,created_at,last_seen) VALUES(?,?,?)').bind(vault,Date.now(),Date.now()).run();}
+  const count=await db.prepare('SELECT count(*) AS n FROM player_stat_links WHERE vault=?').bind(vault).first<{n:number}>();if(!existing&&(count?.n||0)>=100)return reply({error:'Cette clé est déjà utilisée sur 100 navigateurs.'},409);
+  await db.prepare('INSERT OR IGNORE INTO player_stat_links(player,vault,linked_at) VALUES(?,?,?)').bind(player,vault,Date.now()).run();const saved=await db.prepare('SELECT vault FROM player_stat_links WHERE player=?').bind(player).first<{vault:string}>();if(saved?.vault!==vault)return reply({error:'Association concurrente refusée. Réessaie.'},409);await db.prepare('UPDATE personal_stat_keys SET last_seen=? WHERE id=?').bind(Date.now(),vault).run();
+  return reply({linked:true,...(b.action==='create-key'?{key}:{})},200,who.id?undefined:id,key);
+ }
+ if(b.action==='export-key'){if(!who.key)return reply({error:'Crée ou importe une clé sur ce navigateur avant de l’exporter.'},400);return reply({key:who.key});}
+ if(b.action==='unlink-key'){await db.prepare('DELETE FROM player_stat_links WHERE player=?').bind(player).run();return reply({linked:false},200,undefined,'');}
+ if(b.action==='import'){const owner=await db.prepare('SELECT vault FROM player_stat_links WHERE player=?').bind(player).first<{vault:string}>();if(owner&&owner.vault!==who.vault)return reply({error:'Importe la clé associée pour ajouter une sauvegarde à cet historique, ou dissocie ce navigateur.'},409);let archive;try{archive=validateArchive(b.archive);}catch(e){return reply({error:(e as Error).message},400);}const count=await importArchive(db,player,archive);return reply({imported:count},200,who.id?undefined:id);}
+ return reply({error:'Action inconnue.'},400);
+ }catch{return reply({error:'L’opération n’a pas pu être terminée. Tu peux réessayer sans dupliquer les données.'},503);}}
+export async function DELETE(req:Request){if(!sameOrigin(req))return reply({error:'Origine refusée.'},403);try{
+ const who=await identity(req),db=env.DB!,players=await owners(db,who.player,who.vault),hashes=new Set(players);
+ const rooms=await db.prepare('SELECT state FROM rooms').all<{state:string}>();const ids=new Set<string>();for(const row of rooms.results){const s=JSON.parse(row.state);for(const p of [...s.players,...(s.vacancy?.players||[])])if(hashes.has(await playerHash(p.id)))ids.add(p.id);}for(const id of ids)await scrubRooms(db,id,false);
+ for(const player of players){await db.batch([
+ ...['personal_events','personal_sessions','personal_daily','player_stat_links','analytics_sessions','analytics_player_days'].map(table=>db.prepare(`DELETE FROM ${table} WHERE player=?`).bind(player)),
+ db.prepare('DELETE FROM analytics_players WHERE id=?').bind(player),
+ db.prepare("UPDATE analytics_commits SET events=coalesce((SELECT json_group_array(json(value)) FROM json_each(analytics_commits.events) WHERE coalesce(json_extract(value,'$.player'),'')<>?),'[]') WHERE EXISTS (SELECT 1 FROM json_each(analytics_commits.events) WHERE json_extract(value,'$.player')=?)").bind(player,player),
+ ]);}
+ if(who.vault)await db.prepare('DELETE FROM personal_stat_keys WHERE id=?').bind(who.vault).run();return reply({deleted:true},200,undefined,'');}catch{return reply({error:'Effacement incomplet. Réessaie.'},503);}}

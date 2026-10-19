@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, primaryKey, real } from 'drizzle-orm/sqlite-core';
 export const rooms = sqliteTable('rooms', {id:text('id').primaryKey(), state:text('state').notNull(), revision:integer('revision').notNull().default(0)});
 
 // Server-side telemetry. Reporting requires the admin session cookie.
@@ -46,3 +46,10 @@ export const siteVisitorDays = sqliteTable('site_visitor_days', {
 export const adminLoginLimits = sqliteTable('admin_login_limits', {
  id:text('id').primaryKey(), attempts:integer('attempts').notNull().default(0), expiresAt:integer('expires_at').notNull(),
 });
+
+export const personalEvents=sqliteTable('personal_events',{player:text('player').notNull(),id:text('id').notNull(),day:text('day').notNull(),room:text('room').notNull(),kind:text('kind').notNull(),value:real('value').notNull().default(0),at:integer('at').notNull(),source:text('source').notNull().default('live')},t=>[primaryKey({columns:[t.player,t.id]})]);
+export const personalSessions=sqliteTable('personal_sessions',{player:text('player').notNull(),id:text('id').notNull(),room:text('room').notNull(),started:integer('started').notNull(),lastSeen:integer('last_seen').notNull(),activeMs:integer('active_ms').notNull(),source:text('source').notNull().default('live')},t=>[primaryKey({columns:[t.player,t.id]})]);
+export const personalDaily=sqliteTable('personal_daily',{player:text('player').notNull(),id:text('id').notNull(),day:text('day').notNull(),tries:integer('tries').notNull(),solvedAt:integer('solved_at'),at:integer('at').notNull(),source:text('source').notNull().default('live')},t=>[primaryKey({columns:[t.player,t.id]})]);
+export const playerStatLinks=sqliteTable('player_stat_links',{player:text('player').primaryKey(),vault:text('vault').notNull(),linkedAt:integer('linked_at').notNull()});
+
+export const personalStatKeys=sqliteTable('personal_stat_keys',{id:text('id').primaryKey(),createdAt:integer('created_at').notNull(),lastSeen:integer('last_seen').notNull()});

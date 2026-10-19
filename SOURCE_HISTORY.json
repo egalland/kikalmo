@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "9eeae4c93a4e8335cff84e70e2bcd1e42342ad01",
+  "source_head": "95ed4cc73be290ee14e61f1e69587377fd568855",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -386,6 +386,11 @@
       "source_sha": "9eeae4c93a4e8335cff84e70e2bcd1e42342ad01",
       "source_author": "Codex",
       "message": "Integrate consent choices into the home page with shared preferences"
+    },
+    {
+      "source_sha": "95ed4cc73be290ee14e61f1e69587377fd568855",
+      "source_author": "Codex",
+      "message": "Add personal statistics and portable private key access without accounts"
     }
   ]
 }

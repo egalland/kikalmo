@@ -11,3 +11,5 @@
 .privacy-card-choices button:disabled{opacity:.6;cursor:wait}
 .privacy-card-choices .privacy-card-details{min-height:40px;padding:6px;background:transparent;border-color:transparent;text-decoration:underline;font-size:13px;font-weight:400}
 @media(max-width:650px){.privacy-card{grid-template-columns:1fr;gap:18px;padding:20px;border-radius:20px;margin-bottom:24px}}
+
+.personal-stats-link{font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:4px;white-space:nowrap}.header-right{flex-wrap:wrap}@media(max-width:600px){.personal-stats-link{font-size:11px;order:5;width:100%;text-align:right}}

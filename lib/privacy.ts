@@ -11,7 +11,7 @@ export async function removeOptional(db:D1Database,req:Request){
  const statements:D1PreparedStatement[]=[];
  if(visitor)statements.push(db.prepare('DELETE FROM site_visitor_days WHERE visitor=?').bind(await playerHash('visit:'+visitor)));
  if(player){const hash=await playerHash(player);
-  for(const [table,col] of [['analytics_sessions','player'],['analytics_player_days','player'],['analytics_players','id']])statements.push(db.prepare(`DELETE FROM ${table} WHERE ${col}=?`).bind(hash));
+  for(const [table,col] of [['personal_events','player'],['personal_sessions','player'],['personal_daily','player'],['player_stat_links','player'],['analytics_sessions','player'],['analytics_player_days','player'],['analytics_players','id']])statements.push(db.prepare(`DELETE FROM ${table} WHERE ${col}=?`).bind(hash));
   // Remove only this player's events; retain other participants' events and anonymous rollups.
   statements.push(db.prepare("UPDATE analytics_commits SET events=coalesce((SELECT json_group_array(json(value)) FROM json_each(analytics_commits.events) WHERE coalesce(json_extract(value,'$.player'),'')<>?), '[]') WHERE EXISTS (SELECT 1 FROM json_each(analytics_commits.events) WHERE json_extract(value,'$.player')=?)").bind(hash,hash));
  }
@@ -31,6 +31,9 @@ export async function scrubRooms(db:D1Database,player:string,erase:boolean){
 export async function purgeExpired(db:D1Database,now=Date.now()){
  const day=(days:number)=>new Date(now-days*86400000).toISOString().slice(0,10);
  await db.batch([
+  db.prepare('DELETE FROM personal_events WHERE at<?').bind(now-395*86400000),
+  db.prepare('DELETE FROM personal_sessions WHERE last_seen<?').bind(now-395*86400000),
+  db.prepare('DELETE FROM personal_daily WHERE at<?').bind(now-395*86400000),
   db.prepare('DELETE FROM daily_players WHERE day<?').bind(day(30)),
   db.prepare('DELETE FROM daily_challenges WHERE day<?').bind(day(30)),
   db.prepare('DELETE FROM analytics_commits WHERE at<?').bind(now-90*86400000),

@@ -19,3 +19,11 @@
 6. Vérifier les mécanismes de sauvegarde prestataires et leurs délais d’effacement ; le bouton n’efface que la base applicative active et le stockage local concerné.
 
 Cette passe technique n’est pas une certification juridique RGPD. Sources : https://www.cnil.fr/fr/mesurer-la-frequentation-de-vos-sites-web-et-de-vos-applications et https://www.cnil.fr/fr/rgpd-exemples-de-mentions-dinformation
+
+## Statistiques personnelles sans compte
+- `/statistiques` : données du navigateur et d’une clé privée explicitement créée/importée uniquement. Aucun compte ni identité de plateforme utilisé.
+- Clé aléatoire de 256 bits, empreinte SHA-256 conservée en base. La valeur lisible n’apparaît ni dans les URL ni dans les journaux ni dans les exports JSON de statistiques ; cookie HttpOnly Secure SameSite=Strict. Export de clé sur demande explicite.
+- Import de clé : association du navigateur courant, confirmation explicite dans le formulaire ; la clé est un secret donnant accès et effacement à l’historique associé. 100 navigateurs maximum par clé.
+- Statistiques retenues 395 jours ; clé inactive expirée au même horizon. Purges au trafic. Le navigateur lié au jeu est identifié par son cookie ; la clé permet de retrouver l’historique partagé sur un autre appareil.
+- Archive JSON versionnée sans cookie, e-mail ou clé de connexion. Import limité à 3 Mo / 20 000 entrées, validé côté serveur et idempotent ; ne modifie ni classements ni agrégats administrateur.
+- Retrait de consentement : supprime les statistiques et l’association de ce navigateur. Effacement par clé : supprime les détails liés et invalide la clé. Les autres appareils conservent leur propre choix de consentement.

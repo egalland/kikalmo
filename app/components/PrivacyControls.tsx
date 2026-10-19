@@ -2,6 +2,7 @@
 import {createContext,useContext,useEffect,useRef,useState,type ReactNode} from 'react';
 type PrivacySettings={choice:string|null|undefined;busy:boolean;choose:(statistics:boolean)=>Promise<void>;showSettings:()=>void};
 const PrivacyContext=createContext<PrivacySettings|null>(null);
+export function usePrivacySettings(){return useContext(PrivacyContext);}
 export function PrivacyCard(){
  const settings=useContext(PrivacyContext);
  if(!settings||settings.choice!==null)return null;

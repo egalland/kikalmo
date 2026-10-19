@@ -43,6 +43,13 @@
       "when": 1792419500000,
       "tag": "0005_publication_privacy",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1792424000000,
+      "tag": "0006_personal_statistics",
+      "breakpoints": true
     }
   ]
 }
