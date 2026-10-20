@@ -14,9 +14,9 @@
  .keyboard-mode-switch{display:flex;justify-content:center;flex-shrink:0;margin-top:5px}
  .keyboard-mode-switch button,.keyboard-toolbar button{min-height:28px;padding:3px 7px;border:0;background:transparent;color:#5e604b;text-decoration:underline;font-size:11px;cursor:pointer}
  .mobile-keyboard{display:flex;flex-direction:column;flex-shrink:0;gap:5px;width:100%;padding:4px 0 0;background:#e6dfce;border-radius:10px;user-select:none;-webkit-user-select:none}
- .keyboard-toolbar{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:0 6px;min-height:25px}
+ .keyboard-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px;padding:0 6px;min-height:25px}
  .keyboard-toolbar>span{font-size:8px;letter-spacing:.7px;color:#7a7259;white-space:nowrap}
- .keyboard-toolbar>div{display:flex;gap:0;align-items:center}
+ .keyboard-toolbar>div{display:flex;flex-wrap:wrap;justify-content:flex-end;margin-left:auto;gap:0;align-items:center}
  .keyboard-toolbar button{font-size:10px;min-height:27px;padding:2px 5px}
  .keyboard-keys{display:flex;flex-direction:column;gap:5px;padding:0 4px 5px}
  .keyboard-row{display:flex;justify-content:center;gap:4px;width:100%}

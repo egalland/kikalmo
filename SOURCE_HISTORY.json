@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "95ed4cc73be290ee14e61f1e69587377fd568855",
+  "source_head": "86e1cd752b36381a01e072dbec80fb77d60d1427",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -391,6 +391,11 @@
       "source_sha": "95ed4cc73be290ee14e61f1e69587377fd568855",
       "source_author": "Codex",
       "message": "Add personal statistics and portable private key access without accounts"
+    },
+    {
+      "source_sha": "86e1cd752b36381a01e072dbec80fb77d60d1427",
+      "source_author": "Codex",
+      "message": "Add optional light haptic feedback to the Kikalmo keyboard"
     }
   ]
 }
