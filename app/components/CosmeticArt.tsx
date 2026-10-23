@@ -10,16 +10,16 @@ const boxes:Record<string,{width:number;height:number;bottom?:number;top?:number
  crown:{width:170,height:125,bottom:18},halo:{width:165,height:65,bottom:-44},
  wizard:{width:190,height:175,bottom:18},bow:{width:100,height:65},star:{width:48,height:48},heart:{width:48,height:48},
 };
-export default function CosmeticArt({id,shape,body}:{id?:number;shape:number;body:number}){
- const item=COSMETICS.find(c=>c.id===id);if(!item||item.kind==='costume')return null;
+export default function CosmeticArt({id,shape,body,offsetY=0}:{id?:number;shape:number;body:number;offsetY?:number}){
+ const item=COSMETICS.find(c=>c.id===id);if(!item||item.id>=25)return null;
  const m=morphology(shape,body),kind=item.kind==='sparkles'?'star':item.kind;
  const asset=assets.find(a=>a.key===kind);if(!asset)return null;
  const image=(cx:number,cy:number,width:number,height:number,key?:number)=><image key={key} href={asset.url} x={cx-width/2} y={cy-height/2} width={width} height={height} preserveAspectRatio="xMidYMid meet"/>;
- const box=boxes[kind],scale=Math.min(box.width/asset.width,box.height/asset.height),width=asset.width*scale,height=asset.height*scale;
+ const box=boxes[kind],scale=Math.min(box.width/asset.width,box.height/asset.height),headScale=['bow','star','heart'].includes(kind)?1:Math.max(.94,Math.min(1.12,m.cheek.width/120)),width=asset.width*scale*headScale,height=asset.height*scale*headScale;
  let content;
  if(item.kind==='sparkles')content=[[-94,8,40],[96,46,34],[-99,128,26],[68,-44,28]].map(([x,y,size],i)=>image(128+x,m.forehead+y,size,size,i));
  else if(item.kind==='bow')content=image(128,m.chin+18,width,height);
  else if(item.kind==='star'||item.kind==='heart')content=image(182,m.chin+61,width,height);
- else {const top=box.top!==undefined?m.forehead+box.top:m.forehead+(box.bottom||0)-height;content=image(128,top+height/2,width,height);}
- return <g className="puppet-cosmetic" data-cosmetic={item.id} data-material="felt-raster" aria-hidden="true" style={{filter:variants[item.id]||undefined}}>{content}</g>;
+ else {const top=Math.max(-120,box.top!==undefined?m.forehead+box.top:m.forehead+(box.bottom||0)-height);content=image(128,top+height/2,width,height);}
+ return <g className="puppet-cosmetic" data-cosmetic={item.id} data-material="felt-raster" transform={offsetY?`translate(0 ${offsetY})`:undefined} aria-hidden="true" style={{filter:variants[item.id]||undefined}}>{content}</g>;
 }

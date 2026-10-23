@@ -1,0 +1,16 @@
+[
+  {
+    "key": "afro",
+    "url": "/puppets/hair-shop/afro.webp",
+    "width": 512,
+    "height": 354,
+    "sourceSha256": "27c434cfe15e97564edd0003134a83673fe1e7bbeaff51230b3c86c8e047e92e"
+  },
+  {
+    "key": "braids",
+    "url": "/puppets/hair-shop/braids.webp",
+    "width": 460,
+    "height": 512,
+    "sourceSha256": "58d16c38f91fac1b83125e4cba6f2202ff1dad663e082323afbd9c6dfac570d0"
+  }
+]

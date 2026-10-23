@@ -1,3 +1,4 @@
+import type {Avatar} from './profile';
 import {COSMETICS,type Wallet} from './cosmetics';
 // Rewards begin with this release; older daily competitions are not re-awarded.
 export const REWARDS_FROM='2026-10-23';
@@ -31,4 +32,11 @@ export function purchaseStatement(db:D1Database,player:string,item:typeof COSMET
  return db.prepare(`INSERT OR IGNORE INTO economy_ledger(id,player,currency,delta,item,created_at)
  SELECT ?,?,?,?, ?,? WHERE coalesce((SELECT sum(delta) FROM economy_ledger WHERE player=? AND currency=?),0)>=?`)
  .bind('purchase:'+player+':'+item.id,player,item.currency,-item.price,item.id,Date.now(),player,item.currency,item.price);
+}
+
+export async function ownedAppearance(db:D1Database,player:string,avatar:Avatar):Promise<Avatar>{
+ const next={...avatar};const slots=['headwear','adornment','costume','premiumHair','premiumEyes'] as const;
+ if(!slots.some(slot=>next[slot]))return next;
+ const rows=await db.prepare('SELECT item FROM economy_ledger WHERE player=? AND item IS NOT NULL AND delta<0').bind(player).all<{item:number}>();
+ const owned=new Set(rows.results.map(r=>r.item));for(const slot of slots)if(next[slot]&&!owned.has(next[slot]!))delete next[slot];return next;
 }

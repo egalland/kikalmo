@@ -4,7 +4,7 @@ import {DatabaseSync} from 'node:sqlite';
 import assert from 'node:assert/strict';
 import {economyURI,cosmeticsURI,calendarURI,dailyBankURI} from './economy-modules.mjs';
 const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText,uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
-const {wallet,settleDailyStatement,allowedCosmetic,roomPrizeStatement}=await import(economyURI);
+const {wallet,settleDailyStatement,allowedCosmetic,ownedAppearance,roomPrizeStatement}=await import(economyURI);
 const {COSMETICS}=await import(cosmeticsURI),{DAILY_QUESTIONS}=await import(dailyBankURI);
 const sql=new DatabaseSync(':memory:');for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+file,'utf8'));
 const db={async batch(list){sql.exec('BEGIN');try{const out=[];for(const s of list)out.push(await s.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}},prepare(q){let values=[];return{bind(...v){values=v;return this;},async first(){return sql.prepare(q).get(...values)||null;},async all(){return{results:sql.prepare(q).all(...values)};},async run(){const r=sql.prepare(q).run(...values);return{meta:{changes:Number(r.changes)}};}}}};
@@ -34,6 +34,8 @@ const distinct=await Promise.all([api.POST(req('POST',{item:2})),api.POST(req('P
 sql.prepare('INSERT INTO rooms VALUES(?,?,?)').run('cinema',JSON.stringify({telemetryCommit:'accepted'}),4);
 await roomPrizeStatement(db,p,'cinema','game',1,3,'rejected').run();assert.equal((await wallet(db,p)).room,2);
 await roomPrizeStatement(db,p,'cinema','game',1,4,'accepted').run();await roomPrizeStatement(db,p,'cinema','game',1,4,'accepted').run();assert.equal((await wallet(db,p)).room,3);
-sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('costume-credit',p,'room',8,null,now);assert.equal((await api.POST(req('POST',{item:25}))).status,200);assert.equal(await allowedCosmetic(db,p,25),25,'New costumes use the same server-side ownership checks');
-assert.equal(COSMETICS.length,32);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,32);assert.equal(DAILY_QUESTIONS.length,48);assert.equal(new Set(DAILY_QUESTIONS.map(q=>q.answer)).size,48);assert.ok(DAILY_QUESTIONS.every(q=>q.answer.split(' ').length>=3&&q.hint&&q.dailyHint));
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('costume-credit',p,'room',80,null,now);assert.equal((await api.POST(req('POST',{item:25}))).status,200);assert.equal(await allowedCosmetic(db,p,25),25,'New costumes use the same server-side ownership checks');
+assert.equal(COSMETICS.length,38);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,38);assert.equal(DAILY_QUESTIONS.length,48);assert.equal(new Set(DAILY_QUESTIONS.map(q=>q.answer)).size,48);assert.ok(DAILY_QUESTIONS.every(q=>q.answer.split(' ').length>=3&&q.hint&&q.dailyHint));
 console.log('Passed economy: final daily podium 5/3/2, actual attempt participation, no early or duplicate rewards, atomic concurrent purchases, no overdraft, distinct currencies, ownership, authoritative prices, CAS guarded room credits, origin checks and dedicated 48-puzzle bank.');
+
+const owned=await ownedAppearance(db,p,{shape:2,hair:5,eyes:0,nose:1,mouth:0,accessory:1,outfit:0,color:'#f8d779',headwear:1,costume:25,adornment:15,premiumHair:33,premiumEyes:36});assert.equal(owned.headwear,1);assert.equal(owned.costume,25);assert.equal(owned.adornment,undefined);assert.equal(owned.premiumHair,undefined);assert.equal(owned.premiumEyes,undefined);assert.equal(owned.hair,5);assert.equal(owned.accessory,1);assert.ok(COSMETICS.filter(c=>c.id>=25&&c.id<=32).every(c=>c.price>=(c.currency==='room'?80:40)));

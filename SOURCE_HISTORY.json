@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "4b52ee0d402c6d73fc447620a4fcab18567bb498",
+  "source_head": "4252c7ef2af4f809c05b5199593280daab9cefce",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -411,6 +411,11 @@
       "source_sha": "4b52ee0d402c6d73fc447620a4fcab18567bb498",
       "source_author": "Codex",
       "message": "Preserve selected avatar face silhouettes inside costumes and replace flat shop accessories with generated felt assets"
+    },
+    {
+      "source_sha": "4252c7ef2af4f809c05b5199593280daab9cefce",
+      "source_author": "Codex",
+      "message": "Separate character wardrobe and purchase-only shop, preserve costume layers and add premium hair and eyes"
     }
   ]
 }

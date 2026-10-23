@@ -58,3 +58,11 @@ Les 24 accessoires de la boutique utilisent maintenant 12 assets raster en feutr
 - Planche de contrôle des 24 apparences : `node scripts/render-accessory-review.mjs /tmp/accessories.png`.
 - Les casques audio et serre-têtes passent derrière la tête pour laisser tous les yeux visibles ; les autres pièces sont placées sur les repères du front, du menton ou du vêtement.
 - Tests : `tests/accessories.test.mjs` vérifie les matières non uniformes, l’alpha, les silhouettes complètes et l’absence d’occlusion des yeux sur les six formes de tête.
+
+## Atelier et collection
+
+Les cinq emplacements sont persistés séparément ; `cosmetic` est seulement une entrée de migration des anciens profils. La propriété de chaque article est contrôlée en salon et au quotidien. Le costume masque la même identité complète (cheveux, visage, accessoires et vêtements) derrière son ouverture alpha. Les broches se placent au col ou sur le torse du costume. Retirer le costume restitue les autres emplacements.
+
+La boutique possède son aperçu local : examiner et acheter ne changent pas le personnage. Les coiffures afro chocolat, tresses violettes et afro argenté sont dérivées de deux créations ImageGen en laine/feutre sur fond transparent, assorties au personnage existant. Production : `public/puppets/hair-shop/` ; métadonnées : `lib/hair-assets.json` ; packaging : `scripts/package-hair.mjs`. L’afro argenté réutilise le même matériau avec une variation de couleur. Trois regards réutilisent les yeux textiles animés et des teintes lagon, améthyste et émeraude.
+
+Tarifs costumes : 80 / 120 / 180 / 250 pièces de salon, 40 / 60 / 90 / 120 éclats quotidiens. Les lignes d’achat antérieures conservent leur validité. Les 48 énigmes quotidiennes restent dans une banque dédiée invisible dans les catégories des salons.

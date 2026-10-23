@@ -15,7 +15,7 @@ for(const asset of assets){
  for(let shape=0;shape<6;shape++){
   const a={shape,hair:7,eyes:shape%6,nose:shape+1,mouth:shape%6,accessory:6,outfit:5,color:'#f8d779',cosmetic:asset.id};
   const svg=renderPuppet(a,puppetPose(a.eyes,a.mouth,'idle',0,0,false),'costume-'+asset.id+'-'+shape,'idle',size);
-  assert.match(svg,/data-costume=/);assert.ok(!svg.includes('puppet-layer puppet-outfit'),'Full costume must replace the default clothing');assert.ok(!svg.includes('puppet-layer puppet-hair'),'No hair may pierce the integral helmet');
+  assert.match(svg,/data-costume=/);assert.ok(svg.includes('puppet-identity'));assert.ok(svg.includes('puppet-layer puppet-outfit'));assert.ok(svg.includes('puppet-layer puppet-hair'));assert.ok(svg.includes('face-window'));assert.ok(svg.includes('puppet-accessory'));
   const pixels=await sharp(Buffer.from(svg)).ensureAlpha().raw().toBuffer();
   assert.ok(pixels[(py*size+px)*4+3]>220,asset.key+': shape '+shape+' must fill the face aperture');
   // Nothing touches the canvas edge: large fins, antennae, shoulder pads and hems remain visible.
@@ -27,4 +27,10 @@ for(const asset of assets){
  const win=await sharp(Buffer.from(renderPuppet(avatar,puppetPose(0,0,'victory',0,0,false),'expressions','victory',size))).raw().toBuffer();
  assert.notDeepEqual(idle,win,asset.key+' must retain actual facial expression changes');
 }
-console.log('Passed costumes: 8 genuine-alpha assets, '+rendered+' rendered morphology fittings, complete unclipped silhouettes, replaced base clothing/hair and preserved animated expressions.');
+console.log('Passed costumes: 8 genuine-alpha assets, '+rendered+' rendered morphology fittings, complete unclipped silhouettes, masked original identity and preserved animated expressions.');
+for(let costume=25;costume<=32;costume++)for(let shape=0;shape<6;shape++){
+ const a={shape,hair:5,eyes:0,nose:1,mouth:0,accessory:1,outfit:0,color:'#f8d779',costume,headwear:7,adornment:15};
+ const svg=renderPuppet(a,puppetPose(0,0,'idle',0,0,false),'layered-'+costume+'-'+shape);
+ assert.ok(svg.indexOf('puppet-hair')<svg.indexOf('puppet-costume'),'Hair remains inside helmet');assert.ok(svg.indexOf('puppet-accessory')<svg.indexOf('puppet-costume'),'Facial accessories remain inside helmet');assert.ok(svg.indexOf('data-cosmetic="15"')>svg.indexOf('puppet-costume'),'Bow must be in front of costume');assert.ok(svg.includes('data-cosmetic="7"'),'Headwear remains part of underlying identity');
+}
+console.log('Passed 48 combined costumes: headwear, hair and glasses retained underneath, bow above the costume.');
