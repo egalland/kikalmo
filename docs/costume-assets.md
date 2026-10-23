@@ -43,3 +43,18 @@ Images créées avec l’outil intégré ImageGen, avec un rendu de la marionnet
 ## Validation
 
 `node --test tests/costumes.test.mjs` vérifie l’alpha réel, 48 combinaisons tenue/morphologie, les silhouettes complètes, le remplacement des cheveux/vêtements et le changement effectif des expressions. Les tests de profil et d’économie vérifient aussi les nouveaux identifiants et les achats. La planche de rendu des huit tenues portées a été inspectée visuellement.
+
+## Correction des contours de visage
+
+La peau conserve désormais exactement la silhouette du sprite de tête sélectionné (six formes, trois poses), à une échelle uniforme commune aux traits. Elle ne remplit plus toute l’ouverture du casque. Une doublure en feutre assombrie apparaît entre le contour de la tête et le casque ; le cou conserve aussi sa propre largeur. `tests/face-contours.test.mjs` vérifie sur les pixels rendus que la peau ne dépasse pas la silhouette choisie.
+
+## Accessoires textiles
+
+Les 24 accessoires de la boutique utilisent maintenant 12 assets raster en feutre : béret, bonnet tricoté, haut-de-forme, tricorne, serre-tête à antennes, casque audio, étoile, cœur, nœud papillon, couronne, halo et chapeau de mage. Les variantes de couleur sont appliquées au rendu ; les groupes d’étoiles réemploient l’étoile cousue. Les identifiants, prix, monnaies et achats sont conservés.
+
+- Assets de production : `public/puppets/accessories-v2/` (WebP avec alpha).
+- Prompts exacts et outil de création : [accessory-prompts.json](accessory-prompts.json).
+- Optimisation et détourage de cadrage : `node scripts/package-accessories.mjs <manifest.json>` avec des entrées `{key,path}` vers les PNG générés. Les sources ne sont pas modifiées.
+- Planche de contrôle des 24 apparences : `node scripts/render-accessory-review.mjs /tmp/accessories.png`.
+- Les casques audio et serre-têtes passent derrière la tête pour laisser tous les yeux visibles ; les autres pièces sont placées sur les repères du front, du menton ou du vêtement.
+- Tests : `tests/accessories.test.mjs` vérifie les matières non uniformes, l’alpha, les silhouettes complètes et l’absence d’occlusion des yeux sur les six formes de tête.

@@ -1,0 +1,86 @@
+[
+  {
+    "key": "beret",
+    "url": "/puppets/accessories-v2/beret.webp",
+    "width": 512,
+    "height": 327,
+    "sourceSha256": "8e2dac322a2289a0e1fd774d0f3b16cbacbae0310ae2037cad35aca25a7fc363"
+  },
+  {
+    "key": "beanie",
+    "url": "/puppets/accessories-v2/beanie.webp",
+    "width": 463,
+    "height": 512,
+    "sourceSha256": "3a4fef91b36f7b6dabba16095c9372dcfd36f9fb08b091110ab5fa81f3d84544"
+  },
+  {
+    "key": "top",
+    "url": "/puppets/accessories-v2/top.webp",
+    "width": 512,
+    "height": 396,
+    "sourceSha256": "43c61f73d500e73475d65af4472ef6680355c2225f5d51272c06dbf004f631f7"
+  },
+  {
+    "key": "pirate",
+    "url": "/puppets/accessories-v2/pirate.webp",
+    "width": 512,
+    "height": 278,
+    "sourceSha256": "b0fc8b0324192797c1b64b1662e384097b6851471429d56abc3c53fae6d670e7"
+  },
+  {
+    "key": "antenna",
+    "url": "/puppets/accessories-v2/antenna.webp",
+    "width": 512,
+    "height": 476,
+    "sourceSha256": "817dbe38ddf6f0dc56b0cae748297c56d08eb2d49bb0ac1b369be05b7f885036"
+  },
+  {
+    "key": "headphones",
+    "url": "/puppets/accessories-v2/headphones.webp",
+    "width": 512,
+    "height": 511,
+    "sourceSha256": "abdfe97fc80f7d124e5ae18cbd57b62e8f4d12af985e2a806337668b56d6b8a9"
+  },
+  {
+    "key": "star",
+    "url": "/puppets/accessories-v2/star.webp",
+    "width": 512,
+    "height": 482,
+    "sourceSha256": "72fe2cce0e2458c1dd2c88b561af418c392554ea0e83cb7426d9d6ca5cdc2899"
+  },
+  {
+    "key": "heart",
+    "url": "/puppets/accessories-v2/heart.webp",
+    "width": 512,
+    "height": 450,
+    "sourceSha256": "fd943cc6ff1c320d455b82b2c47cb579c9cf7870121abee0b6c99949b8ae4748"
+  },
+  {
+    "key": "bow",
+    "url": "/puppets/accessories-v2/bow.webp",
+    "width": 512,
+    "height": 328,
+    "sourceSha256": "dd2dc5d25c8c8b937b0c046bab74f4fd48a59b8aae005ff4152ea122077dfb37"
+  },
+  {
+    "key": "crown",
+    "url": "/puppets/accessories-v2/crown.webp",
+    "width": 512,
+    "height": 402,
+    "sourceSha256": "634ee153766a8b75318a212501f85ad2b7490f67694ff609d82a03ba56eca2d0"
+  },
+  {
+    "key": "halo",
+    "url": "/puppets/accessories-v2/halo.webp",
+    "width": 512,
+    "height": 257,
+    "sourceSha256": "6d527aa31b76c4fb5e6f2e2a3e656c6b5a953e0b2fd9b3ec0e50385dea049a50"
+  },
+  {
+    "key": "wizard",
+    "url": "/puppets/accessories-v2/wizard.webp",
+    "width": 512,
+    "height": 464,
+    "sourceSha256": "f24a1985120616432bb3819ef9557ff653b310afa1d513bf8d463225f4967f4a"
+  }
+]

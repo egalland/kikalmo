@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "6100689000ed630c6c67cf9b43340326f2109ae4",
+  "source_head": "4b52ee0d402c6d73fc447620a4fcab18567bb498",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -406,6 +406,11 @@
       "source_sha": "6100689000ed630c6c67cf9b43340326f2109ae4",
       "source_author": "Codex",
       "message": "Add eight generated felt costumes with integral helmets and animated avatar face apertures"
+    },
+    {
+      "source_sha": "4b52ee0d402c6d73fc447620a4fcab18567bb498",
+      "source_author": "Codex",
+      "message": "Preserve selected avatar face silhouettes inside costumes and replace flat shop accessories with generated felt assets"
     }
   ]
 }

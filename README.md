@@ -6,6 +6,10 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## Accessoires textiles et formes de visage
+
+Les 24 accessoires de la boutique sont rendus en feutre texturé à partir de 12 assets ImageGen. Dans les costumes, la peau respecte le contour du visage choisi, avec une doublure sombre autour. [Prompts des accessoires](docs/accessory-prompts.json) · [Détails et contrôles](docs/costume-assets.md).
+
 ## Tenues fantaisie
 
 Huit casques et combinaisons en laine et feutre : cosmonaute, scaphandrier, dragon, robot, chevalier, axolotl, champignon et pilote. Les visages gardent leurs expressions animées. [Assets, prompts et intégration](docs/costume-assets.md).

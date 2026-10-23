@@ -26,7 +26,9 @@ export function PuppetArt({value,frame,id,className='',label,expression='idle'}:
    <defs><filter id={id+'-face-alpha'} colorInterpolationFilters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1 1"/></filter>
     <mask id={id+'-face-window'} maskUnits="userSpaceOnUse" x={128-costume.faceWidth/2-1} y={122-costume.faceHeight/2-1} width={costume.faceWidth+2} height={costume.faceHeight+2} style={{maskType:'alpha'}}><image href={costume.url} x={costume.x} y={costume.y} width={costume.renderWidth} height={costume.renderHeight} filter={'url(#'+id+'-face-alpha)'}/></mask></defs>
    <g mask={'url(#'+id+'-face-window)'}><g transform={`translate(128 122) scale(${costume.faceScale}) translate(-128 -122)`}>
-    <g transform="translate(128 122) scale(1.85 1.45) translate(-128 -122)">{art('body','heads',frame.body,a.shape,3,6,0,0,1,1,true)}</g>
+    <g className="puppet-helmet-lining" transform="translate(128 122) scale(2.2 1.6) translate(-128 -122)" style={{filter:'grayscale(1) brightness(.16)'}}>{art('helmet-lining','heads',0,0,3,6)}</g>
+    {art('neck','neck',0,0,1,1,0,m.chin-10-198,1,1,true)}
+    <g className="puppet-selected-face" data-face-shape={a.shape}>{art('body','heads',frame.body,a.shape,3,6,0,0,1,1,true)}</g>
     {face('eyes',frame.eyes,frame.eyesRow)}{face('mouth',frame.mouth,frame.mouthRow)}
     {a.nose>0&&art('nose','noses',a.nose-1,0,6,1)}
    </g></g>
@@ -34,11 +36,12 @@ export function PuppetArt({value,frame,id,className='',label,expression='idle'}:
   </>:<>
   {art('neck','neck',0,0,1,1,0,m.chin-10-198,1,1,true)}
   {art('outfit','outfits',a.outfit,0,6,1,outfit.x,outfit.y,outfit.scaleX)}
+  {[9,10,11,12].includes(a.cosmetic||0)&&<CosmeticArt id={a.cosmetic} shape={a.shape} body={frame.body}/>}
   {art('body','heads',frame.body,a.shape,3,6,0,0,1,1,true)}
   {face('eyes',frame.eyes,frame.eyesRow)}{face('mouth',frame.mouth,frame.mouthRow)}
   {a.nose>0&&art('nose','noses',a.nose-1,0,6,1)}
   {!(a.cosmetic&&[1,2,3,4,5,6,7,8,17,18,21,22].includes(a.cosmetic))&&(a.hair===7?<svg className="puppet-layer puppet-hair" aria-hidden="true" x="0" y="-128" width="256" height="384" viewBox={`${frame.body*256} ${a.shape*384} 256 384`} overflow="hidden"><image href="/puppets/v2/tuft.webp" width="768" height="2304"/></svg>:a.hair>0&&art('hair','hair',a.hair-1,a.shape*3+frame.body,6,18,0,-48))}
-  {a.accessory>0&&accessory()}<CosmeticArt id={a.cosmetic} shape={a.shape} body={frame.body}/>
+  {a.accessory>0&&accessory()}{![9,10,11,12].includes(a.cosmetic||0)&&<CosmeticArt id={a.cosmetic} shape={a.shape} body={frame.body}/>}
   </>}
  </svg>;
 }

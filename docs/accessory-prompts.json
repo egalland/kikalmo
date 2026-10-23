@@ -1,0 +1,55 @@
+{
+  "created_with": "ImageGen intégré",
+  "style_reference": "Marionnette existante rendue depuis public/puppets/v2, avec sa texture de feutre et sa tenue par défaut.",
+  "common": "Use case: stylized-concept. Single production wearable game asset on a TRUE transparent background. Reference image ONLY supplies the exact graphic style: dimensional handmade wool-felt puppet, tactile fuzzy fibres, softly stuffed sculpted fabric volumes, meticulous thick stitches, warm soft studio lighting. Match this material and rendering, NOT flat/vector drawing, not outlines, not plastic. Depict the ACCESSORY ALONE, no mannequin, head, face, skin, body or other item. Orthographic straight FRONT view, centered with clear transparent margin, entire silhouette visible. No text, brand, watermark or labels. ",
+  "assets": [
+    {
+      "key": "beret",
+      "prompt": "A raspberry-pink felt French beret, softly slouching to one side, stuffed rounded wool shape, small fuzzy stalk on top, subtle cream hand-stitched seam along the curved band. Fashionable and tactile. Broad shallow silhouette; front band bottom is gently curved to sit on the top of a puppet head."
+    },
+    {
+      "key": "beanie",
+      "prompt": "A pistachio-green knitted wool beanie, chunky ribbed stitches, thick folded cuff, round fuzzy pompom on top, little sewn cream patch without lettering. Front facing standalone soft hat with flat open underside, no head underneath."
+    },
+    {
+      "key": "top",
+      "prompt": "An elegant midnight-blue felt top hat, gently rounded cylindrical crown, plush broad shallow curved brim, caramel and cream fabric band, a small subtle embroidered diamond on band. Rich wool fibres and soft padded seams. Standalone front view hat."
+    },
+    {
+      "key": "pirate",
+      "prompt": "A charming charcoal wool-felt pirate tricorn hat, broad curved upturned brim with cream stitched piping, tiny ivory felt skull and crossed bones sewn as a soft fabric patch on front. No face, no head, no mannequin. Friendly whimsical plush puppet accessory, no sharp realistic objects."
+    },
+    {
+      "key": "antenna",
+      "prompt": "A whimsical turquoise felt ALIEN ANTENNA HEADBAND. Two soft curved wool stalks ending in large fuzzy round balls, attached to a shallow padded arc band. Front-facing symmetrical standalone headband, no head underneath, open transparent region below band. Rich textile texture and visible cream seams, no wires or real metal."
+    },
+    {
+      "key": "headphones",
+      "prompt": "A pair of retro burnt-orange stuffed-felt OVER-EAR HEADPHONES. Broad rounded padded arch, two deep plush ear cushions, cream stitched piping and tiny round caramel fabric buttons on cups. Whole arch and both cups visible; the interior between the arch/cups is genuinely transparent. Front view, not angled, no head, no wearer."
+    },
+    {
+      "key": "star",
+      "prompt": "A five-point GOLDEN STAR BROOCH made of richly fuzzy padded wool felt, softly rounded stuffed points, cream hand-stitched border, tiny sewn amber center stitch. Three-dimensional small puppet garment accessory, fully frontal, silhouette isolated on true alpha. One star only, no scene."
+    },
+    {
+      "key": "heart",
+      "prompt": "A rose-pink HEART BROOCH of softly padded fuzzy wool felt, plump rounded lobes, delicate cream sewn border and a tiny fabric patch seam. Fully frontal standalone textile pin, gentle relief and natural soft shadows on its own surface, no background shadow or wearer."
+    },
+    {
+      "key": "bow",
+      "prompt": "A deep raspberry-red plush felt BOW TIE for the puppet: two sculpted folded wool loops, rounded padded center knot, little short trailing ends, subtle cream stitching along edges. Fully front-facing symmetrically balanced fabric brooch, rich tactile softly lit relief. One bow tie only, no neck, no shirt, no head."
+    },
+    {
+      "key": "crown",
+      "prompt": "A fantastical GOLDEN FELT ROYAL CROWN, softly stuffed and three-dimensional, five rounded triangular points with little fuzzy pompoms, padded ruby and turquoise fabric gemstones sewn onto the front band, cream stitches, gently curved front lower band to sit on a puppet head. Front view, no wearer, not a flat vector shape, no real metal."
+    },
+    {
+      "key": "halo",
+      "prompt": "A warm golden padded wool-felt HALO RING. An airy horizontally oval hoop seen from a slightly elevated front viewing angle: broad ellipse, circular opening completely transparent, soft stuffed tube with fine fuzzy fibres and subtle cream sewn edge. Small magical puppet accessory. Ring only, no angel/head/supporting mannequin or extra stars, no bright glow background."
+    },
+    {
+      "key": "wizard",
+      "prompt": "A whimsical deep-purple wool-felt WIZARD HAT. Tall floppy tapered crown with a gently crooked tip, broad softly padded brim curved to sit on a puppet head, small golden felt crescent and a few tiny embroidered golden stars. Thick realistic wool fibres and visible stitches, softly stuffed volumes. Single front-facing isolated hat, no head or face, no extra items."
+    }
+  ]
+}
