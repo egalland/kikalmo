@@ -1,3 +1,4 @@
+import {economyURI,dailyBankURI,calendarURI} from './economy-modules.mjs';
 import ts from 'typescript';
 import {readFileSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
@@ -11,11 +12,12 @@ const sql=new DatabaseSync(':memory:');sql.exec(readFileSync('drizzle/0000_polit
 sql.exec(readFileSync('drizzle/0001_premium_miracleman.sql','utf8'));
 sql.exec(readFileSync('drizzle/0002_giant_skrulls.sql','utf8'));
 sql.exec(readFileSync('drizzle/0003_natural_polaris.sql','utf8'));
+for(const f of ['0007_boring_jack_murdock.sql'])sql.exec(readFileSync('drizzle/'+f,'utf8'));
 let batchTail=Promise.resolve();
 globalThis.__testDB={batch(statements){const task=batchTail.then(async()=>{sql.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sql.exec('COMMIT');return result;}catch(e){sql.exec('ROLLBACK');throw e;}});batchTail=task.catch(()=>{});return task;},prepare(query){let values=[];return {bind(...v){values=v;return this},async first(){return sql.prepare(query).get(...values)||null},async all(){return {results:sql.prepare(query).all(...values)}},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}}}}}};
 
 const daily=uri(compile(readFileSync('lib/daily.ts','utf8').replace("'./game'",JSON.stringify(game)).replace("import clues from './question-clues.json';",'const clues='+readFileSync('lib/question-clues.json','utf8')+';')));
-let source=readFileSync('app/api/daily/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/profile'",JSON.stringify(profile)).replace("'../../../lib/daily'",JSON.stringify(daily)).replace("'../../../lib/analytics'",JSON.stringify(analytics));
+let source=readFileSync('app/api/daily/route.ts','utf8').replace("'../../../lib/economy'",JSON.stringify(economyURI)).replace("'../../../lib/daily-bank'",JSON.stringify(dailyBankURI)).replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/profile'",JSON.stringify(profile)).replace("'../../../lib/daily'",JSON.stringify(daily)).replace("'../../../lib/analytics'",JSON.stringify(analytics));
 const {POST,GET}=await import(uri(compile(source)));
 let now=Date.parse('2026-10-17T10:00:00Z');Date.now=()=>now;
 const day='2026-10-17';

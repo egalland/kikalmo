@@ -1,3 +1,4 @@
+import {economyURI,dailyBankURI,calendarURI} from './economy-modules.mjs';
 import ts from 'typescript';
 import {readFileSync,readdirSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
@@ -6,7 +7,7 @@ const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2
 const uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
 const game=uri("export const fresh=()=>({players:[],phase:'empty',deadline:0,started:0,round:0,deck:[],game:''});");
 const analytics=uri(compile(readFileSync('lib/analytics.ts','utf8').replace("import {QUESTIONS, type State, type Player} from './game';",'const QUESTIONS=[];')));
-const privacyURI=uri(compile(readFileSync('lib/privacy.ts','utf8').replace("'./analytics'",JSON.stringify(analytics)).replace("'./game'",JSON.stringify(game))));
+const privacyURI=uri(compile(readFileSync('lib/privacy.ts','utf8').replace("'./economy'",JSON.stringify(economyURI)).replace("'./daily'",JSON.stringify(calendarURI)).replace("'./analytics'",JSON.stringify(analytics)).replace("'./game'",JSON.stringify(game))));
 const authURI=uri(compile(readFileSync('lib/admin-auth.ts','utf8')));
 const {statsAllowed,cookieValue,purgeExpired}=await import(privacyURI);
 const {playerHash,collector}=await import(analytics);
@@ -32,11 +33,14 @@ for(const [id,name,hash] of [[a,'Alice',ha],[b,'Bob',hb]]){
 }
 sql.prepare('INSERT INTO site_visitor_days(id,day,visitor,first_seen,last_seen) VALUES (?,?,?,?,?)').run('visit-a',day,hv,now,now);
 const events=[{kind:'presence',player:ha,at:now,day,hour:'12'},{kind:'presence',player:hb,at:now,day,hour:'12'}];sql.prepare('INSERT INTO analytics_commits VALUES (?,?,?,?,?)').run('shared',now,day,'cinema',JSON.stringify(events));
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('private-credit',a,'room',4,null,now);
 const cookies=`sv_player=${a}; kk_visitor=${v}; kk_consent=v1-yes`;
-r=await privacy.GET(req(cookies,'GET',null,'/api/privacy?export=1'));assert.equal(r.status,200);const exported=await r.json();assert.equal(exported.daily.length,1);assert.equal(exported.daily[0].name,'Alice');assert.equal(exported.sessions.length,1);assert.ok(!JSON.stringify(exported).includes('Bob'));assert.match(r.headers.get('content-disposition'),/attachment/);
+r=await privacy.GET(req(cookies,'GET',null,'/api/privacy?export=1'));assert.equal(r.status,200);const exported=await r.json();assert.equal(exported.progression.length,1);assert.equal(exported.progression[0].delta,4);assert.equal(exported.daily.length,1);assert.equal(exported.daily[0].name,'Alice');assert.equal(exported.sessions.length,1);assert.ok(!JSON.stringify(exported).includes('Bob'));assert.match(r.headers.get('content-disposition'),/attachment/);
 r=await privacy.POST(req(cookies,'POST',{statistics:false}));assert.equal(r.status,200);assert.match(r.headers.get('set-cookie'),/kk_consent=v1-no/);assert.equal(sql.prepare('SELECT count(*) n FROM analytics_sessions WHERE player=?').get(ha).n,0);assert.equal(sql.prepare('SELECT count(*) n FROM analytics_sessions WHERE player=?').get(hb).n,1);assert.equal(sql.prepare('SELECT count(*) n FROM daily_players WHERE player=?').get(a).n,1,'withdrawal must preserve gameplay');
+assert.equal(sql.prepare('SELECT count(*) n FROM economy_ledger WHERE player=?').get(a).n,1,'Statistics withdrawal preserves progression');
 const shared=JSON.parse(sql.prepare("SELECT events FROM analytics_commits WHERE id='shared'").get().events);assert.equal(shared.length,1);assert.equal(shared[0].player,hb,'other participant must survive shared-event cleanup');
 r=await privacy.DELETE(req(cookies,'DELETE'));assert.equal(r.status,200);assert.equal((await r.json()).deleted,true);assert.equal(sql.prepare('SELECT count(*) n FROM daily_players WHERE player=?').get(a).n,0);assert.equal(sql.prepare('SELECT count(*) n FROM daily_players WHERE player=?').get(b).n,1);const after=JSON.parse(sql.prepare("SELECT state FROM rooms WHERE id='cinema'").get().state);assert.deepEqual(after.players.map(p=>p.id),[b]);assert.equal(after.messages.length,1);assert.equal(after.champion,undefined);
+assert.equal(sql.prepare('SELECT count(*) n FROM economy_ledger WHERE player=?').get(a).n,0,'Full erasure removes progression');
 const c=collector('cinema',now),p={id:a};await c.attach(p,{players:[]},false,false);assert.equal(p.tracking,undefined);assert.equal(c.events.length,0);c.emit('guess_correct',{players:[],deck:[],round:0},p);assert.equal(c.events.length,0);
 sql.prepare('INSERT INTO daily_players(id,day,player,name,avatar,state,last_seen) VALUES (?,?,?,?,?,?,?)').run('expired','2020-01-01',a,'old','{}','{}',1);await purgeExpired(db);assert.equal(sql.prepare("SELECT count(*) n FROM daily_players WHERE id='expired'").get().n,0);
 console.log('Passed privacy: default refusal, server-side cookie gate, prior consent, CSRF, export isolation, withdrawal preserving game state, erasure preserving other players and shared events, retention.');

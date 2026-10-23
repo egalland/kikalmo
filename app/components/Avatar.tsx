@@ -1,4 +1,5 @@
 'use client';
+import CosmeticArt from './CosmeticArt';
 import {useId,useSyncExternalStore} from 'react';
 import {cleanAvatar,type Avatar as AvatarData} from '../../lib/profile';
 import {feltColor,puppetPose,EXPRESSION_LABELS} from '../../lib/puppet';
@@ -14,7 +15,7 @@ export default function Avatar({value,className='',label,animated=true,emotion}:
  return <PuppetArt value={a} frame={frame} id={id} className={className} label={label} expression={expression}/>;
 }
 export function PuppetArt({value,frame,id,className='',label,expression='idle'}:{value:AvatarData;frame:ReturnType<typeof puppetPose>;id:string;className?:string;label?:string;expression?:string}){
- const a=cleanAvatar(value),color=feltColor(a.color),m=morphology(a.shape,frame.body),outfit=outfitPlacement(a.shape,frame.body),stage=a.hair===7?{...PUPPET_STAGE,y:-128,height:464}:PUPPET_STAGE;
+ const a=cleanAvatar(value),color=feltColor(a.color),m=morphology(a.shape,frame.body),outfit=outfitPlacement(a.shape,frame.body),stage=a.cosmetic?{...PUPPET_STAGE,y:-128,height:464}:a.hair===7?{...PUPPET_STAGE,y:-128,height:464}:PUPPET_STAGE;
  const art=(name:string,file:string,col:number,row:number,columns:number,rows:number,x=0,y=0,scaleX=1,scaleY=1,tint=false)=>
   <svg key={name} className={'puppet-layer puppet-'+name} aria-hidden="true" x={x} y={y} width={256*scaleX} height={256*scaleY} viewBox={`${col*256} ${row*256} 256 256`} overflow="hidden" preserveAspectRatio="none" style={tint?{filter:color}:undefined}><image href={'/puppets/v2/'+file+'.webp'} x="0" y="0" width={columns*256} height={rows*256}/></svg>;
  const face=(name:string,col:number,row:number)=>{const {x,y,scaleX,scaleY,crop}=puppetPlacement(name,col,row,a.shape,frame);return <svg key={name} className={'puppet-layer puppet-'+name} aria-hidden="true" x={x+crop.x*scaleX} y={y+crop.y*scaleY} width={crop.width*scaleX} height={crop.height*scaleY} viewBox={`${col*256+crop.x} ${row*256+crop.y} ${crop.width} ${crop.height}`} overflow="hidden" preserveAspectRatio="none" style={{filter:color}}><image href={'/puppets/'+name+'.webp?v=5'} width="1024" height="1536"/></svg>;};
@@ -25,7 +26,7 @@ export function PuppetArt({value,frame,id,className='',label,expression='idle'}:
   {art('body','heads',frame.body,a.shape,3,6,0,0,1,1,true)}
   {face('eyes',frame.eyes,frame.eyesRow)}{face('mouth',frame.mouth,frame.mouthRow)}
   {a.nose>0&&art('nose','noses',a.nose-1,0,6,1)}
-  {a.hair===7?<svg className="puppet-layer puppet-hair" aria-hidden="true" x="0" y="-128" width="256" height="384" viewBox={`${frame.body*256} ${a.shape*384} 256 384`} overflow="hidden"><image href="/puppets/v2/tuft.webp" width="768" height="2304"/></svg>:a.hair>0&&art('hair','hair',a.hair-1,a.shape*3+frame.body,6,18,0,-48)}
-  {a.accessory>0&&accessory()}
+  {!(a.cosmetic&&[1,2,3,4,5,6,7,8,17,18,21,22].includes(a.cosmetic))&&(a.hair===7?<svg className="puppet-layer puppet-hair" aria-hidden="true" x="0" y="-128" width="256" height="384" viewBox={`${frame.body*256} ${a.shape*384} 256 384`} overflow="hidden"><image href="/puppets/v2/tuft.webp" width="768" height="2304"/></svg>:a.hair>0&&art('hair','hair',a.hair-1,a.shape*3+frame.body,6,18,0,-48))}
+  {a.accessory>0&&accessory()}<CosmeticArt id={a.cosmetic} shape={a.shape} body={frame.body}/>
  </svg>;
 }

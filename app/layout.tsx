@@ -3,6 +3,7 @@ import './globals.css';
 import './privacy.css';
 import PrivacyControls from './components/PrivacyControls';
 import './puppet.css';
+import './shop.css';
 import './answer-reveal.css';
 import './emotes.css';
 import './mobile-play.css';

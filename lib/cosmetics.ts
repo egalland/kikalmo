@@ -1,0 +1,29 @@
+export type Currency='room'|'daily';
+export const CURRENCY_LABELS={room:'Pièces de salon',daily:'Éclats du jour'};
+export const COSMETICS=[
+ {id:1,name:'Béret framboise',kind:'beret',color:'#c74969',currency:'room',price:2},
+ {id:2,name:'Béret océan',kind:'beret',color:'#247c95',currency:'room',price:3},
+ {id:3,name:'Bonnet pistache',kind:'beanie',color:'#91b85c',currency:'room',price:3},
+ {id:4,name:'Bonnet myrtille',kind:'beanie',color:'#7957a8',currency:'room',price:4},
+ {id:5,name:'Haut-de-forme',kind:'top',color:'#39405b',currency:'room',price:5},
+ {id:6,name:'Chapeau caramel',kind:'top',color:'#b07647',currency:'room',price:5},
+ {id:7,name:'Petit pirate',kind:'pirate',color:'#354049',currency:'room',price:6},
+ {id:8,name:'Pirate rubis',kind:'pirate',color:'#9a3b50',currency:'room',price:8},
+ {id:9,name:'Antenne cosmique',kind:'antenna',color:'#60b9c3',currency:'room',price:6},
+ {id:10,name:'Antenne acidulée',kind:'antenna',color:'#b7cc5b',currency:'room',price:8},
+ {id:11,name:'Casque studio',kind:'headphones',color:'#df7e4f',currency:'room',price:8},
+ {id:12,name:'Casque nocturne',kind:'headphones',color:'#717ac5',currency:'room',price:10},
+ {id:13,name:'Étoile de feutre',kind:'star',color:'#f2b84b',currency:'room',price:10},
+ {id:14,name:'Cœur cousu',kind:'heart',color:'#dc6089',currency:'room',price:12},
+ {id:15,name:'Nœud papillon',kind:'bow',color:'#c04d65',currency:'room',price:12},
+ {id:16,name:'Nœud céladon',kind:'bow',color:'#53a59b',currency:'room',price:15},
+ {id:17,name:'Couronne solaire',kind:'crown',color:'#e7ad35',currency:'daily',price:3},
+ {id:18,name:'Couronne lunaire',kind:'crown',color:'#a5b4d8',currency:'daily',price:5},
+ {id:19,name:'Halo des idées',kind:'halo',color:'#efd264',currency:'daily',price:5},
+ {id:20,name:'Halo boréal',kind:'halo',color:'#81d7c6',currency:'daily',price:8},
+ {id:21,name:'Mage des mots',kind:'wizard',color:'#7a64b0',currency:'daily',price:8},
+ {id:22,name:'Mage des étoiles',kind:'wizard',color:'#3b829c',currency:'daily',price:12},
+ {id:23,name:'Constellation',kind:'sparkles',color:'#e5be64',currency:'daily',price:15},
+ {id:24,name:'Aurore de feutre',kind:'sparkles',color:'#b790da',currency:'daily',price:20},
+] as const;
+export type Wallet={room:number;daily:number;owned:number[]};

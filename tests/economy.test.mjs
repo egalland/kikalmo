@@ -1,0 +1,38 @@
+import ts from 'typescript';
+import {readFileSync,readdirSync} from 'node:fs';
+import {DatabaseSync} from 'node:sqlite';
+import assert from 'node:assert/strict';
+import {economyURI,cosmeticsURI,calendarURI,dailyBankURI} from './economy-modules.mjs';
+const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText,uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
+const {wallet,settleDailyStatement,allowedCosmetic,roomPrizeStatement}=await import(economyURI);
+const {COSMETICS}=await import(cosmeticsURI),{DAILY_QUESTIONS}=await import(dailyBankURI);
+const sql=new DatabaseSync(':memory:');for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+file,'utf8'));
+const db={async batch(list){sql.exec('BEGIN');try{const out=[];for(const s of list)out.push(await s.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}},prepare(q){let values=[];return{bind(...v){values=v;return this;},async first(){return sql.prepare(q).get(...values)||null;},async all(){return{results:sql.prepare(q).all(...values)};},async run(){const r=sql.prepare(q).run(...values);return{meta:{changes:Number(r.changes)}};}}}};
+globalThis.economyTestDB=db;
+let source=readFileSync('app/api/economy/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.economyTestDB};').replace("'../../../lib/economy'",JSON.stringify(economyURI)).replace("'../../../lib/cosmetics'",JSON.stringify(cosmeticsURI)).replace("'../../../lib/daily'",JSON.stringify(calendarURI));
+const api=await import(uri(compile(source)));
+let now=Date.parse('2026-10-23T19:00:00Z');Date.now=()=>now;
+const players=Array.from({length:6},()=>crypto.randomUUID());
+for(const [i,p] of players.entries())sql.prepare('INSERT INTO daily_players(id,day,player,name,avatar,state,tries,solved_at) VALUES(?,?,?,?,?,?,?,?)').run('2026-10-23:'+p,'2026-10-23',p,'Player '+i,'{}','{}',i===5?0:i===2?2:1,i<4?now+i:null);
+await settleDailyStatement(db,'2026-10-23').run();assert.equal((await wallet(db,players[0])).daily,0,'No provisional podium rewards');
+await settleDailyStatement(db,'2026-10-24').run();await settleDailyStatement(db,'2026-10-24').run();
+assert.deepEqual(await Promise.all(players.map(async p=>(await wallet(db,p)).daily)),[5,3,1,2,1,0],'Fewest tries, time, participation only after an actual guess');
+const p=players[0],cookie='sv_player='+p;
+const req=(method='GET',body,origin='https://test.local')=>new Request('https://test.local/api/economy',{method,headers:{Cookie:cookie,Origin:origin,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
+assert.equal(await allowedCosmetic(db,p,1),undefined);
+assert.equal((await api.POST(req('POST',{item:1}))).status,409,'Daily currency cannot buy room items');
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('test-room-credit',p,'room',3,null,now);
+const same=await Promise.all([api.POST(req('POST',{item:1})),api.POST(req('POST',{item:1}))]);assert.ok(same.every(r=>r.status===200));assert.equal((await wallet(db,p)).room,1);assert.equal(await allowedCosmetic(db,p,1),1);
+assert.equal((await api.POST(req('POST',{item:2}))).status,409);
+assert.equal((await api.POST(req('POST',{item:17,price:0,currency:'room'}))).status,200);assert.equal((await wallet(db,p)).daily,2,'Price and currency are server authoritative');
+assert.equal((await api.POST(req('POST',{item:999}))).status,400);assert.equal((await api.POST(req('POST',{item:2},'https://evil.test'))).status,403);
+assert.deepEqual((await wallet(db,p)).owned.sort((a,b)=>a-b),[1,17]);
+// Concurrent distinct purchases can spend only the remaining balance once.
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('test-more-room',p,'room',4,null,now);
+const distinct=await Promise.all([api.POST(req('POST',{item:2})),api.POST(req('POST',{item:3}))]);assert.deepEqual(distinct.map(r=>r.status).sort(),[200,409]);assert.equal((await wallet(db,p)).room,2);
+// A stale room CAS must never reward an answer; retrying a committed round cannot re-award.
+sql.prepare('INSERT INTO rooms VALUES(?,?,?)').run('cinema',JSON.stringify({telemetryCommit:'accepted'}),4);
+await roomPrizeStatement(db,p,'cinema','game',1,3,'rejected').run();assert.equal((await wallet(db,p)).room,2);
+await roomPrizeStatement(db,p,'cinema','game',1,4,'accepted').run();await roomPrizeStatement(db,p,'cinema','game',1,4,'accepted').run();assert.equal((await wallet(db,p)).room,3);
+assert.equal(COSMETICS.length,24);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,24);assert.equal(DAILY_QUESTIONS.length,48);assert.equal(new Set(DAILY_QUESTIONS.map(q=>q.answer)).size,48);assert.ok(DAILY_QUESTIONS.every(q=>q.answer.split(' ').length>=3&&q.hint&&q.dailyHint));
+console.log('Passed economy: final daily podium 5/3/2, actual attempt participation, no early or duplicate rewards, atomic concurrent purchases, no overdraft, distinct currencies, ownership, authoritative prices, CAS guarded room credits, origin checks and dedicated 48-puzzle bank.');

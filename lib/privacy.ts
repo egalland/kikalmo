@@ -1,3 +1,5 @@
+import {settleDailyStatement} from './economy';
+import {dailyDate} from './daily';
 import {playerHash} from './analytics';
 import {fresh,type State} from './game';
 export const CONSENT_VERSION='v1';
@@ -30,6 +32,7 @@ export async function scrubRooms(db:D1Database,player:string,erase:boolean){
 }
 export async function purgeExpired(db:D1Database,now=Date.now()){
  const day=(days:number)=>new Date(now-days*86400000).toISOString().slice(0,10);
+ await settleDailyStatement(db,dailyDate(now),now).run();
  await db.batch([
   db.prepare('DELETE FROM personal_events WHERE at<?').bind(now-395*86400000),
   db.prepare('DELETE FROM personal_sessions WHERE last_seen<?').bind(now-395*86400000),

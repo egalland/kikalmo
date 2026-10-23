@@ -53,3 +53,9 @@ export const personalDaily=sqliteTable('personal_daily',{player:text('player').n
 export const playerStatLinks=sqliteTable('player_stat_links',{player:text('player').primaryKey(),vault:text('vault').notNull(),linkedAt:integer('linked_at').notNull()});
 
 export const personalStatKeys=sqliteTable('personal_stat_keys',{id:text('id').primaryKey(),createdAt:integer('created_at').notNull(),lastSeen:integer('last_seen').notNull()});
+
+// Functional progression: authoritative credits and one-time cosmetic purchases.
+export const economyLedger=sqliteTable('economy_ledger',{
+ id:text('id').primaryKey(),player:text('player').notNull(),currency:text('currency').notNull(),
+ delta:integer('delta').notNull(),item:integer('item'),createdAt:integer('created_at').notNull(),
+});

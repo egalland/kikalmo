@@ -1,3 +1,4 @@
+import {economyURI,dailyBankURI,calendarURI} from './economy-modules.mjs';
 import ts from 'typescript';
 import {readFileSync,readdirSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
@@ -5,7 +6,7 @@ import assert from 'node:assert/strict';
 const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText,uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
 const analytics=uri(compile(readFileSync('lib/analytics.ts','utf8').replace("import {QUESTIONS, type State, type Player} from './game';",'const QUESTIONS=[];')));
 const game=uri("export const fresh=()=>({players:[],phase:'empty',round:0,deadline:0,started:0,deck:[],game:''});");
-const privacy=uri(compile(readFileSync('lib/privacy.ts','utf8').replace("'./analytics'",JSON.stringify(analytics)).replace("'./game'",JSON.stringify(game))));
+const privacy=uri(compile(readFileSync('lib/privacy.ts','utf8').replace("'./economy'",JSON.stringify(economyURI)).replace("'./daily'",JSON.stringify(calendarURI)).replace("'./analytics'",JSON.stringify(analytics)).replace("'./game'",JSON.stringify(game))));
 const personal=uri(compile(readFileSync('lib/player-stats.ts','utf8'))),auth=uri(compile(readFileSync('lib/admin-auth.ts','utf8'))),stats=uri(compile(readFileSync('lib/stats.ts','utf8').replace("'./analytics'",JSON.stringify(analytics))));
 const {playerHash,calendar}=await import(analytics),{validateArchive}=await import(personal);
 const sql=new DatabaseSync(':memory:');for(const f of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+f,'utf8'));

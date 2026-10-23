@@ -6,6 +6,19 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## Progression et boutique
+
+- 24 nouveaux cosmétiques, à essayer dans **Avatar & boutique**. Les éléments de base restent gratuits.
+- Premier à répondre correctement dans une manche : 1 pièce de salon. Achat à partir de 2 pièces.
+- Monnaie quotidienne indépendante : 5 / 3 / 2 éclats au podium final ; 1 éclat aux autres participants ayant envoyé au moins une proposition, même sans résoudre le défi. Une simple ouverture ne rapporte rien.
+- Classement quotidien : moins d’essais, puis heure de résolution, puis identifiant stable en cas d’égalité. Les gains sont calculés sur les journées closes, à la requête suivante après minuit à Paris, et chaque gain n’est crédité qu’une fois.
+- Banque dédiée de 48 expressions/proverbes, indices après 3 et 6 erreurs et une voyelle après 9. Le défi déjà commencé le jour de la mise à jour reste identique.
+- Pièces et achats conservés dans D1 et liés au cookie du navigateur, séparés des statistiques facultatives. Export et effacement depuis le panneau de confidentialité. Les deux monnaies ne sont pas convertibles ; les cosmétiques ne modifient pas les scores.
+- Achats atomiques au tarif serveur ; contrôle de propriété côté serveur avant affichage en salon et au classement. Les crédits de manche font partie du même batch que la mise à jour du salon et sont protégés contre les nouvelles tentatives simultanées.
+
+Validation : `node --test tests/*.test.mjs` et `node node_modules/typescript/bin/tsc --noEmit`. Migration ajoutée : `0007_boring_jack_murdock.sql` (table de progression uniquement ; les anciennes migrations restent inchangées).
+
+
 ## Le jeu
 
 - 12 salons thématiques et un salon général, avec 4 382 réponses.

@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "86e1cd752b36381a01e072dbec80fb77d60d1427",
+  "source_head": "fcbf3c8408ad89e3f64a9ed10ce73d396558ffeb",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -396,6 +396,11 @@
       "source_sha": "86e1cd752b36381a01e072dbec80fb77d60d1427",
       "source_author": "Codex",
       "message": "Add optional light haptic feedback to the Kikalmo keyboard"
+    },
+    {
+      "source_sha": "fcbf3c8408ad89e3f64a9ed10ce73d396558ffeb",
+      "source_author": "Codex",
+      "message": "Add dual-currency progression, cosmetic shop and dedicated daily expression challenges"
     }
   ]
 }

@@ -1,3 +1,4 @@
+import {economyURI,dailyBankURI,calendarURI} from './economy-modules.mjs';
 import ts from 'typescript';
 import {readFileSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
@@ -9,9 +10,10 @@ const game=uri(compile(readFileSync('lib/game.ts','utf8').replace("import questi
 const analytics=uri(compile(readFileSync('lib/analytics.ts','utf8').replace("'./game'",JSON.stringify(game))));
 const sql=new DatabaseSync(':memory:');sql.exec(readFileSync('drizzle/0000_polite_next_avengers.sql','utf8'));
 sql.exec(readFileSync('drizzle/0001_premium_miracleman.sql','utf8'));
+for(const f of ['0007_boring_jack_murdock.sql'])sql.exec(readFileSync('drizzle/'+f,'utf8'));
 let batchTail=Promise.resolve();
 globalThis.__testDB={batch(statements){const task=batchTail.then(async()=>{sql.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sql.exec('COMMIT');return result;}catch(e){sql.exec('ROLLBACK');throw e;}});batchTail=task.catch(()=>{});return task;},prepare(query){let values=[];return {bind(...v){values=v;return this},async first(){return sql.prepare(query).get(...values)||null},async all(){return {results:sql.prepare(query).all(...values)}},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}}}}}};
-let source=readFileSync('app/api/game/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/analytics'",JSON.stringify(analytics)).replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/themes'",JSON.stringify(themes)).replace("'../../../lib/profile'",JSON.stringify(profile));
+let source=readFileSync('app/api/game/route.ts','utf8').replace("'../../../lib/economy'",JSON.stringify(economyURI)).replace("'../../../lib/daily-bank'",JSON.stringify(dailyBankURI)).replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/analytics'",JSON.stringify(analytics)).replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/themes'",JSON.stringify(themes)).replace("'../../../lib/profile'",JSON.stringify(profile));
 const {POST,GET}=await import(uri(compile(source)));
 let now=1000000;Date.now=()=>now;
 async function post(action,cookie='',extra={}){const r=await POST(new Request('https://test.local/api/game',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://test.local',Cookie:cookie+'; kk_consent=v1-yes'},body:JSON.stringify({action,room:'cinema',...extra})}));return {status:r.status,body:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]||cookie}}
@@ -19,6 +21,8 @@ let a=await post('join','',{name:'Alice'}),b=await post('join','',{name:'Bob'});
 now+=10000;let snap=(await post('sync',a.cookie)).body;assert.equal(snap.phase,'guess');assert.equal(snap.question.answer,undefined);
 const {QUESTIONS}=await import(game);const state=JSON.parse(sql.prepare('SELECT state FROM rooms WHERE id=?').get('cinema').state);const answer=QUESTIONS[state.deck[0]].answer;
 now+=1000;const guesses=await Promise.all([post('answer',a.cookie,{answer,game:snap.game,round:1}),post('answer',a.cookie,{answer,game:snap.game,round:1}),post('answer',b.cookie,{answer,game:snap.game,round:1})]);assert.ok(guesses.every(g=>g.status===200));snap=(await post('sync',a.cookie)).body;assert.equal(snap.phase,'reveal');assert.equal(snap.players.find(p=>p.id==='me').score,955);assert.equal(snap.question.answer,answer);assert.deepEqual(snap.players.map(p=>p.solveRank).sort(),[1,2],'Concurrent submissions must award exactly one first place');
+assert.equal(sql.prepare("SELECT count(*) n FROM economy_ledger WHERE currency='room'").get().n,1,'Concurrent correct answers credit one round winner exactly once');
+const forged=await post('profile',a.cookie,{name:'Alice',avatar:{cosmetic:24}});assert.equal(forged.body.players.find(p=>p.id==='me').avatar.cosmetic,undefined,'Unowned cosmetics cannot be equipped by a forged request');
 const avatar={shape:4,hair:7,eyes:2,nose:6,mouth:5,accessory:1,outfit:4,color:'#c8b9ff'};
 const edited=await post('profile',a.cookie,{name:'KiwiCosmique',avatar});assert.equal(edited.status,200);const editedMe=edited.body.players.find(p=>p.id==='me');assert.equal(editedMe.score,955);assert.equal(editedMe.name,'KiwiCosmique');assert.deepEqual(editedMe.avatar,avatar);
 const otherView=(await post('sync',b.cookie)).body;assert.equal(otherView.players.find(p=>p.name==='KiwiCosmique').avatar.color,'#c8b9ff');assert.equal(otherView.players.find(p=>p.name==='KiwiCosmique').avatar.nose,6,'Custom nose propagates to remote players');
