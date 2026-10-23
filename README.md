@@ -6,6 +6,10 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## Tenues fantaisie
+
+Huit casques et combinaisons en laine et feutre : cosmonaute, scaphandrier, dragon, robot, chevalier, axolotl, champignon et pilote. Les visages gardent leurs expressions animées. [Assets, prompts et intégration](docs/costume-assets.md).
+
 ## Progression et boutique
 
 - 24 nouveaux cosmétiques, à essayer dans **Avatar & boutique**. Les éléments de base restent gratuits.

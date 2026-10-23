@@ -25,5 +25,13 @@ export const COSMETICS=[
  {id:22,name:'Mage des étoiles',kind:'wizard',color:'#3b829c',currency:'daily',price:12},
  {id:23,name:'Constellation',kind:'sparkles',color:'#e5be64',currency:'daily',price:15},
  {id:24,name:'Aurore de feutre',kind:'sparkles',color:'#b790da',currency:'daily',price:20},
+ {id:25,name:'Cosmonaute rétro',kind:'costume',asset:'space',color:'#ed8950',currency:'room',price:8},
+ {id:26,name:'Scaphandrier des abysses',kind:'costume',asset:'diver',color:'#b56f49',currency:'room',price:12},
+ {id:27,name:'Dragon de mousse',kind:'costume',asset:'dragon',color:'#829951',currency:'room',price:15},
+ {id:28,name:'Robot de laine',kind:'costume',asset:'robot',color:'#a297ca',currency:'room',price:18},
+ {id:29,name:'Chevalier comète',kind:'costume',asset:'knight',color:'#56618f',currency:'daily',price:8},
+ {id:30,name:'Axolotl des rêves',kind:'costume',asset:'axolotl',color:'#e9a8bd',currency:'daily',price:12},
+ {id:31,name:'Gardien champignon',kind:'costume',asset:'mushroom',color:'#b94c4c',currency:'daily',price:15},
+ {id:32,name:'Pilote des tempêtes',kind:'costume',asset:'pilot',color:'#d7ac48',currency:'daily',price:20},
 ] as const;
 export type Wallet={room:number;daily:number;owned:number[]};

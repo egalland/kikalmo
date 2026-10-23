@@ -13,3 +13,5 @@ console.log('Passed: all avatar parts, independent randomizers, guaranteed chang
 assert.equal(migrated.avatar.nose,1,'Old profiles retain a classic nose');assert.equal(cleanAvatar({nose:0}).nose,0);assert.equal(cleanAvatar({nose:999}).nose,1);assert.ok(PARTS.find(p=>p.key==='nose').options.length===7);
 
 assert.equal(cleanAvatar({hair:7}).hair,7);assert.equal(parseProfile(JSON.stringify({version:1,name:'Mèche',avatar:{...DEFAULT_AVATAR,hair:7}})).avatar.hair,7);
+
+assert.equal(cleanAvatar({cosmetic:25}).cosmetic,25);assert.equal(cleanAvatar({cosmetic:32}).cosmetic,32);assert.equal(cleanAvatar({cosmetic:33}).cosmetic,undefined);
