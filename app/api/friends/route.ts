@@ -8,7 +8,7 @@ function response(data:unknown,status=200,player?:string){return Response.json(d
 export async function GET(req:Request){try{return response(await friendsSnapshot(env.DB!,identity(req)));}catch{return response({error:'Le panneau d’amis est momentanément indisponible.'},503);}}
 export async function POST(req:Request){try{
  if(req.headers.get('origin')!==new URL(req.url).origin)return response({error:'Origine refusée.'},403);
- const b=await req.json() as {action:string;code?:string;name?:string;avatar?:unknown;visible?:boolean};let player=identity(req);const db=env.DB!;
+ const b=await req.json() as {action:string;code?:string;name?:string;avatar?:unknown;visible?:boolean;room?:string;target?:string};let player=identity(req);const db=env.DB!;
  if(b.action==='register'||b.action==='pulse'){
   if(typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>20)return response({error:'Créez votre personnage pour utiliser les amis.'},400);
   if(b.action==='pulse'&&!player)return response({error:'Ouvrez d’abord le panneau d’amis.'},401);player??=crypto.randomUUID();
@@ -20,7 +20,22 @@ export async function POST(req:Request){try{
  }
  if(!player||!await db.prepare('SELECT code FROM friend_profiles WHERE player=?').bind(player).first())return response({error:'Ouvrez d’abord le panneau d’amis.'},401);
  if(b.action==='visibility'){if(typeof b.visible!=='boolean')return response({error:'Choix invalide.'},400);await db.prepare('UPDATE friend_profiles SET visible=? WHERE player=?').bind(b.visible?1:0,player).run();return response(await friendsSnapshot(db,player));}
- if(!['request','accept','decline','cancel','remove','block','unblock','locate'].includes(b.action))return response({error:'Action inconnue.'},400);
+ if(!['request','request-room','accept','decline','cancel','remove','block','unblock','locate'].includes(b.action))return response({error:'Action inconnue.'},400);
+ let roomTarget:string|undefined;
+ if(b.action==='request-room'){
+  if(typeof b.room!=='string'||typeof b.target!=='string'||!/^[a-f0-9]{8}$/.test(b.target))return response({error:'Joueur du salon invalide.'},400);
+  const row=await db.prepare('SELECT state FROM rooms WHERE id=?').bind(b.room).first<{state:string}>();
+  const participants=(row?JSON.parse(row.state).players||[]:[]).filter((p:{seen:number})=>Date.now()-p.seen<12000);
+  if(!participants.some((p:{id:string})=>p.id===player))return response({error:'Rejoignez ce salon pour ajouter un joueur.'},403);
+  const peers=participants.filter((p:{id:string})=>p.id.slice(0,8)===b.target&&p.id!==player);
+  if(peers.length!==1)return response({error:'Ce joueur n’est plus disponible dans ce salon.'},409);
+  const peer=peers[0];
+  if(await db.prepare('SELECT owner FROM friend_blocks WHERE (owner=? AND target=?) OR (owner=? AND target=?)').bind(player,peer.id,peer.id,player).first())return response({error:'Cette relation n’est pas disponible.'},403);
+  // A live room already provides this public name/avatar; preserve any existing social preferences.
+  await db.prepare('INSERT OR IGNORE INTO friend_profiles(player,code,name,avatar,seen) VALUES(?,?,?,?,?)').bind(peer.id,crypto.randomUUID().replaceAll('-','').slice(0,16).toUpperCase(),peer.name,JSON.stringify(cleanAvatar(peer.avatar)),peer.seen).run();
+  const contact=await db.prepare('SELECT code FROM friend_profiles WHERE player=?').bind(peer.id).first<{code:string}>();
+  b.code=contact!.code;roomTarget=b.target;b.action='request';
+ }
  const code=friendCode(b.code);if(!/^[A-F0-9]{16}$/.test(code))return response({error:'Entrez un code ami valide.'},400);
  const target=await db.prepare('SELECT player FROM friend_profiles WHERE code=?').bind(code).first<{player:string}>();if(!target)return response({error:'Code ami introuvable.'},404);if(target.player===player)return response({error:'C’est votre propre code ami.'},400);
  const other=target.player;
@@ -38,5 +53,5 @@ export async function POST(req:Request){try{
  else if(b.action==='remove')await db.prepare('DELETE FROM friend_links WHERE (requester=? AND recipient=?) OR (requester=? AND recipient=?)').bind(player,other,other,player).run();
  const snapshot=await friendsSnapshot(db,player);
  if(b.action==='locate'){const friend=snapshot.friends.find(f=>f.code===code);if(!friend?.room)return response({error:'Cet ami n’est plus dans un salon accessible.'},409);const row=await db.prepare('SELECT state FROM rooms WHERE id=?').bind(friend.room).first<{state:string}>();const present=row?JSON.parse(row.state).players||[]:[];if(present.filter((p:{seen:number})=>Date.now()-p.seen<12000).length>=30)return response({error:'Le salon de cet ami est complet. Réessayez dans un instant.'},409);return response({room:friend.room});}
- return response(snapshot);
+ return response(roomTarget?{...snapshot,roomTarget:{id:roomTarget,code}}:snapshot);
  }catch{return response({error:'La demande n’a pas pu être enregistrée. Réessayez.'},503);}}

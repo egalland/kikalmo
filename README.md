@@ -118,3 +118,13 @@ Les données de jeu en production et les secrets d’exécution ne sont pas incl
 Une partie terminée avec une proposition dans au moins cinq manches rapporte trois pièces. En multijoueur, trouver en premier rapporte une pièce supplémentaire par manche. En solo, chaque groupe de trois mots trouvés rapporte une pièce, dans la limite de trois par partie. Les crédits sont atomiques avec la sauvegarde du salon et uniques par partie, joueur et seuil ; les reconnexions ne remettent pas la progression à zéro. Les étoiles restent inchangées.
 
 Accessoires : 8–40 pièces ; coiffures et regards : 45–75 ; costumes Halloween : 60–80 ; costumes permanents : 180–550. Les achats acquis restent équipables et aucun solde existant n’est débité par la hausse des prix. Le remboursement historique Halloween conserve ses anciens montants.
+
+### Discussion et ajout d’amis dans un salon
+
+La fenêtre Discussion en bas d’écran affiche uniquement les échanges de discussion, avec le même filtrage serveur que le fil principal. Avant résolution, l’écriture reste verrouillée ; les messages entre gagnants deviennent visibles à tous à la révélation. Le brouillon est conservé en cas d’erreur d’envoi. La fenêtre peut être réduite et signale les nouvelles arrivées.
+
+Le bouton Ajouter près d’un joueur du classement envoie une demande sans recopier de code. Le serveur exige une présence commune récente, résout l’identifiant court uniquement dans ce salon, respecte les blocages et préserve les préférences d’un profil ami existant. L’acceptation reste réservée au destinataire.
+
+### Documentation du projet
+
+[Dossier, cahier des charges et mode opératoire](docs/projet/README.md), avec un PDF de 14 pages dans la direction artistique textile du site et des sources éditables.

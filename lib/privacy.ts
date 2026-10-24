@@ -26,7 +26,7 @@ export async function scrubRooms(db:D1Database,player:string,erase:boolean){
   const row=await db.prepare('SELECT state,revision FROM rooms WHERE id=?').bind(room.id).first<{state:string;revision:number}>();if(!row){done=true;break;}
   const s=JSON.parse(row.state) as State;
   for(const list of [s.players,s.vacancy?.players||[]])for(const p of list)if(p.id===player)delete p.tracking;
-  if(erase){if(s.coinProgress)delete s.coinProgress[player];s.players=s.players.filter(p=>p.id!==player);if(s.vacancy)s.vacancy.players=s.vacancy.players.filter(p=>p.id!==player);s.messages=s.messages?.filter(m=>m.player!==player);if(s.champion===player)delete s.champion;if(!s.players.length&&!s.vacancy?.players.length)Object.assign(s,fresh(),{vacancy:undefined,messages:[]});}
+  if(erase){if(s.coinProgress)delete s.coinProgress[player];s.players=s.players.filter(p=>p.id!==player);if(s.vacancy)s.vacancy.players=s.vacancy.players.filter(p=>p.id!==player);s.messages=s.messages?.filter(m=>m.player!==player&&m.player!==player.slice(0,8));if(s.champion===player)delete s.champion;if(!s.players.length&&!s.vacancy?.players.length)Object.assign(s,fresh(),{vacancy:undefined,messages:[]});}
   const r=await db.prepare('UPDATE rooms SET state=?,revision=revision+1 WHERE id=? AND revision=?').bind(JSON.stringify(s),room.id,row.revision).run();if(r.meta.changes){done=true;break;}
  }if(!done)throw Error('Un salon est occupé. Réessaie dans un instant.');}
 }

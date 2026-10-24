@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "15880967e54da75f123c4ac859e6e5f299eb5a34",
+  "source_head": "80543d36111199b68f117aa4769af3bba49c2fff",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -466,6 +466,11 @@
       "source_sha": "15880967e54da75f123c4ac859e6e5f299eb5a34",
       "source_author": "Codex",
       "message": "Add participation and solo coin rewards with repriced coin cosmetics and unchanged stars"
+    },
+    {
+      "source_sha": "80543d36111199b68f117aa4769af3bba49c2fff",
+      "source_author": "Codex",
+      "message": "Add a room discussion dock, direct room friend requests and a branded project handbook"
     }
   ]
 }

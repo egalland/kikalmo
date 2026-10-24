@@ -27,4 +27,15 @@ try{
  const pending=sql.prepare('SELECT requester,recipient FROM friend_links').get();const recipient=pending.recipient===aid?a:b,requester=pending.requester===aid?a:b;await request(recipient.cookie,{action:'accept',code:requester.data.me.code});assert.equal((await request(a.cookie)).data.friends.length,1);
  await request(c.cookie,{action:'remove',code:a.data.me.code});assert.equal((await request(a.cookie)).data.friends.length,1,'Third party cannot remove another friendship');await request(a.cookie,{action:'remove',code:b.data.me.code});assert.equal((await request(b.cookie)).data.friends.length,0);
  console.log('Passed friends: identity isolation, real requests/acceptance, forged appearance, current/stale/hidden presence, authoritative join lookup, blocks, crossed requests and scoped removal.');
+ const d=await request('',{action:'register',name:'Dora'}),did=d.cookie.split('=')[1],eid=crypto.randomUUID(),ecookie='sv_player='+eid;
+ sql.prepare('INSERT INTO rooms(id,state,revision) VALUES(?,?,0)').run('food',JSON.stringify({players:[{id:did,name:'Dora',seen:now},{id:eid,name:'Eli',avatar:{shape:2},seen:now}]}));
+ assert.equal((await request(c.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)})).status,403,'Must share the live room');
+ const shortcut=await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)});assert.equal(shortcut.status,200);assert.equal(shortcut.data.outgoing.length,1);assert.equal(shortcut.data.roomTarget.id,eid.slice(0,8));assert.ok(!JSON.stringify(shortcut.data).includes(eid),'Shortcuts never expose session cookies');
+ const eli=(await request(ecookie)).data;assert.equal(eli.incoming[0].name,'Dora');assert.equal(eli.me.code,shortcut.data.roomTarget.code);
+ await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)});assert.equal(sql.prepare('SELECT count(*) n FROM friend_links WHERE requester=?').get(did).n,1);
+ await request(ecookie,{action:'accept',code:d.data.me.code});assert.equal((await request(d.cookie)).data.friends[0].name,'Eli');
+ await request(ecookie,{action:'visibility',visible:false});await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)});assert.equal((await request(ecookie)).data.me.visible,false,'A room shortcut preserves existing privacy choices');
+ await request(ecookie,{action:'block',code:d.data.me.code});assert.equal((await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)})).status,403);
+ now+=12000;assert.equal((await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)})).status,403,'Presence expires exactly at twelve seconds');
+ console.log('Passed room friend shortcuts: shared live room, automatic public contact, recipient acceptance, idempotence, session isolation, preserved visibility and blocking.');
 }finally{Date.now=originalNow;delete globalThis.friendsDB;}
