@@ -2,9 +2,10 @@
 
 Édition du 24 octobre 2026. La direction artistique du document reprend le logo en laine, les surfaces ivoire et les coutures du site.
 
-- [Dossier complet en PDF](Kikalmo-dossier-projet.pdf) : 14 pages, prêt à lire et à partager.
+- [Dossier complet en PDF](Kikalmo-dossier-projet.pdf) : 24 pages, prêt à lire et à partager.
 - [Dossier éditable](dossier-projet.md) : cadrage, cahier des charges, parcours joueur, social, boutique, économie, quotidien, architecture, données, confidentialité, maintenance et recette.
 - [Source structurée](dossier.json) : contenu de référence pour régénérer les documents.
+- [Annexe technique](annexe-technique.json) : dix chapitres détaillés, contrats HTTP, SQL, D1, moteur, économie, avatars, social, déploiement et diagnostic.
 - [Générateur PDF](../../scripts/build-project-dossier.py) : Python, ReportLab, polices DejaVu et assets du projet.
 
 ## Mode opératoire

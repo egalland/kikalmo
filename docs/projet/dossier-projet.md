@@ -328,3 +328,268 @@ Le profil, la collection et les amitiés ne sont pas transférables entre appare
 
 > Lors de cette édition, l’aperçu navigateur de l’environnement était indisponible. Les tests serveur, le contrôle TypeScript et la compilation peuvent être vérifiés ; ils ne remplacent pas une validation visuelle sur les appareils réels.
 
+## Structure du projet et exécution.
+
+Repères pour reprendre le développement à partir des sources. Les versions exactes des dépendances sont celles du package.json et du verrou de dépendances du dépôt.
+
+| Emplacement | Responsabilité |
+| --- | --- |
+| app/ | Pages React, composants client, styles et routes API. |
+| lib/ | Moteur de jeu, profils, économie, social, statistiques et règles partagées. |
+| db/schema.ts + drizzle/ | Schéma D1 déclaré et historique de migrations versionné. |
+| public/puppets/ + public/branding/ | Sprites, costumes, accessoires, logo et textures optimisés. |
+| tests/ + scripts/ | Tests Node, contrôles d’avatars, génération et outils de construction. |
+| .openai/hosting.json | Identité du Site et déclarations des ressources d’hébergement. |
+
+### Pile et prérequis
+
+Le package déclare Node.js >= 22.13.0. L’interface utilise React, TypeScript et les routes de type App Router de Vinext ; Vite construit les environnements client et serveur. Les routes importent env depuis cloudflare:workers : un simple serveur de fichiers statiques ne suffit donc pas pour faire fonctionner le multijoueur, les achats et les amis.
+
+### Environnements à distinguer
+
+Le développement et les tests peuvent utiliser un stockage local ou une base SQLite simulée. La production utilise le binding D1 DB. Les données de test ne doivent pas être confondues avec les achats et parties de production. Le script npm start démarre Wrangler en mode local à partir du résultat de compilation ; ce n’est pas une procédure de déploiement de production.
+
+> L’application actuelle est hébergée sur Sites / Workers avec D1. Un transfert sur VPS impose d’adapter les accès Cloudflare et la base ; copier uniquement les fichiers publics ne recrée pas le service.
+
+## Clés, contraintes et relations D1.
+
+Le schéma de référence est db/schema.ts. Les colonnes state et avatar contiennent du JSON sérialisé ; les autres colonnes structurent les recherches, contraintes et agrégats.
+
+| Table / clé | Colonnes et invariant |
+| --- | --- |
+| rooms · id | state, revision ; une ligne par salon, écriture conditionnée par revision. |
+| economy_ledger · id | player, currency, delta, item, created_at ; identifiant unique de chaque crédit ou achat. |
+| daily_challenges · day | question ; un défi commun pour une date de Paris. |
+| daily_players · id | day, player, name, avatar, state, revision, tries, solved_at ; tentatives d’un navigateur pour un jour. |
+| friend_profiles · player | code UNIQUE, name, avatar, seen, visible ; le code public ne remplace pas le cookie. |
+| friend_links · (requester, recipient) | status, created_at ; une direction canonique par paire, index destinataire/statut. |
+| friend_blocks · (owner, target) | Un blocage dans un sens interdit les demandes et la localisation entre les deux joueurs. |
+
+### Relations logiques
+
+Le champ player relie les achats, défis et contacts à la session du navigateur. Ces liens sont gérés par le code applicatif ; ne pas supposer l’existence de cascades de clés étrangères SQL. L’effacement complet supprime explicitement les lignes liées et nettoie les salons. Les tableaux de joueurs et messages restent dans rooms.state plutôt que dans des tables séparées.
+
+### Évolution du schéma
+
+Modifier la déclaration Drizzle, exécuter npm run db:generate, puis relire la migration SQL et les métadonnées générées. Versionner ensemble la migration, le snapshot et le journal. Préparer une sauvegarde des données avant application. Ne pas réécrire une migration déjà appliquée et ne pas créer les tables à la volée dans une route API.
+
+> Les sauvegardes de code et les sauvegardes D1 répondent à deux besoins différents. Un retour à une ancienne version du code ne retire pas automatiquement une migration ni une transaction déjà écrite.
+
+## Exemples d’appels et traitement des erreurs.
+
+Exemples de structure, avec valeurs fictives. Les champs game et round doivent provenir du dernier instantané de partie reçu du serveur.
+
+### Proposer une réponse
+
+```text
+POST /api/game
+Content-Type: application/json
+{
+  "action": "answer", "room": "cinema",
+  "game": "identifiant-du-match-recu",
+  "round": 3, "answer": "Une proposition"
+}
+```
+
+La réponse comprend l’état public, revision, serverNow, result, roomCoinsEarned et roomCoinProgress pour le joueur courant. result peut notamment valoir correct, close, incorrect ou wait. Les gains n’obéissent jamais à un montant envoyé par le client.
+
+Achat : POST /api/economy avec {"item":39}. Le portefeuille renvoyé contient room, daily, owned et serverNow. Les valeurs de ces champs sont déterminées par le serveur.
+
+| Statut | Interprétation / réaction client |
+| --- | --- |
+| 400 | Paramètres ou action invalides : corriger la saisie. |
+| 401 / 403 | Session requise, origine refusée ou relation indisponible : vérifier le contexte. |
+| 409 | Manche changée, salon plein ou solde insuffisant selon la route ; relire error et l’état courant. |
+| 410 | Article saisonnier qui n’est plus en vente. |
+| 503 | Service indisponible ou conflits épuisés : conserver le brouillon et réessayer. |
+
+> Les routes fonctionnelles renvoient Cache-Control: no-store. Les exemples ne demandent aucun accès manuel au cookie HttpOnly ; le navigateur le transmet dans son contexte habituel.
+
+## Transitions, horloge et concurrence.
+
+Les fonctions fresh, begin, advance, submit et view de lib/game.ts séparent le calcul de la partie de sa persistance HTTP.
+
+### Machine d’états
+
+| Transition | Déclencheur |
+| --- | --- |
+| empty vers countdown | Démarrage d’un salon. |
+| countdown vers guess | Fin du compte à rebours. |
+| guess vers reveal | Délai écoulé ou tous les joueurs ont trouvé. |
+| reveal vers guess / podium | 5 secondes ; podium après la dixième manche. |
+| podium vers countdown | Fin des 60 secondes de classement. |
+
+advance retire les présences expirées et applique au plus la transition temporelle prévue pour l’instant courant. Une arrivée ou une synchronisation peut donc faire avancer une partie. Le client ne choisit jamais sa phase et ne décrète pas qu’une réponse est correcte.
+
+### Écriture conditionnelle
+
+```text
+UPDATE rooms
+SET state = ?, revision = revision + 1
+WHERE id = ? AND revision = ?;
+```
+
+La route relit l’état et sa révision, calcule l’action, puis tente cette mise à jour. Si aucune ligne n’a changé, elle recommence sur la nouvelle révision, dans une limite de 10 essais. Le lot comprend également les écritures de mesure autorisées et les récompenses. Un nonce telemetryCommit lie les crédits à la révision effectivement validée.
+
+### Synchronisation côté navigateur
+
+La partie est synchronisée toutes les 900 ms, sans lancer deux sync concurrentes. L’affichage du temps se rafraîchit toutes les 100 ms. lib/countdown.ts convertit deadline - serverNow en horloge monotone ; pour une même phase, un instantané tardif ne peut pas rallonger le chronomètre. Un numéro de session empêche une ancienne requête d’écraser le nouveau salon.
+
+> L’aperçu des salons est relu toutes les 3 secondes dans l’accueil et toutes les 10 secondes pendant une partie. La capacité et la présence sont revérifiées par le serveur lors de l’entrée, même si la carte affichée est ancienne.
+
+## Crédits uniques et achats atomiques.
+
+Il s’agit de monnaies de jeu, sans paiement réel intégré. Le serveur garde un livre d’écritures plutôt qu’un compteur de solde modifiable par le navigateur.
+
+```text
+solde(player, currency) = SUM(delta)
+possession = ecriture d’achat avec item et delta < 0
+
+Identifiants d’ecriture :
+round:{room}:{game}:{round}
+solo:{room}:{game}:{player}:{seuil}
+match:{room}:{game}:{player}
+daily:{day}:{player}
+purchase:{player}:{item}
+```
+
+### Récompenses de salon
+
+coinProgress garde, pour chaque session, les manches tentées, les mots trouvés en solo et les premières places. Cette progression appartient au match et survit au départ/re-retour dans ce même match. roomCoinAwards calcule les nouveaux seuils et le bonus de podium. Le champ completed ne devient vrai que pour un joueur réellement présent à la fin et éligible.
+
+### Atomicité et réessais
+
+coinPrizeStatement utilise INSERT OR IGNORE avec un identifiant unique. Le SELECT d’insertion exige la bonne révision du salon et le bon telemetryCommit. Deux appels simultanés ou un réessai ne peuvent donc pas produire deux crédits pour la même récompense. La vue publique retire la progression complète et ne renvoie que le récapitulatif du demandeur.
+
+### Achat et apparence
+
+purchaseStatement vérifie le solde disponible et la limite saisonnière dans l’instruction SQL d’achat. Le prix, la monnaie et l’article viennent de COSMETICS. Le même identifiant purchase empêche un second débit pour un article déjà acquis. ownedAppearance retire les éléments payants non possédés lors d’une mise à jour du profil de jeu ou social.
+
+> Le remboursement historique Halloween utilise une grille figée et une date limite pour les achats en pièces. Une future hausse du catalogue ne doit pas réactiver cette remise pour de nouveaux acheteurs. Tests : tests/economy.test.mjs et tests/api.test.mjs.
+
+## Journée de Paris et essais idempotents.
+
+Les salons et le mot du jour partagent la normalisation des réponses, mais pas leur banque de questions, leurs points ou leurs récompenses.
+
+### Identité du défi
+
+dailyDate utilise Intl.DateTimeFormat avec Europe/Paris. La clé du défi est une date YYYY-MM-DD, indépendante du fuseau du téléphone. daily_challenges enregistre la question choisie pour cette date. daily_players conserve les essais et la révision de l’état du joueur, afin de reprendre la même tentative après actualisation.
+
+### Réessayer une requête sans ajouter un essai
+
+Le client associe un identifiant requestId à la proposition en attente. dailyGuess recherche cet identifiant dans les réponses déjà enregistrées ; si le même envoi a déjà été traité, il conserve l’état. Une erreur réseau ne doit donc pas inciter à générer immédiatement un nouvel identifiant pour le même envoi en cours.
+
+### Classement et clôture
+
+Le classement porte d’abord sur les joueurs qui ont résolu, puis sur le nombre d’essais et l’heure de résolution. Une participation réelle exige tries > 0. settleDailyStatement classe toute la journée fermée avant de créer les crédits. Le crédit daily:{day}:{player} est unique. La clôture est traitée lors des appels du service ; aucun ordonnanceur nocturne dédié n’est nécessaire pour la logique actuelle.
+
+| Fonction | Rôle |
+| --- | --- |
+| dailyClues | Indices à partir de 3 et 6 erreurs. |
+| dailyMasked | Révèle une voyelle à partir de 9 erreurs. |
+| dailyGuess | Réponse normalisée et protection contre le même requestId. |
+| settleDailyStatement | Répartition définitive des étoiles des journées antérieures. |
+
+> Le minuit de Paris ne correspond pas à une heure UTC fixe toute l’année. L’événement Halloween se termine le 10 novembre 2026 à 00 h à Paris, soit le 9 novembre à 23 h UTC. Conserver une date explicite avec son décalage lors des prochaines saisons.
+
+## Assets, contours et superpositions.
+
+Le personnage est un assemblage SVG d’images transparentes et d’éléments natifs. Le costume n’est pas une image opaque remplaçant tout le personnage.
+
+### Références du pipeline
+
+| Fichier / dossier | Utilité |
+| --- | --- |
+| app/components/Avatar.tsx | Composition, expression et ordre des couches. |
+| lib/puppet-morphology.ts | Cibles adaptées aux différentes formes de tête. |
+| lib/puppet-registration.* | Repères d’alignement des illustrations. |
+| lib/costumes.ts + costume-assets.json | Placement des costumes et ouverture du visage. |
+| accessory-assets.json / hair-assets.json | Index des accessoires et coiffures générés. |
+| scripts/puppet-render.mjs | Rendu du vrai composant pour contrôles et illustrations. |
+
+### Règles de composition
+
+Le visage conserve sa silhouette native à l’intérieur de l’ouverture du costume. La couleur de peau ne remplit pas toute l’ouverture rectangulaire de l’asset. Les cheveux courts sous un couvre-chef utilisent un masque de tête ; les longueurs des tresses et carrés restent adaptées. Les broches et effets sont placés au-dessus du costume. Les lunettes et moustaches respectent la profondeur du nez.
+
+### Ajouter ou corriger un asset
+
+1. Créer une version séparée de l’image source, conserver son alpha et éviter de modifier les identifiants d’articles existants.
+2. Préparer les WebP avec les scripts de packaging adaptés et mettre à jour l’index d’assets concerné.
+3. Vérifier les contours sur toutes les formes de visage, puis tester les combinaisons cheveux, couvre-chef et costume.
+4. Contrôler les états animés : yeux, bouche, premier à trouver et victoire. Réviser les coordonnées d’ancrage plutôt que d’étirer arbitrairement l’image.
+
+> Les tests d’avatars et les images rendues par script vérifient la géométrie. Ils ne prouvent pas que le rendu final d’une page mobile ou d’une modale est correct dans le navigateur.
+
+## Identité, demandes et filtrage serveur.
+
+La présence dans un salon, l’amitié acceptée et la visibilité de présence sont trois conditions distinctes. Un code ami n’est pas un moyen d’authentification.
+
+### Demande depuis le classement
+
+```text
+POST /api/friends
+{
+  "action": "request-room",
+  "room": "cinema",
+  "target": "1234abcd"
+}
+```
+
+Le demandeur doit avoir son profil social et être présent dans ce salon. Le serveur résout le préfixe de huit caractères parmi les joueurs dont la présence date de moins de 12 secondes, en exigeant une correspondance unique. Il vérifie les blocages, prépare si nécessaire le contact public puis crée une demande pending. Un profil existant conserve ses choix de visibilité.
+
+### Amitié et présence
+
+Seul le destinataire peut passer une demande à accepted. Les demandes croisées sont conservées dans une direction unique. locate n’accepte que les amis autorisés avec un salon visible ; le nombre de joueurs est revérifié avant de proposer une entrée. Le panneau actualise ses données toutes les 15 secondes quand le document est visible. Le contrôle de blocage reste côté serveur.
+
+### Discussion de salon
+
+communicate refuse le chat pendant guess avant la résolution du demandeur. Les messages écrits pendant guess sont marqués privés aux gagnants. view masque ces messages aux joueurs qui n’ont pas trouvé jusqu’à la révélation ; le verrouillage ne repose pas seulement sur un bouton grisé. Le tableau conserve les 100 derniers messages du salon. Le panneau du bas sélectionne uniquement kind = chat ; les réponses restent dans le fil principal.
+
+> Les messages sont affichés comme texte React, sans HTML utilisateur injecté. L’effacement retire les messages identifiés par le joueur et son identifiant public court. La discussion n’est ni un canal chiffré de bout en bout ni une messagerie privée persistante.
+
+## Construire, déployer et revenir en arrière.
+
+Procédure de reprise technique. Les chemins des helpers dépendent de l’environnement Sites installé ; ne pas copier de jeton de publication dans un script versionné.
+
+1. Restaurer les sources et le verrou de dépendances. Utiliser le helper d’installation Sites pour installer l’environnement prévu par le projet.
+2. Vérifier .openai/hosting.json : conserver l’identifiant du Site et le binding D1 DB. Ne pas recréer un autre Site pour une simple mise à jour.
+3. Déclarer les secrets d’administration dans l’environnement, sans les inscrire dans le dépôt. Compléter les paramètres publics de lib/publication.ts.
+4. Si nécessaire, générer puis appliquer les migrations avec le circuit de déploiement prévu. Tester l’évolution sur une copie des données avant la production.
+5. Exécuter TypeScript et les tests du module modifié. Construire avec le helper build-site.mjs. Ouvrir un aperçu quand l’infrastructure le permet.
+6. Synchroniser la source, enregistrer une version à partir du même commit et de son archive, puis déployer cette version. Attendre un statut terminal succeeded.
+7. Mettre à jour GitHub main et SOURCE_HISTORY.json ; conserver le lien entre la révision publiée et les sources.
+
+### Retour en arrière
+
+Identifier une version de code connue comme fonctionnelle et compatible avec le schéma D1 courant. Redéployer cette version par les outils d’hébergement. Vérifier un accès à un salon, un solde, une relation d’ami et le défi quotidien. Une migration incompatible impose une procédure de restauration de données préparée ; le retour de code seul n’annule pas les transactions.
+
+### Surveillance minimale
+
+Suivre les réponses 503, les échecs d’écriture, les conflits épuisés et les erreurs de configuration de l’administration. Comparer l’activité entre périodes uniquement sur un périmètre de consentement comparable. La journalisation ne doit pas exposer les cookies, codes secrets ou clés de statistiques privées.
+
+> Le service n’inclut pas une sauvegarde automatique D1 documentée ici. L’export, la rétention et la restauration de la base doivent être organisés avec l’hébergeur, puis réellement testés.
+
+## Dépanner à partir d’un symptôme.
+
+Collecter l’heure, le salon, la phase, la révision et le statut HTTP. Partager un exemple minimal sans cookie ni donnée privée. Une indisponibilité d’aperçu ne prouve pas un défaut du site publié.
+
+| Symptôme | Vérification prioritaire |
+| --- | --- |
+| Salon bloqué / joueur disparu | Connectivité ; sync toutes les 900 ms ; présence 12 s ; fenêtre de reprise 10 s ; réponse expired. |
+| Réponse rejetée après changement de manche | Comparer game et round envoyés avec le dernier instantané. Un 409 peut être une protection normale. |
+| Pièces de fin non attribuées | 5 manches distinctes avec proposition non vide, présence au podium et écriture match du bon game. |
+| Achat refusé | Cookie, monnaie de l’article, tarif serveur, solde du livre et date de fin saisonnière. |
+| Ami introuvable ou bouton inactif | Demande acceptée, visibilité, blocage, présence commune et capacité du salon. |
+| Discussion verrouillée | Phase guess et résolution du demandeur ; contrôler le filtrage serveur avant toute modification du bouton. |
+| Administration indisponible | Variables de session et mot de passe robuste ; limitation des tentatives et statut 503 de configuration. |
+| Image décalée / trou rectangulaire | Alpha, repères d’asset, forme de tête, masque et ordre des couches. |
+| Données perdues après changement d’appareil | Identité liée au navigateur ; la clé statistique ne transfère pas collection ou amis. |
+
+### Tests à lancer selon le module
+
+Dans tests/ : game.test.mjs et api.test.mjs (jeu), economy.test.mjs (transactions), friends.test.mjs (social), room-discussion.test.mjs (panneau) et privacy.test.mjs (droits). Les rendus d’avatars contrôlent leur géométrie.
+
+Un test SQLite vérifie une règle dans son environnement. La compilation vérifie la construction. Le statut de publication vérifie le déploiement annoncé. Le clavier, la lisibilité et la disposition PC/mobile exigent une recette visuelle.
+
+> Dimensionnement théorique : 30 clients synchronisés à 900 ms représentent environ 33 sync/s par salon, hors autres actions. Ce calcul n’est pas un test de charge ; mesurer le trafic et le coût D1 avant toute évolution.
+

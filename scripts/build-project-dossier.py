@@ -13,8 +13,10 @@ from reportlab.lib.utils import ImageReader
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'docs/projet'; OUT.mkdir(parents=True,exist_ok=True)
 DATA=json.loads((OUT/'dossier.json').read_text())
+ANNEX=OUT/'annexe-technique.json'
+if ANNEX.exists(): DATA['pages']+=json.loads(ANNEX.read_text())
 FONT=Path('/usr/share/fonts/truetype/dejavu')
-for name,file in [('Sans','DejaVuSans.ttf'),('SansBold','DejaVuSans-Bold.ttf'),('Serif','DejaVuSerif.ttf')]:pdfmetrics.registerFont(TTFont(name,str(FONT/file)))
+for name,file in [('Sans','DejaVuSans.ttf'),('SansBold','DejaVuSans-Bold.ttf'),('Serif','DejaVuSerif.ttf'),('Mono','DejaVuSansMono.ttf')]:pdfmetrics.registerFont(TTFont(name,str(FONT/file)))
 W,H=A4; M=43; CW=W-2*M
 INK=HexColor('#43573e'); MUTED=HexColor('#776a52'); PAPER=HexColor('#f6f0df'); SEAM=HexColor('#baa783'); SAGE=HexColor('#e2e8d2')
 styles={
@@ -24,7 +26,8 @@ styles={
  'cell':ParagraphStyle('cell',fontName='Sans',fontSize=8.3,leading=12,textColor=INK),
  'cellhead':ParagraphStyle('cellhead',fontName='SansBold',fontSize=8.1,leading=12,textColor=INK),
  'note':ParagraphStyle('note',fontName='Sans',fontSize=8.4,leading=12.5,textColor=MUTED),
- 'title':ParagraphStyle('title',fontName='Serif',fontSize=25,leading=32,textColor=INK)
+ 'title':ParagraphStyle('title',fontName='Serif',fontSize=25,leading=32,textColor=INK),
+ 'code':ParagraphStyle('code',fontName='Mono',fontSize=8,leading=12,textColor=INK)
 }
 def esc(s):return html.escape(s).replace('\n','<br/>')
 def paragraph(c,text,y,kind='body',x=M,width=CW):
@@ -57,6 +60,7 @@ def build():
  c.setFont('Sans',7.8);c.setFillColor(INK);c.drawString(M,93,DATA['url']);c.linkURL(DATA['url'],(M,90,W-M,104),relative=0);c.drawString(M,76,DATA['repository']);c.linkURL(DATA['repository'],(M,73,W-M,87),relative=0);c.showPage()
  markdown=['# Kikalmo - Dossier de projet et mode opératoire','',f'Édition : {DATA["date"]}',f'Site : {DATA["url"]}',f'Sources : {DATA["repository"]}','']
  for n,page in enumerate(DATA['pages'],2):
+  c.bookmarkPage(f'page-{n}');c.addOutlineEntry(page['section']+' - '+page['title'],f'page-{n}',level=0)
   base(c,n,page['section']);y=paragraph(c,page['title'],H-108,'title');y=paragraph(c,page['intro'],y-13,'intro')-20
   markdown+=['## '+page['title'],'',page['intro'],'']
   for kind,value in page['blocks']:
@@ -64,6 +68,8 @@ def build():
    elif kind=='p':y=paragraph(c,value,y)-11;markdown+=[value,'']
    elif kind=='table':
     y=table(c,value,y);markdown+=['| '+' | '.join(value[0])+' |','| '+' | '.join(['---']*len(value[0]))+' |']+['| '+' | '.join(r)+' |' for r in value[1:]]+['']
+   elif kind=='code':
+    text=esc(value).replace(' ','&nbsp;');p=Paragraph(text,styles['code']);_,h=p.wrap(CW-26,800);c.setFillColor(SAGE);c.roundRect(M,y-h-20,CW,h+20,10,fill=1,stroke=0);p.drawOn(c,M+13,y-h-10);y-=h+34;markdown+=['```text',value,'```','']
    elif kind=='steps':
     for i,step in enumerate(value,1):
      c.setFillColor(SAGE);c.circle(M+8,y-8,8,fill=1,stroke=0);c.setFillColor(INK);c.setFont('SansBold',8);c.drawCentredString(M+8,y-11,str(i));y=paragraph(c,step,y,'body',M+25,CW-25)-10;markdown+=[f'{i}. {step}']

@@ -127,4 +127,4 @@ Le bouton Ajouter près d’un joueur du classement envoie une demande sans reco
 
 ### Documentation du projet
 
-[Dossier, cahier des charges et mode opératoire](docs/projet/README.md), avec un PDF de 14 pages dans la direction artistique textile du site et des sources éditables.
+[Dossier, cahier des charges et mode opératoire](docs/projet/README.md), avec un PDF de 24 pages dans la direction artistique textile du site et des sources éditables.

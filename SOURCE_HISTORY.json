@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "80543d36111199b68f117aa4769af3bba49c2fff",
+  "source_head": "6915d600a331b1f29d523c5da68afed746e1f5c9",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -471,6 +471,11 @@
       "source_sha": "80543d36111199b68f117aa4769af3bba49c2fff",
       "source_author": "Codex",
       "message": "Add a room discussion dock, direct room friend requests and a branded project handbook"
+    },
+    {
+      "source_sha": "6915d600a331b1f29d523c5da68afed746e1f5c9",
+      "source_author": "Codex",
+      "message": "Expand the project handbook to 24 pages with a detailed technical appendix"
     }
   ]
 }
