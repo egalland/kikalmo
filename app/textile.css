@@ -27,3 +27,8 @@ body.textile-ui{background-color:var(--wool-cream);background-image:linear-gradi
 /* The room action is now a padded textile label rather than an old top-only separator. */
 .textile-ui .room-card .room-cta{min-height:48px;padding:12px 16px;gap:12px;line-height:1.4;font-size:12px;font-weight:650;text-align:left}.textile-ui .room-card .room-cta>span{display:block;min-width:0;flex:1}.textile-ui .room-card .room-cta>svg{flex:0 0 auto;align-self:center}.textile-ui .room-card .room-bottom>p{line-height:1.6;color:#59654e}
 @media(max-width:650px){.textile-ui .room-card .room-cta{min-height:48px;padding:11px 14px;font-size:12px;gap:10px}}
+
+/* Dialog overlays must cover the header and the fixed mobile game controls. */
+.textile-ui .modal-backdrop{z-index:100}
+/* The atelier itself scrolls; its controls must not create a second scroll area. */
+.textile-ui .atelier-modal .profile-controls{max-height:none;overflow:visible;padding-right:0}

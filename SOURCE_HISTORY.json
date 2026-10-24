@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "12b08fe4315ab664aa141dbe938cc5691adeb90e",
+  "source_head": "9841df49da085426d8d81a946a05a873e945f720",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -451,6 +451,11 @@
       "source_sha": "12b08fe4315ab664aa141dbe938cc5691adeb90e",
       "source_author": "Codex",
       "message": "Simplify the empty daily word champion message"
+    },
+    {
+      "source_sha": "9841df49da085426d8d81a946a05a873e945f720",
+      "source_author": "Codex",
+      "message": "Keep modal overlays above navigation and remove nested atelier scrolling"
     }
   ]
 }
