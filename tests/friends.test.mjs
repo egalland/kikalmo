@@ -33,9 +33,10 @@ try{
  const shortcut=await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)});assert.equal(shortcut.status,200);assert.equal(shortcut.data.outgoing.length,1);assert.equal(shortcut.data.roomTarget.id,eid.slice(0,8));assert.ok(!JSON.stringify(shortcut.data).includes(eid),'Shortcuts never expose session cookies');
  const eli=(await request(ecookie)).data;assert.equal(eli.incoming[0].name,'Dora');assert.equal(eli.me.code,shortcut.data.roomTarget.code);
  await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)});assert.equal(sql.prepare('SELECT count(*) n FROM friend_links WHERE requester=?').get(did).n,1);
- await request(ecookie,{action:'accept',code:d.data.me.code});assert.equal((await request(d.cookie)).data.friends[0].name,'Eli');
+ await request(ecookie,{action:'accept',code:d.data.me.code});assert.equal((await request(d.cookie)).data.friends[0].name,'Eli');assert.equal((await request(d.cookie)).data.friends[0].playerKey,eid.slice(0,8),'Room identity is available before an Add click');
  await request(ecookie,{action:'visibility',visible:false});await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)});assert.equal((await request(ecookie)).data.me.visible,false,'A room shortcut preserves existing privacy choices');
  await request(ecookie,{action:'block',code:d.data.me.code});assert.equal((await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)})).status,403);
+ const blockedByRoom=await request(d.cookie,{action:'block-room',room:'food',target:eid.slice(0,8)});assert.equal(blockedByRoom.status,200);assert.equal(blockedByRoom.data.blocked[0].playerKey,eid.slice(0,8));
  now+=12000;assert.equal((await request(d.cookie,{action:'request-room',room:'food',target:eid.slice(0,8)})).status,403,'Presence expires exactly at twelve seconds');
  console.log('Passed room friend shortcuts: shared live room, automatic public contact, recipient acceptance, idempotence, session isolation, preserved visibility and blocking.');
 }finally{Date.now=originalNow;delete globalThis.friendsDB;}

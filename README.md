@@ -119,11 +119,13 @@ Une partie terminée avec une proposition dans au moins cinq manches rapporte tr
 
 Accessoires : 8–40 pièces ; coiffures et regards : 45–75 ; costumes Halloween : 60–80 ; costumes permanents : 180–550. Les achats acquis restent équipables et aucun solde existant n’est débité par la hausse des prix. Le remboursement historique Halloween conserve ses anciens montants.
 
-### Discussion et ajout d’amis dans un salon
+### Discussion du salon et messagerie privée
 
-La fenêtre Discussion en bas d’écran affiche uniquement les échanges de discussion, avec le même filtrage serveur que le fil principal. Avant résolution, l’écriture reste verrouillée ; les messages entre gagnants deviennent visibles à tous à la révélation. Le brouillon est conservé en cas d’erreur d’envoi. La fenêtre peut être réduite et signale les nouvelles arrivées.
+La discussion du salon reste dans le fil du jeu : pendant la recherche, seuls les joueurs qui ont trouvé peuvent échanger, puis les messages deviennent visibles à tous à la révélation.
 
-Le bouton Ajouter près d’un joueur du classement envoie une demande sans recopier de code. Le serveur exige une présence commune récente, résout l’identifiant court uniquement dans ce salon, respecte les blocages et préserve les préférences d’un profil ami existant. L’acceptation reste réservée au destinataire.
+L’onglet Messages en bas de l’écran ouvre des conversations privées entre amis acceptés, dans le jeu, à l’accueil et dans la boutique. Les messages persistent 90 jours ; historique paginé, non-lus et accusés de lecture utilisent une API séparée. Un identifiant d’envoi unique évite les doublons lors des réessais. Les appels de messagerie vérifient l’amitié et le blocage côté serveur ; les écritures revérifient ces conditions atomiquement.
+
+Le bouton Ajouter est masqué pour les personnes déjà amies ou bloquées. Les options d’un joueur permettent d’ouvrir un message privé ou de bloquer. Le panneau de messagerie et Mes amis donnent accès à la liste des personnes bloquées et au déblocage. Débloquer ne rétablit pas l’amitié. L’export et l’effacement couvrent aussi les échanges privés.
 
 ### Documentation du projet
 

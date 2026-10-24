@@ -6,6 +6,7 @@ import ProfileEditor from '../components/ProfileEditor';
 import MobileMenu from '../components/MobileMenu';
 import MenuRooms from '../components/MenuRooms';
 import FriendsPanel from '../components/FriendsPanel';
+import PrivateMessenger from '../components/PrivateMessenger';
 import useFriends from '../hooks/useFriends';
 import Avatar from '../components/Avatar';
 import AnimatedLogo from '../components/AnimatedLogo';
@@ -13,7 +14,8 @@ import {DEFAULT_AVATAR,PROFILE_KEY,parseProfile,type Profile} from '../../lib/pr
 import type {Wallet} from '../../lib/cosmetics';
 export default function Boutique(){
  const [profile,setProfile]=useState<Profile|null>(null),[wallet,setWallet]=useState<Wallet|null>(null),[editing,setEditing]=useState(false),[error,setError]=useState('');
- const friends=useFriends(profile),[friendsOpen,setFriendsOpen]=useState(false);
+ const friends=useFriends(profile),[friendsOpen,setFriendsOpen]=useState(false),[privateOpen,setPrivateOpen]=useState(false),[privatePeer,setPrivatePeer]=useState('');
+ function openPrivate(code:string){setPrivatePeer(code);setPrivateOpen(true);setFriendsOpen(false);}
  async function loadWallet(){try{const r=await fetch('/api/economy');const d=await r.json() as Wallet&{error?:string};if(!r.ok)throw Error(d.error||'Collection indisponible.');setWallet(d);setError('');}catch(e){setError(e instanceof Error?e.message:'Collection indisponible.');}}
  useEffect(()=>{try{setProfile(parseProfile(localStorage.getItem(PROFILE_KEY)));}catch{}void loadWallet();},[]);
  async function save(p:Profile){try{localStorage.setItem(PROFILE_KEY,JSON.stringify(p));}catch{throw Error('La sauvegarde est bloquée par ce navigateur.');}setProfile(p);setEditing(false);void loadWallet();}
@@ -21,5 +23,5 @@ export default function Boutique(){
  {error&&<p className="notice error" role="alert">{error} <button onClick={()=>void loadWallet()}>Réessayer</button></p>}
  <CosmeticShop avatar={profile?.avatar||DEFAULT_AVATAR} wallet={wallet} onWallet={setWallet} onCharacter={()=>setEditing(true)}/>
  <footer className="boutique-footer"><a href="/">Retourner jouer →</a></footer>
- {friendsOpen&&<FriendsPanel controller={friends} profile={profile} currentRoom="" onClose={()=>setFriendsOpen(false)} onProfile={()=>setEditing(true)} onJoin={id=>{window.location.assign('/?room='+id);}}/>}{editing&&<ProfileEditor initial={profile} onSave={save} onCancel={()=>setEditing(false)} inRoom={false}/>}</main>;
+ <PrivateMessenger controller={friends} profile={profile} open={privateOpen} onOpen={setPrivateOpen} selectedCode={privatePeer} onSelect={setPrivatePeer} onFriends={()=>setFriendsOpen(true)} onProfile={()=>setEditing(true)}/>{friendsOpen&&<FriendsPanel onChat={openPrivate} controller={friends} profile={profile} currentRoom="" onClose={()=>setFriendsOpen(false)} onProfile={()=>setEditing(true)} onJoin={id=>{window.location.assign('/?room='+id);}}/>}{editing&&<ProfileEditor initial={profile} onSave={save} onCancel={()=>setEditing(false)} inRoom={false}/>}</main>;
 }

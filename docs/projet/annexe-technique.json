@@ -98,6 +98,10 @@
           [
             "friend_blocks · (owner, target)",
             "Un blocage dans un sens interdit les demandes et la localisation entre les deux joueurs."
+          ],
+          [
+            "direct_messages · id",
+            "sender, recipient, text, created_at, read_at ; index de conversation et de non-lus."
           ]
         ]
       ],
@@ -442,15 +446,15 @@
       ],
       [
         "h",
-        "Discussion de salon"
+        "Discussion de salon et messagerie privée"
       ],
       [
         "p",
-        "communicate refuse le chat pendant guess avant la résolution du demandeur. Les messages écrits pendant guess sont marqués privés aux gagnants. view masque ces messages aux joueurs qui n’ont pas trouvé jusqu’à la révélation ; le verrouillage ne repose pas seulement sur un bouton grisé. Le tableau conserve les 100 derniers messages du salon. Le panneau du bas sélectionne uniquement kind = chat ; les réponses restent dans le fil principal."
+        "communicate et view conservent les règles de discussion du salon : il faut avoir trouvé pour écrire pendant guess. La messagerie privée utilise /api/messages et direct_messages. Lecture, envoi et accusés de lecture exigent une amitié accepted et l’absence de blocage dans les deux sens. Le message envoyé possède un requestId unique ; un réessai ne crée pas un second message. Les pages d’historique sont ordonnées par date puis id, par groupes de 50."
       ],
       [
         "note",
-        "Les messages sont affichés comme texte React, sans HTML utilisateur injecté. L’effacement retire les messages identifiés par le joueur et son identifiant public court. La discussion n’est ni un canal chiffré de bout en bout ni une messagerie privée persistante."
+        "Les messages privés sont conservés 90 jours ; l’export et l’effacement les couvrent. Un blocage supprime l’amitié et ferme les échanges. Débloquer n’accorde aucun nouvel accès tant qu’une demande n’a pas été acceptée."
       ]
     ]
   },
@@ -549,7 +553,7 @@
       ],
       [
         "p",
-        "Dans tests/ : game.test.mjs et api.test.mjs (jeu), economy.test.mjs (transactions), friends.test.mjs (social), room-discussion.test.mjs (panneau) et privacy.test.mjs (droits). Les rendus d’avatars contrôlent leur géométrie."
+        "Dans tests/ : game.test.mjs et api.test.mjs (jeu), economy.test.mjs (transactions), friends.test.mjs (social), private-messenger-ui.test.mjs (panneau) et privacy.test.mjs (droits). Les rendus d’avatars contrôlent leur géométrie."
       ],
       [
         "p",

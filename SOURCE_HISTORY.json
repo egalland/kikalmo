@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "6915d600a331b1f29d523c5da68afed746e1f5c9",
+  "source_head": "221d00773b147721b59db4b4a8edfd0c2d0e4ce9",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -476,6 +476,11 @@
       "source_sha": "6915d600a331b1f29d523c5da68afed746e1f5c9",
       "source_author": "Codex",
       "message": "Expand the project handbook to 24 pages with a detailed technical appendix"
+    },
+    {
+      "source_sha": "221d00773b147721b59db4b4a8edfd0c2d0e4ce9",
+      "source_author": "Codex",
+      "message": "Separate private friend messages from room chat, hide existing-friend Add buttons and expose blocking controls"
     }
   ]
 }

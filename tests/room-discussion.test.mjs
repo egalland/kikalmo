@@ -1,9 +1,0 @@
-import ts from 'typescript';import {readFileSync} from 'node:fs';import {createElement} from 'react';import {renderToStaticMarkup} from 'react-dom/server';import assert from 'node:assert/strict';
-const uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
-const source=ts.transpileModule(readFileSync('app/components/RoomDiscussion.tsx','utf8'),{compilerOptions:{module:ts.ModuleKind.ES2022,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}}).outputText.replaceAll('"react/jsx-runtime"',JSON.stringify(import.meta.resolve('react/jsx-runtime'))).replace("'react'",JSON.stringify(import.meta.resolve('react'))).replace("'lucide-react'",JSON.stringify(import.meta.resolve('lucide-react')));
-const {default:Discussion}=await import(uri(source));const messages=[{id:'guess',name:'A',text:'hidden guess',kind:'guess',player:'other',private:false},{id:'chat',name:'A',text:'<script>alert(1)</script>',kind:'chat',player:'other',private:false}];
-const props={roomName:'Salle obscure',messages,canSend:false,privateChat:true,open:true,onOpen:()=>{},onSend:async()=>{}};
-let html=renderToStaticMarkup(createElement(Discussion,props));assert.ok(html.includes('Salle obscure'));assert.ok(html.includes('Trouvez le mot'));assert.ok(html.includes('disabled=""'));assert.ok(!html.includes('hidden guess'));assert.ok(html.includes('&lt;script&gt;'));assert.ok(!html.includes('<script>'));assert.ok(html.includes('aria-expanded="true"'));
-html=renderToStaticMarkup(createElement(Discussion,{...props,open:false}));assert.ok(!html.includes('discussion-log'));assert.ok(html.includes('aria-expanded="false"'));
-html=renderToStaticMarkup(createElement(Discussion,{...props,canSend:true,privateChat:false}));assert.ok(!html.includes('Trouvez le mot'));assert.ok(html.includes('Message au salon'));
-console.log('Passed discussion: collapsed/open state, existing chat-only stream, locked composer, accessible controls and escaped user text.');

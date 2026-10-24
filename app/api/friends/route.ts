@@ -20,9 +20,10 @@ export async function POST(req:Request){try{
  }
  if(!player||!await db.prepare('SELECT code FROM friend_profiles WHERE player=?').bind(player).first())return response({error:'Ouvrez d’abord le panneau d’amis.'},401);
  if(b.action==='visibility'){if(typeof b.visible!=='boolean')return response({error:'Choix invalide.'},400);await db.prepare('UPDATE friend_profiles SET visible=? WHERE player=?').bind(b.visible?1:0,player).run();return response(await friendsSnapshot(db,player));}
- if(!['request','request-room','accept','decline','cancel','remove','block','unblock','locate'].includes(b.action))return response({error:'Action inconnue.'},400);
+ if(!['request','request-room','block-room','accept','decline','cancel','remove','block','unblock','locate'].includes(b.action))return response({error:'Action inconnue.'},400);
  let roomTarget:string|undefined;
- if(b.action==='request-room'){
+ if(b.action==='request-room'||b.action==='block-room'){
+  const blocking=b.action==='block-room';
   if(typeof b.room!=='string'||typeof b.target!=='string'||!/^[a-f0-9]{8}$/.test(b.target))return response({error:'Joueur du salon invalide.'},400);
   const row=await db.prepare('SELECT state FROM rooms WHERE id=?').bind(b.room).first<{state:string}>();
   const participants=(row?JSON.parse(row.state).players||[]:[]).filter((p:{seen:number})=>Date.now()-p.seen<12000);
@@ -30,11 +31,11 @@ export async function POST(req:Request){try{
   const peers=participants.filter((p:{id:string})=>p.id.slice(0,8)===b.target&&p.id!==player);
   if(peers.length!==1)return response({error:'Ce joueur n’est plus disponible dans ce salon.'},409);
   const peer=peers[0];
-  if(await db.prepare('SELECT owner FROM friend_blocks WHERE (owner=? AND target=?) OR (owner=? AND target=?)').bind(player,peer.id,peer.id,player).first())return response({error:'Cette relation n’est pas disponible.'},403);
+  if(!blocking&&await db.prepare('SELECT owner FROM friend_blocks WHERE (owner=? AND target=?) OR (owner=? AND target=?)').bind(player,peer.id,peer.id,player).first())return response({error:'Cette relation n’est pas disponible.'},403);
   // A live room already provides this public name/avatar; preserve any existing social preferences.
   await db.prepare('INSERT OR IGNORE INTO friend_profiles(player,code,name,avatar,seen) VALUES(?,?,?,?,?)').bind(peer.id,crypto.randomUUID().replaceAll('-','').slice(0,16).toUpperCase(),peer.name,JSON.stringify(cleanAvatar(peer.avatar)),peer.seen).run();
   const contact=await db.prepare('SELECT code FROM friend_profiles WHERE player=?').bind(peer.id).first<{code:string}>();
-  b.code=contact!.code;roomTarget=b.target;b.action='request';
+  b.code=contact!.code;roomTarget=b.target;b.action=blocking?'block':'request';
  }
  const code=friendCode(b.code);if(!/^[A-F0-9]{16}$/.test(code))return response({error:'Entrez un code ami valide.'},400);
  const target=await db.prepare('SELECT player FROM friend_profiles WHERE code=?').bind(code).first<{player:string}>();if(!target)return response({error:'Code ami introuvable.'},404);if(target.player===player)return response({error:'C’est votre propre code ami.'},400);

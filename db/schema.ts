@@ -64,3 +64,9 @@ export const economyLedger=sqliteTable('economy_ledger',{
 export const friendProfiles=sqliteTable('friend_profiles',{player:text('player').primaryKey(),code:text('code').notNull().unique(),name:text('name').notNull(),avatar:text('avatar').notNull(),seen:integer('seen').notNull(),visible:integer('visible').notNull().default(1)});
 export const friendLinks=sqliteTable('friend_links',{requester:text('requester').notNull(),recipient:text('recipient').notNull(),status:text('status').notNull().default('pending'),createdAt:integer('created_at').notNull()},t=>[primaryKey({columns:[t.requester,t.recipient]}),index('friend_links_recipient').on(t.recipient,t.status)]);
 export const friendBlocks=sqliteTable('friend_blocks',{owner:text('owner').notNull(),target:text('target').notNull()},t=>[primaryKey({columns:[t.owner,t.target]})]);
+
+// Private, browser-bound conversations. Reads and writes require a current accepted friendship.
+export const directMessages=sqliteTable('direct_messages',{
+ id:text('id').primaryKey(),sender:text('sender').notNull(),recipient:text('recipient').notNull(),
+ text:text('text').notNull(),createdAt:integer('created_at').notNull(),readAt:integer('read_at'),
+},t=>[index('direct_messages_pair').on(t.sender,t.recipient,t.createdAt),index('direct_messages_unread').on(t.recipient,t.readAt)]);

@@ -106,28 +106,27 @@ Le menu permet de rejoindre un autre salon ; la nouvelle session devient active 
 
 ## Discuter et retrouver ses amis.
 
-La discussion réductible se trouve en bas de l’écran dans un salon. Le bouton d’ajout d’ami est disponible à côté des autres joueurs dans le classement.
+La discussion de la room reste dans le fil du jeu. L’onglet Messages, en bas de l’écran, ouvre des conversations privées avec les amis acceptés, indépendamment de la manche.
 
-### Utiliser la fenêtre de discussion
+### Discussion du salon
 
-1. Cliquer sur Discussion en bas de l’écran pour ouvrir la fenêtre du salon.
-2. Lire les messages ; les propositions de réponse restent dans le fil principal et ne sont pas recopiées dans cette fenêtre.
-3. Pendant la recherche, trouver le mot pour pouvoir écrire. Les échanges sont alors visibles seulement aux joueurs qui ont trouvé.
-4. À la révélation, les échanges deviennent visibles à tous. Écrire un message de 200 caractères maximum, puis envoyer.
-5. Réduire la fenêtre pour retrouver toute la zone de jeu. Le compteur indique les nouvelles arrivées de messages lorsque la fenêtre est réduite.
+Pendant une manche, il faut avoir trouvé le mot pour discuter dans le fil du salon. Ces échanges sont visibles aux gagnants, puis à tous à la révélation. La messagerie privée ne remplace pas ce fil.
 
-### Ajouter un joueur du salon
+### Envoyer un message privé
 
-1. Repérer le joueur dans le classement, puis cliquer sur le bouton Ajouter en ami à côté de son nom.
-2. La demande est envoyée à ce joueur ; une icône d’attente remplace le bouton d’ajout.
-3. Le destinataire ouvre Mes amis et accepte ou refuse. L’expéditeur ne peut pas accepter à sa place.
-4. Une fois la demande acceptée, retrouver cet ami dans le panneau Amis et utiliser Rejoindre sa partie.
+1. Ouvrir Messages en bas de l’écran, puis choisir un ami dans la liste. Le panneau Amis propose aussi un bouton Message privé.
+2. Écrire le message, puis envoyer. Les échanges sont conservés 90 jours et restent liés au navigateur.
+3. Consulter les non-lus et les indications Envoyé / Lu. Charger les messages précédents pour remonter la conversation.
+4. Réduire la fenêtre pour continuer à jouer ; le brouillon reste associé à son destinataire.
 
-### Codes amis et contrôles
+### Ajouter, bloquer et débloquer
 
-Le panneau Amis permet aussi de copier son code, d’ajouter un code reçu, d’annuler une demande, de retirer un ami ou de le bloquer. La présence peut être masquée. Le serveur vérifie le salon, la présence récente, les blocages et la capacité avant de permettre de rejoindre un ami.
+1. Dans le classement, cliquer sur Ajouter en ami pour un nouveau contact. Le bouton n’apparaît pas pour les personnes déjà amies.
+2. Le destinataire accepte la demande depuis Mes amis. Une demande ne devient pas automatiquement une amitié.
+3. Pour bloquer quelqu’un, utiliser les options du joueur ou celles de la conversation. Les échanges privés sont alors coupés dans les deux sens.
+4. Dans Messages, ouvrir Bloqués et cliquer sur Débloquer. La liste existe aussi dans Mes amis.
 
-> La fenêtre est une discussion de salon, pas une messagerie privée entre deux amis. Un ajout depuis un salon prépare un contact avec le pseudo et l’avatar publics, sans transformer la demande en amitié automatique.
+> Débloquer ne rétablit pas l’amitié : une nouvelle demande doit être acceptée. Les messages privés ne sont pas montrés aux autres joueurs de la room.
 
 ## Acheter, puis équiper.
 
@@ -212,7 +211,7 @@ Application React et TypeScript avec Vinext, hébergée via Sites dans un Worker
 
 | Couche | Rôle / fichiers principaux |
 | --- | --- |
-| Interface | app/page.tsx ; composants Avatar, DailyWord, CosmeticShop, FriendsPanel, RoomDiscussion. |
+| Interface | app/page.tsx ; composants Avatar, DailyWord, CosmeticShop, FriendsPanel, PrivateMessenger. |
 | Règles de jeu | lib/game.ts : cycle des manches, validation, scores et progression des pièces. |
 | Économie | lib/economy.ts et lib/cosmetics.ts : livre des crédits, achats, catalogue et échéances. |
 | Social | lib/friends.ts ; API friends : relations, présence et demandes depuis un salon. |
@@ -238,6 +237,7 @@ Les opérations d’écriture utilisent les contrôles d’origine et l’identi
 | /api/game | Lister ; join, sync, answer, leave, profile, chat, emote. |
 | /api/daily | Lire le défi et le classement ; rejoindre et proposer une réponse. |
 | /api/economy | Lire les soldes et possessions ; acheter un article. |
+| /api/messages | Conversations privées : lister, lire l’historique, envoyer et marquer les messages reçus comme lus. |
 | /api/friends | Lire ; register, pulse, request, request-room, accept, decline, cancel, remove, block, unblock, visibility, locate. |
 | /api/privacy | Choix statistiques ; export associé au navigateur ; effacement. |
 | /api/admin/auth | Authentification et session privée d’administration. |
@@ -295,7 +295,7 @@ Les sources du Site et le dépôt GitHub main doivent rester synchronisés. Les 
 
 ### Commandes de contrôle
 
-TypeScript : npx tsc --noEmit. Jeu et API : node --test tests/game.test.mjs tests/api.test.mjs. Économie : node --test tests/economy.test.mjs. Social : node --test tests/friends.test.mjs tests/room-discussion.test.mjs. Confidentialité : node --test tests/privacy.test.mjs. Les vérifications visuelles du navigateur complètent ces contrôles lorsqu’un aperçu est disponible.
+TypeScript : npx tsc --noEmit. Jeu et API : node --test tests/game.test.mjs tests/api.test.mjs. Économie : node --test tests/economy.test.mjs. Social : node --test tests/friends.test.mjs tests/private-messenger-ui.test.mjs. Confidentialité : node --test tests/privacy.test.mjs. Les vérifications visuelles du navigateur complètent ces contrôles lorsqu’un aperçu est disponible.
 
 ### Administration
 
@@ -320,11 +320,11 @@ Les tests automatiques valident les règles et les écritures. Une recette PC et
 
 ### Recette visuelle à effectuer
 
-PC : ouvrir et réduire la discussion, lire le classement, envoyer une demande, accepter dans un second navigateur, rejoindre un ami et changer de salon. Mobile : vérifier à 320 px et sur un écran courant, avec clavier natif et clavier du site ; contrôler que les champs, boutons et modales restent accessibles. Ouvrir l’atelier au-dessus de la navigation et contrôler le défilement unique.
+PC : ouvrir et réduire la messagerie privée, lire le classement, envoyer une demande, accepter dans un second navigateur, rejoindre un ami et changer de salon. Mobile : vérifier à 320 px et sur un écran courant, avec clavier natif et clavier du site ; contrôler que les champs, boutons et modales restent accessibles. Ouvrir l’atelier au-dessus de la navigation et contrôler le défilement unique.
 
 ### Limites connues et décisions différées
 
-Le profil, la collection et les amitiés ne sont pas transférables entre appareils par un compte. La discussion n’est pas une messagerie privée persistante. Les illustrations externes de révélation peuvent être indisponibles. Le module d’administration dépend de ses variables d’environnement. Les animations de tricotage restent hors du site.
+Le profil, la collection et les amitiés ne sont pas transférables entre appareils par un compte. La messagerie privée est conservée 90 jours et liée au navigateur. Les illustrations externes de révélation peuvent être indisponibles. Le module d’administration dépend de ses variables d’environnement. Les animations de tricotage restent hors du site.
 
 > Lors de cette édition, l’aperçu navigateur de l’environnement était indisponible. Les tests serveur, le contrôle TypeScript et la compilation peuvent être vérifiés ; ils ne remplacent pas une validation visuelle sur les appareils réels.
 
@@ -364,6 +364,7 @@ Le schéma de référence est db/schema.ts. Les colonnes state et avatar contien
 | friend_profiles · player | code UNIQUE, name, avatar, seen, visible ; le code public ne remplace pas le cookie. |
 | friend_links · (requester, recipient) | status, created_at ; une direction canonique par paire, index destinataire/statut. |
 | friend_blocks · (owner, target) | Un blocage dans un sens interdit les demandes et la localisation entre les deux joueurs. |
+| direct_messages · id | sender, recipient, text, created_at, read_at ; index de conversation et de non-lus. |
 
 ### Relations logiques
 
@@ -541,11 +542,11 @@ Le demandeur doit avoir son profil social et être présent dans ce salon. Le se
 
 Seul le destinataire peut passer une demande à accepted. Les demandes croisées sont conservées dans une direction unique. locate n’accepte que les amis autorisés avec un salon visible ; le nombre de joueurs est revérifié avant de proposer une entrée. Le panneau actualise ses données toutes les 15 secondes quand le document est visible. Le contrôle de blocage reste côté serveur.
 
-### Discussion de salon
+### Discussion de salon et messagerie privée
 
-communicate refuse le chat pendant guess avant la résolution du demandeur. Les messages écrits pendant guess sont marqués privés aux gagnants. view masque ces messages aux joueurs qui n’ont pas trouvé jusqu’à la révélation ; le verrouillage ne repose pas seulement sur un bouton grisé. Le tableau conserve les 100 derniers messages du salon. Le panneau du bas sélectionne uniquement kind = chat ; les réponses restent dans le fil principal.
+communicate et view conservent les règles de discussion du salon : il faut avoir trouvé pour écrire pendant guess. La messagerie privée utilise /api/messages et direct_messages. Lecture, envoi et accusés de lecture exigent une amitié accepted et l’absence de blocage dans les deux sens. Le message envoyé possède un requestId unique ; un réessai ne crée pas un second message. Les pages d’historique sont ordonnées par date puis id, par groupes de 50.
 
-> Les messages sont affichés comme texte React, sans HTML utilisateur injecté. L’effacement retire les messages identifiés par le joueur et son identifiant public court. La discussion n’est ni un canal chiffré de bout en bout ni une messagerie privée persistante.
+> Les messages privés sont conservés 90 jours ; l’export et l’effacement les couvrent. Un blocage supprime l’amitié et ferme les échanges. Débloquer n’accorde aucun nouvel accès tant qu’une demande n’a pas été acceptée.
 
 ## Construire, déployer et revenir en arrière.
 
@@ -587,7 +588,7 @@ Collecter l’heure, le salon, la phase, la révision et le statut HTTP. Partage
 
 ### Tests à lancer selon le module
 
-Dans tests/ : game.test.mjs et api.test.mjs (jeu), economy.test.mjs (transactions), friends.test.mjs (social), room-discussion.test.mjs (panneau) et privacy.test.mjs (droits). Les rendus d’avatars contrôlent leur géométrie.
+Dans tests/ : game.test.mjs et api.test.mjs (jeu), economy.test.mjs (transactions), friends.test.mjs (social), private-messenger-ui.test.mjs (panneau) et privacy.test.mjs (droits). Les rendus d’avatars contrôlent leur géométrie.
 
 Un test SQLite vérifie une règle dans son environnement. La compilation vérifie la construction. Le statut de publication vérifie le déploiement annoncé. Le clavier, la lisibilité et la disposition PC/mobile exigent une recette visuelle.
 

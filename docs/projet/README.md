@@ -10,7 +10,7 @@
 
 ## Mode opératoire
 
-Le dossier contient des procédures numérotées pour créer son personnage, rejoindre une partie, répondre, utiliser la discussion en bas d’écran, demander un joueur en ami depuis le classement, gérer les relations, acheter et équiper un skin, résoudre le mot du jour, exporter ses données et publier une mise à jour.
+Le dossier contient des procédures numérotées pour créer son personnage, rejoindre une partie, répondre, utiliser la messagerie privée en bas d’écran, gérer les personnes bloquées, demander un joueur en ami depuis le classement, gérer les relations, acheter et équiper un skin, résoudre le mot du jour, exporter ses données et publier une mise à jour.
 
 ## Régénération
 
