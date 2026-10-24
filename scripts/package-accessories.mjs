@@ -1,7 +1,8 @@
 import sharp from 'sharp';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-const inputs=JSON.parse(readFileSync(process.argv[2],'utf8')),output=[];
+const inputs=JSON.parse(readFileSync(process.argv[2],'utf8'));
+const output=process.argv.includes('--append')?JSON.parse(readFileSync('lib/accessory-assets.json','utf8')).filter(a=>!inputs.some(i=>i.key===a.key)):[];
 mkdirSync('public/puppets/accessories-v2',{recursive:true});
 for(const input of inputs){
  const raw=readFileSync(input.path),{data,info}=await sharp(raw).ensureAlpha().raw().toBuffer({resolveWithObject:true});

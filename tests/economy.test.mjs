@@ -4,8 +4,8 @@ import {DatabaseSync} from 'node:sqlite';
 import assert from 'node:assert/strict';
 import {economyURI,cosmeticsURI,calendarURI,dailyBankURI} from './economy-modules.mjs';
 const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText,uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
-const {wallet,settleDailyStatement,allowedCosmetic,ownedAppearance,roomPrizeStatement}=await import(economyURI);
-const {COSMETICS}=await import(cosmeticsURI),{DAILY_QUESTIONS}=await import(dailyBankURI);
+const {wallet,settleDailyStatement,allowedCosmetic,ownedAppearance,roomPrizeStatement,purchaseStatement}=await import(economyURI);
+const {COSMETICS,HALLOWEEN,availableItem,eventRemaining,isSeasonal}=await import(cosmeticsURI),{DAILY_QUESTIONS}=await import(dailyBankURI);
 const sql=new DatabaseSync(':memory:');for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+file,'utf8'));
 const db={async batch(list){sql.exec('BEGIN');try{const out=[];for(const s of list)out.push(await s.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}},prepare(q){let values=[];return{bind(...v){values=v;return this;},async first(){return sql.prepare(q).get(...values)||null;},async all(){return{results:sql.prepare(q).all(...values)};},async run(){const r=sql.prepare(q).run(...values);return{meta:{changes:Number(r.changes)}};}}}};
 globalThis.economyTestDB=db;
@@ -35,7 +35,19 @@ sql.prepare('INSERT INTO rooms VALUES(?,?,?)').run('cinema',JSON.stringify({tele
 await roomPrizeStatement(db,p,'cinema','game',1,3,'rejected').run();assert.equal((await wallet(db,p)).room,2);
 await roomPrizeStatement(db,p,'cinema','game',1,4,'accepted').run();await roomPrizeStatement(db,p,'cinema','game',1,4,'accepted').run();assert.equal((await wallet(db,p)).room,3);
 sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('costume-credit',p,'room',80,null,now);assert.equal((await api.POST(req('POST',{item:25}))).status,200);assert.equal(await allowedCosmetic(db,p,25),25,'New costumes use the same server-side ownership checks');
-assert.equal(COSMETICS.length,38);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,38);assert.equal(DAILY_QUESTIONS.length,48);assert.equal(new Set(DAILY_QUESTIONS.map(q=>q.answer)).size,48);assert.ok(DAILY_QUESTIONS.every(q=>q.answer.split(' ').length>=3&&q.hint&&q.dailyHint));
+assert.equal(COSMETICS.length,49);assert.equal(new Set(COSMETICS.map(c=>c.id)).size,49);assert.equal(DAILY_QUESTIONS.length,48);assert.equal(new Set(DAILY_QUESTIONS.map(q=>q.answer)).size,48);assert.ok(DAILY_QUESTIONS.every(q=>q.answer.split(' ').length>=3&&q.hint&&q.dailyHint));
 console.log('Passed economy: final daily podium 5/3/2, actual attempt participation, no early or duplicate rewards, atomic concurrent purchases, no overdraft, distinct currencies, ownership, authoritative prices, CAS guarded room credits, origin checks and dedicated 48-puzzle bank.');
 
 const owned=await ownedAppearance(db,p,{shape:2,hair:5,eyes:0,nose:1,mouth:0,accessory:1,outfit:0,color:'#f8d779',headwear:1,costume:25,adornment:15,premiumHair:33,premiumEyes:36});assert.equal(owned.headwear,1);assert.equal(owned.costume,25);assert.equal(owned.adornment,undefined);assert.equal(owned.premiumHair,undefined);assert.equal(owned.premiumEyes,undefined);assert.equal(owned.hair,5);assert.equal(owned.accessory,1);assert.ok(COSMETICS.filter(c=>c.id>=25&&c.id<=32).every(c=>c.price>=(c.currency==='room'?80:40)));
+
+// The deadline is an exact Paris midnight boundary, enforced by both API and purchase SQL.
+now=HALLOWEEN.endsAt-1;assert.equal(availableItem(39),true);assert.equal(eventRemaining(now),1);assert.equal(isSeasonal(49),true);assert.equal(isSeasonal(25),false);
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('season-credit',p,'room',1000,null,now);
+assert.equal((await api.POST(req('POST',{item:39}))).status,200);
+now=HALLOWEEN.endsAt;assert.equal(availableItem(39),false);assert.equal(eventRemaining(now),0);assert.equal(new Date(now).toISOString(),'2026-11-09T23:00:00.000Z');
+assert.equal((await api.POST(req('POST',{item:40}))).status,410,'Expired event purchase blocked server-side');
+assert.equal((await api.POST(req('POST',{item:39}))).status,200,'Previously owned seasonal purchases remain idempotent');
+assert.equal((await purchaseStatement(db,p,COSMETICS.find(c=>c.id===48)).run()).meta.changes,0,'SQL also blocks expired purchases');
+assert.equal((await ownedAppearance(db,p,{shape:0,hair:1,eyes:0,nose:1,mouth:0,accessory:0,outfit:0,color:'#f8d779',costume:39})).costume,39,'Owned event costume still equipable after expiry');
+assert.equal((await api.POST(req('POST',{item:3}))).status,200,'Permanent stock remains buyable');
+console.log('Passed Halloween expiry: Paris midnight, no late purchase, permanent stock available and prior purchases retained.');

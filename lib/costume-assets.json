@@ -20,9 +20,9 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "8f46f0793a6019e5893546f341fa6e6869be7d5c6066092079cc59d4159c4eb1"
   },
@@ -47,9 +47,9 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "ae1bfa09f64152cece97fe1196f768951afd656f285264d4b5e26cfa76829a79"
   },
@@ -74,9 +74,9 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "3e115308c98a777795375a0fb99cfac56bfc16618268fb295b830eff3d4df46c"
   },
@@ -101,9 +101,9 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "6400b3a5d0752f5ef7169f5c0e30fbe78a7050efc3c2485a044c33286e48617a"
   },
@@ -128,9 +128,9 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "6924a13ad6ffd1fc22952833bee400abeb5ce5ae92ba1a20435dbbfc47e4aa64"
   },
@@ -155,9 +155,9 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "b7ad7e45c3554002dc290da5c21087e7465bbce04f6c1476495e86e1f7e459ff"
   },
@@ -182,9 +182,9 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "173b019dd238b0cdd73537451ae8cba51cd06d1c8f45a8ed4d178f5408a2431e"
   },
@@ -209,10 +209,91 @@
     },
     "stage": {
       "x": -81,
-      "y": -87,
+      "y": -95,
       "width": 417,
-      "height": 522
+      "height": 530
     },
     "sourceSha256": "f6d72343cb124f4f06a7f2a86b736694275979195df41435898cebf6c82ed12f"
+  },
+  {
+    "id": 39,
+    "key": "pumpkin",
+    "url": "/puppets/costumes/pumpkin.webp",
+    "width": 1024,
+    "height": 1024,
+    "face": {
+      "x": 350,
+      "y": 286,
+      "width": 329,
+      "height": 306,
+      "pixels": 80881
+    },
+    "bounds": {
+      "x": 161,
+      "y": 34,
+      "width": 703,
+      "height": 937
+    },
+    "stage": {
+      "x": -81,
+      "y": -95,
+      "width": 417,
+      "height": 530
+    },
+    "sourceSha256": "1b3aba09d0b432c68af8fd34e90d4d06509b5ca0a0abf0cd56e1c1903d400ffb"
+  },
+  {
+    "id": 40,
+    "key": "ghost",
+    "url": "/puppets/costumes/ghost.webp",
+    "width": 1024,
+    "height": 1024,
+    "face": {
+      "x": 353,
+      "y": 321,
+      "width": 325,
+      "height": 289,
+      "pixels": 74602
+    },
+    "bounds": {
+      "x": 158,
+      "y": 55,
+      "width": 708,
+      "height": 907
+    },
+    "stage": {
+      "x": -81,
+      "y": -95,
+      "width": 417,
+      "height": 530
+    },
+    "sourceSha256": "cc5a3587e781794184a70cc6775414d3012b8115bd53644d606a00d63a9fd3f6"
+  },
+  {
+    "id": 41,
+    "key": "bat",
+    "url": "/puppets/costumes/bat.webp",
+    "width": 1024,
+    "height": 1024,
+    "face": {
+      "x": 345,
+      "y": 295,
+      "width": 334,
+      "height": 317,
+      "pixels": 84337
+    },
+    "bounds": {
+      "x": 38,
+      "y": 26,
+      "width": 948,
+      "height": 943
+    },
+    "stage": {
+      "x": -81,
+      "y": -95,
+      "width": 417,
+      "height": 530
+    },
+    "sourceSha256": "d3164826a3aa10985b745a92e25f2f78fde8e2952a020041cbfe8e3376143d67"
   }
 ]

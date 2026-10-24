@@ -66,3 +66,15 @@ Les cinq emplacements sont persistés séparément ; `cosmetic` est seulement un
 La boutique possède son aperçu local : examiner et acheter ne changent pas le personnage. Les coiffures afro chocolat, tresses violettes et afro argenté sont dérivées de deux créations ImageGen en laine/feutre sur fond transparent, assorties au personnage existant. Production : `public/puppets/hair-shop/` ; métadonnées : `lib/hair-assets.json` ; packaging : `scripts/package-hair.mjs`. L’afro argenté réutilise le même matériau avec une variation de couleur. Trois regards réutilisent les yeux textiles animés et des teintes lagon, améthyste et émeraude.
 
 Tarifs costumes : 80 / 120 / 180 / 250 pièces de salon, 40 / 60 / 90 / 120 éclats quotidiens. Les lignes d’achat antérieures conservent leur validité. Les 48 énigmes quotidiennes restent dans une banque dédiée invisible dans les catégories des salons.
+
+## Halloween 2026 — collection éphémère
+
+La page `/boutique` est accessible directement depuis l’en-tête et possède un aperçu indépendant du personnage équipé. Une vitrine saisonnière et une navigation article précédent/suivant mettent les pièces Halloween en avant. Les rayons et les monnaies restent filtrables.
+
+La collection comprend 11 articles : trois costumes (citrouille, fantôme et chauve-souris), deux chapeaux de sorcière, un nœud chauve-souris, deux broches citrouille, des lucioles et deux textures à motifs. Six nouveaux sprites ImageGen transparents sont utilisés ; les variantes réemploient les matières avec des filtres de couleur. Les motifs sont répétés dans un masque alpha de la tête choisie, sous les yeux, les cheveux et les accessoires. Le slot `fabric` est indépendant des cinq autres emplacements.
+
+Fin exclusive : `2026-11-10T00:00:00+01:00` (9 novembre 23 h UTC). Le décompte en jours est recalculé côté boutique et synchronisé sur l’heure reçue du serveur. À l’échéance, les nouveaux achats sont bloqués dans la route API et dans la requête d’achat atomique. Les articles possédés restent équipables dans l’atelier après la fermeture. Les autres articles restent disponibles.
+
+Les cheveux sous les chapeaux suivent désormais une ouverture courbe avec une échelle réduite autour du front. Les contours du visage et les accessoires d’origine restent sous les ouvertures des costumes ; les broches et nœuds s’alignent au col ou au torse par-dessus la tenue.
+
+Reproduction : `node scripts/package-costumes.mjs <costumes.json> --append` et `node scripts/package-accessories.mjs <accessories.json> --append`. Prompts complets : `docs/halloween-prompts.json`. Méthode : outil ImageGen intégré, référence de style du personnage existant.

@@ -1,5 +1,10 @@
 export type Currency='room'|'daily';
 export const CURRENCY_LABELS={room:'Pièces de salon',daily:'Éclats du jour'};
+export const HALLOWEEN={id:'halloween-2026',name:'Les mailles d’Halloween',endsAt:Date.parse('2026-11-10T00:00:00+01:00'),endLabel:'10 novembre à 00 h · heure de Paris'} as const;
+export const SEASONAL_IDS=[39,40,41,42,43,44,45,46,47,48,49] as const;
+export function isSeasonal(id:number){return (SEASONAL_IDS as readonly number[]).includes(id);}
+export function availableItem(id:number,now=Date.now()){return !isSeasonal(id)||now<HALLOWEEN.endsAt;}
+export function eventRemaining(now=Date.now()){return Math.max(0,Math.ceil((HALLOWEEN.endsAt-now)/86400000));}
 export const COSMETICS=[
  {id:1,name:'Béret framboise',kind:'beret',color:'#c74969',currency:'room',price:2},
  {id:2,name:'Béret océan',kind:'beret',color:'#247c95',currency:'room',price:3},
@@ -39,5 +44,16 @@ export const COSMETICS=[
  {id:36,name:'Regards lagon',kind:'premiumEyes',color:'#278ca2',currency:'room',price:20},
  {id:37,name:'Regards améthyste',kind:'premiumEyes',color:'#9660bb',currency:'daily',price:10},
  {id:38,name:'Regards émeraude',kind:'premiumEyes',color:'#368e65',currency:'room',price:30},
+ {id:39,name:'Citrouille des veillées',kind:'costume',asset:'pumpkin',color:'#cd7137',currency:'room',price:160},
+ {id:40,name:'Fantôme en cachemire',kind:'costume',asset:'ghost',color:'#eee6d1',currency:'room',price:200},
+ {id:41,name:'Chauve-souris de minuit',kind:'costume',asset:'bat',color:'#54415f',currency:'daily',price:75},
+ {id:42,name:'Sorcière cannelle',kind:'witch',color:'#53405f',currency:'room',price:25},
+ {id:43,name:'Nœud chauve-souris',kind:'batbow',color:'#654d78',currency:'room',price:18},
+ {id:44,name:'Citrouille cousue',kind:'pumpkinpin',color:'#d87838',currency:'room',price:15},
+ {id:45,name:'Sorcière des brumes',kind:'witch',color:'#5f927d',currency:'daily',price:12},
+ {id:46,name:'Citrouille enchantée',kind:'pumpkinpin',color:'#a47cbd',currency:'daily',price:8},
+ {id:47,name:'Luciole d’automne',kind:'sparkles',color:'#e9ad54',currency:'daily',price:10},
+ {id:48,name:'Maille citrouille',kind:'fabric',color:'#dc8c45',currency:'room',price:30},
+ {id:49,name:'Maille nuit étoilée',kind:'fabric',color:'#75628f',currency:'daily',price:15},
 ] as const;
-export type Wallet={room:number;daily:number;owned:number[]};
+export type Wallet={room:number;daily:number;owned:number[];serverNow?:number};

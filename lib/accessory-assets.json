@@ -82,5 +82,26 @@
     "width": 512,
     "height": 464,
     "sourceSha256": "f24a1985120616432bb3819ef9557ff653b310afa1d513bf8d463225f4967f4a"
+  },
+  {
+    "key": "witch",
+    "url": "/puppets/accessories-v2/witch.webp",
+    "width": 512,
+    "height": 389,
+    "sourceSha256": "9aab802a587cf93c632bb9971d71bc13d000d96becde7735c5ac937878ed588e"
+  },
+  {
+    "key": "batbow",
+    "url": "/puppets/accessories-v2/batbow.webp",
+    "width": 512,
+    "height": 184,
+    "sourceSha256": "118640f9a415968db6fe34bade70bdad99ae46c88b78ea106dc5e1aac25edd2b"
+  },
+  {
+    "key": "pumpkinpin",
+    "url": "/puppets/accessories-v2/pumpkinpin.webp",
+    "width": 509,
+    "height": 512,
+    "sourceSha256": "a4e852ae51bfac67d99b173445d7542b6160095983edcff0de33de07adbf4127"
   }
 ]

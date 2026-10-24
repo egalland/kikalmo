@@ -1,0 +1,48 @@
+{
+  "tool": "Built-in ImageGen",
+  "reference": "Existing Kikalmo felt puppet; style only",
+  "assets": [
+    {
+      "id": 39,
+      "key": "pumpkin",
+      "type": "costume",
+      "prompt": "Use case: stylized-concept. Asset type: transparent collectible avatar sprite for a felt puppet dress-up game. Input image is a STYLE REFERENCE ONLY: match its dimensional wool fibres, handmade seams, soft studio light and warm cozy miniature craft appearance. Front view perfectly symmetrical, centered, orthographic, no perspective, no ground, no text, no watermark, generous transparent margin. Genuine alpha background. A complete plush Halloween pumpkin hood and matching pumpkin orange quilted bodysuit shown as a BUST, cropped flat below the waist, short soft sleeves at sides, no legs. Stem and curled green vine on top. Huge round EMPTY FACE HOLE in hood centered exactly x50% y40% of square image, fully enclosed by orange felt rim. Opening approximately 30% image width and 30% height. Hole is actually transparent, no head, no face, no hair, no eyes in the hole. Black embroidered jack-o-lantern smile and triangles ON THE CHEST only. Rich rust fabric, sage leaf collar.",
+      "productionPath": "public/puppets/costumes/pumpkin.webp"
+    },
+    {
+      "id": 40,
+      "key": "ghost",
+      "type": "costume",
+      "prompt": "Use case: stylized-concept. Asset type: transparent collectible avatar sprite for a felt puppet dress-up game. Input image is a STYLE REFERENCE ONLY: match its dimensional wool fibres, handmade seams, soft studio light and warm cozy miniature craft appearance. Front view perfectly symmetrical, centered, orthographic, no perspective, no ground, no text, no watermark, generous transparent margin. Genuine alpha background. A complete friendly ghost ivory wool hood and matching soft scalloped ghost poncho shown as BUST, flat bottom near waist, no legs. Hood round with a tiny curled tuft. Huge round EMPTY FACE HOLE in hood centered exactly x50% y40% of square image, fully enclosed by padded ivory felt rim. Opening approximately 30% image width and 30% height. Hole is actually transparent, no head no face no hair no eyes. Tiny charcoal embroidered friendly ghosts and stars on lower fabric, lavender trim and little pearl button.",
+      "productionPath": "public/puppets/costumes/ghost.webp"
+    },
+    {
+      "id": 41,
+      "key": "bat",
+      "type": "costume",
+      "prompt": "Use case: stylized-concept. Asset type: transparent collectible avatar sprite for a felt puppet dress-up game. Input image is a STYLE REFERENCE ONLY: match its dimensional wool fibres, handmade seams, soft studio light and warm cozy miniature craft appearance. Front view perfectly symmetrical, centered, orthographic, no perspective, no ground, no text, no watermark, generous transparent margin. Genuine alpha background. A complete cozy bat costume, charcoal purple wool hood with tall soft bat ears and plum lined miniature bat wings attached to shoulders of a knitted bodysuit, BUST to waist no legs. Huge round EMPTY FACE HOLE centered exactly x50% y40% of square image, fully enclosed by dark padded hood rim, approximately 30% image width and 30% height. Hole must be actually transparent no head no face no eyes no hair. Copper moon clasp and lovely stitched wing details. Compact rounded silhouette.",
+      "productionPath": "public/puppets/costumes/bat.webp"
+    },
+    {
+      "id": 42,
+      "key": "witch",
+      "type": "accessory",
+      "prompt": "Use case: stylized-concept. Asset type: transparent collectible avatar sprite for a felt puppet dress-up game. Input image is a STYLE REFERENCE ONLY: match its dimensional wool fibres, handmade seams, soft studio light and warm cozy miniature craft appearance. Front view perfectly symmetrical, centered, orthographic, no perspective, no ground, no text, no watermark, generous transparent margin. Genuine alpha background. ONE separate wearable crooked Halloween witch hat only. Broad slightly wavy black felt brim, tall floppy charcoal purple pointed cone bending to right, burnt orange wool ribbon and tiny antique brass buckle, hand embroidered orange stars. No head, no hair, no mannequin, no body. Simple readable silhouette, rich tactile felt and wool.",
+      "productionPath": "public/puppets/accessories-v2/witch.webp"
+    },
+    {
+      "id": 43,
+      "key": "batbow",
+      "type": "accessory",
+      "prompt": "Use case: stylized-concept. Asset type: transparent collectible avatar sprite for a felt puppet dress-up game. Input image is a STYLE REFERENCE ONLY: match its dimensional wool fibres, handmade seams, soft studio light and warm cozy miniature craft appearance. Front view perfectly symmetrical, centered, orthographic, no perspective, no ground, no text, no watermark, generous transparent margin. Genuine alpha background. ONE separate wearable tiny plush bat shaped bow tie only, wings spread horizontally, deep aubergine felt with lavender embroidered wing seams, tiny soft black central bat head with two ears, amber thread eyes, cute and cozy. No mannequin, no body. Isolated single accessory.",
+      "productionPath": "public/puppets/accessories-v2/batbow.webp"
+    },
+    {
+      "id": 44,
+      "key": "pumpkinpin",
+      "type": "accessory",
+      "prompt": "Use case: stylized-concept. Asset type: transparent collectible avatar sprite for a felt puppet dress-up game. Input image is a STYLE REFERENCE ONLY: match its dimensional wool fibres, handmade seams, soft studio light and warm cozy miniature craft appearance. Front view perfectly symmetrical, centered, orthographic, no perspective, no ground, no text, no watermark, generous transparent margin. Genuine alpha background. ONE separate small jack-o-lantern pumpkin brooch only. Round padded pumpkin orange felt, three lobes, dark plum stitched friendly triangular eyes and smile, tiny green wool stem and leaf. Raised blanket stitch edges and thick tactile wool fibers. No other objects, no mannequin.",
+      "productionPath": "public/puppets/accessories-v2/pumpkinpin.webp"
+    }
+  ]
+}

@@ -15,7 +15,10 @@ for(let shape=0;shape<6;shape++){
   if(!clear)continue;
   const wx=128+(x-128)*c.faceScale,wy=122+(y-122)*c.faceScale;
   const ax=Math.round((wx-c.x)/c.scale),ay=Math.round((wy-c.y)/c.scale);
-  if(ax<0||ay<0||ax>=c.width||ay>=c.height||costume[(ay*c.width+ax)*4+3]>4)continue;
+  if(ax<4||ay<4||ax>=c.width-4||ay>=c.height-4)continue;
+  // Sampling at output-pixel centers can include a neighbouring rim fibre after viewport rescaling.
+  // Test only face-window interiors, safely away from the independently textured helmet.
+  let rim=false;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++)if(costume[((ay+dy)*c.width+ax+dx)*4+3]>4)rim=true;if(rim)continue;
   const [px,py]=screen(wx,wy),i=(py*size+px)*4;
   if(image[i+3]<200)continue;
   assert.ok(Math.max(image[i],image[i+1],image[i+2])<90,'Skin spills outside the selected head silhouette: shape '+shape+' at '+x+','+y);

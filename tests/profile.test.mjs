@@ -16,9 +16,11 @@ assert.equal(cleanAvatar({hair:7}).hair,7);assert.equal(parseProfile(JSON.string
 
 assert.equal(cleanAvatar({cosmetic:25}).costume,25);assert.equal(cleanAvatar({cosmetic:32}).costume,32);assert.equal(cleanAvatar({cosmetic:1}).headwear,1);
 let layered={...DEFAULT_AVATAR,hair:5,accessory:1};for(const id of [1,15,25,34,37])layered=equipItem(layered,id);
-assert.deepEqual(SHOP_SLOTS.map(s=>layered[s]),[1,15,25,34,37]);assert.equal(layered.hair,5);assert.equal(layered.accessory,1);
+assert.deepEqual(SHOP_SLOTS.map(s=>layered[s]),[1,15,25,34,37,undefined]);assert.equal(layered.hair,5);assert.equal(layered.accessory,1);
 const naked=removeItem(layered,'costume');assert.equal(naked.costume,undefined);assert.equal(naked.headwear,1);assert.equal(naked.adornment,15);assert.equal(layered.costume,25);
 const preview=previewItem(layered,33);assert.equal(preview.costume,undefined);assert.equal(preview.headwear,undefined);assert.equal(preview.premiumHair,33);assert.equal(layered.costume,25);assert.equal(layered.premiumHair,34);
 assert.equal(cleanAvatar({...DEFAULT_AVATAR,headwear:25,costume:1,premiumEyes:34,premiumHair:38,adornment:999}).costume,undefined);
-assert.equal(shopSlot(1.5),undefined);assert.equal(shopSlot(39),undefined);assert.equal(shufflePart(layered,'hair').premiumHair,undefined);assert.equal(shufflePart(layered,'eyes').premiumEyes,undefined);
+assert.equal(shopSlot(1.5),undefined);assert.equal(shopSlot(50),undefined);assert.equal(shufflePart(layered,'hair').premiumHair,undefined);assert.equal(shufflePart(layered,'eyes').premiumEyes,undefined);
 console.log('Passed independent wardrobe slots, legacy migration, isolated previews, category validation and removal preserving identity.');
+
+const patterned=equipItem(layered,48);assert.equal(patterned.fabric,48);assert.equal(removeItem(patterned,'fabric').headwear,1);assert.equal(cleanAvatar({...DEFAULT_AVATAR,fabric:39}).fabric,undefined);

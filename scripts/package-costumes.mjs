@@ -3,7 +3,7 @@ import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 const inputs=JSON.parse(readFileSync(process.argv[2],'utf8'));
 mkdirSync('public/puppets/costumes',{recursive:true});
-const output=[];
+const output=process.argv.includes('--append')?JSON.parse(readFileSync('lib/costume-assets.json','utf8')).filter(a=>!inputs.some(i=>i.id===a.id)):[];
 for(const input of inputs){
  const raw=readFileSync(input.path);
  const webp=await sharp(raw).resize({width:1024,height:1024,fit:'inside',withoutEnlargement:true}).webp({quality:92,alphaQuality:100,effort:6}).toBuffer();

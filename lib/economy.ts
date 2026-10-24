@@ -1,5 +1,5 @@
 import type {Avatar} from './profile';
-import {COSMETICS,type Wallet} from './cosmetics';
+import {COSMETICS,HALLOWEEN,isSeasonal,type Wallet} from './cosmetics';
 // Rewards begin with this release; older daily competitions are not re-awarded.
 export const REWARDS_FROM='2026-10-23';
 export function dailyPrize(rank:number|null){return rank===1?5:rank===2?3:rank===3?2:1;}
@@ -30,12 +30,12 @@ export async function allowedCosmetic(db:D1Database,player:string,id:unknown){
 export function purchaseStatement(db:D1Database,player:string,item:typeof COSMETICS[number]){
  // One atomic statement, authoritative price, unique purchase ID, no negative wallet on concurrent buys.
  return db.prepare(`INSERT OR IGNORE INTO economy_ledger(id,player,currency,delta,item,created_at)
- SELECT ?,?,?,?, ?,? WHERE coalesce((SELECT sum(delta) FROM economy_ledger WHERE player=? AND currency=?),0)>=?`)
- .bind('purchase:'+player+':'+item.id,player,item.currency,-item.price,item.id,Date.now(),player,item.currency,item.price);
+ SELECT ?,?,?,?, ?,? WHERE coalesce((SELECT sum(delta) FROM economy_ledger WHERE player=? AND currency=?),0)>=? AND (? IS NULL OR ? < ?)`)
+ .bind('purchase:'+player+':'+item.id,player,item.currency,-item.price,item.id,Date.now(),player,item.currency,item.price,isSeasonal(item.id)?HALLOWEEN.endsAt:null,Date.now(),HALLOWEEN.endsAt);
 }
 
 export async function ownedAppearance(db:D1Database,player:string,avatar:Avatar):Promise<Avatar>{
- const next={...avatar};const slots=['headwear','adornment','costume','premiumHair','premiumEyes'] as const;
+ const next={...avatar};const slots=['headwear','adornment','costume','premiumHair','premiumEyes','fabric'] as const;
  if(!slots.some(slot=>next[slot]))return next;
  const rows=await db.prepare('SELECT item FROM economy_ledger WHERE player=? AND item IS NOT NULL AND delta<0').bind(player).all<{item:number}>();
  const owned=new Set(rows.results.map(r=>r.item));for(const slot of slots)if(next[slot]&&!owned.has(next[slot]!))delete next[slot];return next;

@@ -10,12 +10,12 @@ export const PARTS=[
  {key:'outfit',label:'Vêtements',options:['Chemise rayée','Pull sauge','Veste prune','Sweat marine','Gilet rouille','Tweed et nœud']},
 ] as const;
 export type PartKey=typeof PARTS[number]['key'];
-export type Avatar={shape:number;hair:number;eyes:number;nose:number;mouth:number;accessory:number;outfit:number;color:string;cosmetic?:number;headwear?:number;adornment?:number;costume?:number;premiumHair?:number;premiumEyes?:number};
+export type Avatar={shape:number;hair:number;eyes:number;nose:number;mouth:number;accessory:number;outfit:number;color:string;cosmetic?:number;headwear?:number;adornment?:number;costume?:number;premiumHair?:number;premiumEyes?:number;fabric?:number};
 export type Profile={version:1;name:string;avatar:Avatar};
 export const DEFAULT_AVATAR:Avatar={shape:0,hair:1,eyes:0,nose:1,mouth:0,accessory:0,outfit:0,color:'#f8d779'};
-export const SHOP_SLOTS=['headwear','adornment','costume','premiumHair','premiumEyes'] as const;
+export const SHOP_SLOTS=['headwear','adornment','costume','premiumHair','premiumEyes','fabric'] as const;
 export type ShopSlot=typeof SHOP_SLOTS[number];
-export function shopSlot(id:number):ShopSlot|undefined{if(!Number.isInteger(id))return;if(id>=1&&id<=12||id>=17&&id<=22)return 'headwear';if(id>=13&&id<=16||id>=23&&id<=24)return 'adornment';if(id>=25&&id<=32)return 'costume';if(id>=33&&id<=35)return 'premiumHair';if(id>=36&&id<=38)return 'premiumEyes';}
+export function shopSlot(id:number):ShopSlot|undefined{if(!Number.isInteger(id))return;if(id>=1&&id<=12||id>=17&&id<=22)return 'headwear';if(id>=13&&id<=16||id>=23&&id<=24)return 'adornment';if(id>=25&&id<=32)return 'costume';if(id>=33&&id<=35)return 'premiumHair';if(id>=36&&id<=38)return 'premiumEyes';if(id>=39&&id<=41)return 'costume';if(id===42||id===45)return 'headwear';if(id===43||id===44||id===46||id===47)return 'adornment';if(id===48||id===49)return 'fabric';}
 export function equipItem(avatar:Avatar,id:number):Avatar{const slot=shopSlot(id),next=cleanAvatar(avatar);if(slot)next[slot]=id;return next;}
 export function removeItem(avatar:Avatar,slot:ShopSlot):Avatar{const next=cleanAvatar(avatar);delete next[slot];return next;}
 export function previewItem(avatar:Avatar,id:number):Avatar{const next=equipItem(avatar,id),slot=shopSlot(id);if(slot!=='costume')delete next.costume;if(slot==='premiumHair'||slot==='premiumEyes')delete next.headwear;return next;}

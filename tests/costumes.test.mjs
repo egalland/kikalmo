@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
 import {renderPuppet,puppetPose} from '../scripts/puppet-render.mjs';
 const assets=JSON.parse(readFileSync('lib/costume-assets.json','utf8'));
-assert.equal(assets.length,8);
+assert.equal(assets.length,11);
 let rendered=0;
 for(const asset of assets){
  const {data,info}=await sharp('public'+asset.url).ensureAlpha().raw().toBuffer({resolveWithObject:true});

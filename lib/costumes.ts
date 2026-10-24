@@ -1,5 +1,5 @@
 import assets from './costume-assets.json';
-export const COSTUME_IDS=[25,26,27,28,29,30,31,32] as const;
+export const COSTUME_IDS=[25,26,27,28,29,30,31,32,39,40,41] as const;
 export function costumeAsset(id?:number){return assets.find(asset=>asset.id===id);}
 /** Uniform asset scale: no stretching of the felt, regardless of the original sprite size. */
 export function costumePlacement(id?:number){

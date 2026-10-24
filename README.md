@@ -6,9 +6,15 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## La petite mercerie et Halloween 2026
+
+Bouton **Boutique** visible dans l’en-tête, page dédiée `/boutique`, ambiance mercerie avec vitrine saisonnière, articles mis en avant et navigation précédent/suivant. L’atelier conserve l’équipement du personnage ; acheter ou examiner ne l’équipe jamais automatiquement.
+
+11 pièces Halloween : trois costumes en feutre, chapeaux de sorcière, broches citrouille, nœud chauve-souris, lucioles et deux mailles à motifs. Fermeture des achats le **10 novembre 2026 à 00 h, heure de Paris** ; les pièces déjà achetées restent utilisables. Le compte à rebours est dynamique, avec contrôle d’expiration dans l’API et la requête d’achat. Les motifs suivent le masque du visage sélectionné. [Prompts ImageGen](docs/halloween-prompts.json) · [Intégration et règles](docs/costume-assets.md).
+
 ## Collection et superpositions
 
-Cinq emplacements indépendants : couvre-chef, broche/effet, costume, coiffure de collection et regard de collection. Les anciens profils migrent automatiquement leur unique cosmétique vers son emplacement. Les cheveux et accessoires du visage restent sous les casques ; broches et effets passent devant les tenues. Les chapeaux sont ajustés à la largeur du visage et conservent les mèches sous leur bord. Les cartes verrouillées ouvrent le bon article dans la boutique. Un achat ne modifie jamais le personnage équipé.
+Six emplacements indépendants : couvre-chef, broche/effet, costume, coiffure de collection, regard de collection et maille à motifs. Les anciens profils migrent automatiquement leur unique cosmétique vers son emplacement. Les cheveux et accessoires du visage restent sous les casques ; broches et effets passent devant les tenues. Les chapeaux sont ajustés à la largeur du visage et conservent les mèches sous leur bord. Les cartes verrouillées ouvrent le bon article dans la boutique. Un achat ne modifie jamais le personnage équipé.
 
 ## Accessoires textiles et formes de visage
 
@@ -20,7 +26,7 @@ Huit casques et combinaisons en laine et feutre : cosmonaute, scaphandrier, drag
 
 ## Progression et boutique
 
-- 38 articles : 24 accessoires, 8 costumes, 3 coiffures et 3 regards. **Boutique** sert aux achats et aux aperçus ; **Mon personnage** sert à équiper la collection. Les éléments de base restent gratuits.
+- 49 articles, dont 11 pièces Halloween en série éphémère. **Boutique** sert aux achats et aux aperçus ; **Mon personnage** sert à équiper la collection. Les éléments de base restent gratuits.
 - Premier à répondre correctement dans une manche : 1 pièce de salon. Accessoires à partir de 2 pièces ; costumes de 80 à 250 pièces de salon ou de 40 à 120 éclats. Les achats antérieurs restent acquis sans supplément.
 - Monnaie quotidienne indépendante : 5 / 3 / 2 éclats au podium final ; 1 éclat aux autres participants ayant envoyé au moins une proposition, même sans résoudre le défi. Une simple ouverture ne rapporte rien.
 - Classement quotidien : moins d’essais, puis heure de résolution, puis identifiant stable en cas d’égalité. Les gains sont calculés sur les journées closes, à la requête suivante après minuit à Paris, et chaque gain n’est crédité qu’une fois.
