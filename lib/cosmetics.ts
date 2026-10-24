@@ -1,5 +1,5 @@
 export type Currency='room'|'daily';
-export const CURRENCY_LABELS={room:'Pelotes de salon',daily:'Étoiles de laine'};
+export const CURRENCY_LABELS={room:'Pièces de laine',daily:'Étoiles de laine'};
 export const HALLOWEEN={id:'halloween-2026',name:'Les mailles d’Halloween',endsAt:Date.parse('2026-11-10T00:00:00+01:00'),endLabel:'10 novembre à 00 h · heure de Paris'} as const;
 export const SEASONAL_IDS=[39,40,41,42,43,44,45,46,47,48,49] as const;
 export function isSeasonal(id:number){return (SEASONAL_IDS as readonly number[]).includes(id);}

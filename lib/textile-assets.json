@@ -16,5 +16,11 @@
     "path": "public/branding/textile/felt.webp",
     "sourceSha256": "bb2448a118e23df610b083d5e839a94614b1f3e83c6617f67c7f22917ba4a053",
     "bytes": 26596
+  },
+  {
+    "key": "piece",
+    "path": "public/branding/textile/piece.webp",
+    "sourceSha256": "19f1e558f6ffa0d7382dcfd9721e0071cf8b34b4b282ebefcd1ce41cf2698bfa",
+    "bytes": 15526
   }
 ]

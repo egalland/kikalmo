@@ -12,10 +12,19 @@ const text=n=>Array.isArray(n)?n.map(text).join(''):n&&typeof n==='object'?text(
 const {DEFAULT_AVATAR}=await import(profile),avatar={...DEFAULT_AVATAR,headwear:1,adornment:15,costume:26};const original=JSON.stringify(avatar),values=[],deps=[];let cursor,tree,props,requests=[],returned=0;
 const oldFetch=globalThis.fetch,oldNow=Date.now;Date.now=()=>Date.parse('2026-10-23T20:00:00Z');
 try{
- props={avatar,wallet:{room:500,daily:200,owned:[]},onWallet:w=>props.wallet=w,onCharacter:()=>returned++,focusId:34};
+ props={avatar,wallet:{room:500,daily:200,owned:[]},onWallet:w=>props.wallet=w,onCharacter:()=>returned++,focusId:undefined};
  globalThis.wardrobeHooks={state(init){const i=cursor++;if(!(i in values))values[i]=init;return[values[i],v=>values[i]=typeof v==='function'?v(values[i]):v];},ref(init){const i=cursor++;return values[i]??=( {current:init});},effect(fn,next){const i=cursor++;if(!deps[i]||next.some((v,k)=>v!==deps[i][k])){deps[i]=next;fn();}}};
  const render=()=>{cursor=0;tree=Shop(props);return flatten(tree);};const button=label=>flatten(tree).find(n=>n.type==='button'&&text(n)===label);
- render();render();assert.ok(flatten(tree).some(n=>n.type==='h4'&&text(n)==='Tresses violettes'),'Locked item opens its specific shop category and feature');
+ render();render();
+ const checks=()=>flatten(tree).filter(n=>n.type==='input'&&n.props.type==='checkbox');
+ const catalog=()=>flatten(tree).filter(n=>n.props?.['aria-label']?.startsWith('Examiner '));
+ assert.equal(catalog().length,49,'Default view must contain all 49 items');assert.ok(checks().every(n=>n.props.checked));
+ checks()[1].props.onChange();render();assert.ok(catalog().length>10&&catalog().length<49);assert.ok(!catalog().some(n=>n.props['aria-label']==='Examiner Chauve-souris de minuit'));
+ checks()[0].props.onChange();render();assert.equal(catalog().length,0);assert.ok(text(tree).includes('Cochez au moins une monnaie'));
+ checks()[1].props.onChange();render();assert.ok(catalog().some(n=>n.props['aria-label']==='Examiner Chauve-souris de minuit'));assert.ok(!catalog().some(n=>n.props['aria-label']==='Examiner Citrouille des veillées'));
+ checks()[0].props.onChange();render();assert.equal(catalog().length,49);
+ props.wallet={room:0,daily:200,owned:[]};render();const batCard=flatten(tree).find(n=>n.props?.className?.startsWith('shop-card')&&text(n).includes('Chauve-souris de minuit'));assert.equal(flatten(batCard).find(n=>n.props?.className==='shop-action').props.disabled,false);const pumpkinCard=flatten(tree).find(n=>n.props?.className?.startsWith('shop-card')&&text(n).includes('Citrouille des veillées'));assert.equal(flatten(pumpkinCard).find(n=>n.props?.className==='shop-action').props.disabled,true);
+ props.wallet={room:500,daily:200,owned:[]};props.focusId=34;render();render();assert.ok(flatten(tree).some(n=>n.type==='h4'&&text(n)==='Tresses violettes'),'Locked item opens its specific shop category and feature');
  globalThis.fetch=async(path,opts)=>{requests.push([path,JSON.parse(opts.body)]);return Response.json({room:465,daily:200,owned:[34]});};
  await button('Acheter').props.onClick();await new Promise(r=>setImmediate(r));render();assert.deepEqual(requests,[['/api/economy',{item:34}]]);assert.ok(props.wallet.owned.includes(34));assert.equal(JSON.stringify(avatar),original,'Buying and previews must never equip or erase any original slot');assert.ok(!button('Acheter'),'Owned item cannot be purchased again');
  flatten(tree).find(n=>n.type==='button'&&text(n).includes('Retour à Mon personnage')).props.onClick();assert.equal(returned,1);
@@ -23,5 +32,5 @@ try{
  const rayon=flatten(tree).find(n=>n.type==='select');rayon.props.onChange({target:{value:'premiumEyes'}});render();assert.ok(text(tree).includes('Regards lagon'));assert.equal(JSON.stringify(avatar),original,'Mobile category picker changes only the shop preview');
  props.focusId=39;render();render();assert.ok(text(tree).includes('Encore 18 jours'));assert.ok(text(tree).includes('Citrouille des veillées'));assert.equal(JSON.stringify(avatar),original);
  Date.now=()=>Date.parse('2026-11-10T00:00:00+01:00');values.length=0;deps.length=0;props.focusId=undefined;render();render();assert.ok(text(tree).includes('Collection terminée'));assert.ok(!flatten(tree).some(n=>n.props?.['aria-label']==='Examiner Citrouille des veillées'));
- console.log('Passed shop UI: locked-item deep link, purchase-only request, wallet unlock, no automatic equip, independent preview and return to character.');
+ console.log('Passed shop UI: all items by default, two independent currency checkboxes, empty filters, correct currency balances,  locked-item deep link, purchase-only request, wallet unlock, no automatic equip, independent preview and return to character.');
 }finally{globalThis.fetch=oldFetch;Date.now=oldNow;delete globalThis.wardrobeHooks;}

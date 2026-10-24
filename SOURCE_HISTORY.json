@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "454f44a9531f81919acaac57ef69035f34c6c95a",
+  "source_head": "b1244ff21ba13a613dafbf1f735a41b56fc61570",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -431,6 +431,11 @@
       "source_sha": "454f44a9531f81919acaac57ef69035f34c6c95a",
       "source_author": "Codex",
       "message": "Unify Kikalmo textile identity with wool currencies, felt controls and stitched surfaces"
+    },
+    {
+      "source_sha": "b1244ff21ba13a613dafbf1f735a41b56fc61570",
+      "source_author": "Codex",
+      "message": "Add stitched felt coin, show all shop items with combined currency checkboxes and fit default accessories"
     }
   ]
 }

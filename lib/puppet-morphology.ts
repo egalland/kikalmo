@@ -6,8 +6,8 @@ export function outfitPlacement(shape:number,body:number){const m=morphology(sha
 export function accessoryTarget(col:number,shape:number,body:number){
  const m=morphology(shape,body);
  if(col===3)return {x:m.brow.right-3,y:m.forehead+25,width:38,height:38};
- if(col===4)return {x:128,y:145,width:m.cheek.width*.8,height:28};
- if(col===5)return {x:128,y:149,width:Math.max(65,Math.min(88,m.jaw.width*.65)),height:25};
- if(col===6)return {x:128,y:m.chin+24,width:76,height:48};
- return {x:128,y:110,width:143,height:55};
+ if(col===4)return {x:128,y:142,width:m.cheek.width*.68,height:20};
+ if(col===5)return {x:128,y:150,width:Math.max(66,Math.min(86,m.jaw.width*.64)),height:30};
+ if(col===6)return {x:128,y:m.chin+30,width:92,height:68};
+ return {x:128,y:110,width:Math.max(138,Math.min(151,m.bounds.width*.79)),height:64};
 }

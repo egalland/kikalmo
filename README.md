@@ -6,11 +6,17 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## Catalogue et accessoires de base
+
+La boutique affiche tous les articles disponibles par défaut, avec les deux monnaies cochées. Les cases de monnaie sont indépendantes et se combinent avec les rayons ; un état vide explique de recocher une monnaie si les deux sont désactivées. Prix, disponibilité du bouton d’achat et navigation entre articles utilisent la monnaie propre à chaque article. Halloween conserve sa vitrine et son filtre dédié.
+
+Les accessoires de base sont rendus à échelle uniforme : lunettes, lunettes de soleil, fleur, moustache et foulard conservent leurs proportions. Les joues sont espacées et atténuées ; le foulard passe sous le menton, lunettes et moustache derrière le nez, et la fleur devant la coiffure. Validation sur 108 assemblages et contrôle des pixels du nez.
+
 ## Identité textile Kikalmo
 
-Le logo cousu et les marionnettes servent de référence aux composants du site. Monnaie de salon : pelote dorée ; monnaie quotidienne : étoile de laine violette. Les boutons, onglets, cartes, fenêtres, champs et menus partagent une texture de feutre, des coutures, un relief discret et des états cohérents. Les zones de texte et de réponse gardent des fonds sobres ; le menu mobile et les interactions existantes sont conservés.
+Le logo cousu et les marionnettes servent de référence aux composants du site. Monnaie de salon : pièce ronde en feutre doré, bord cousu et K brodé ; monnaie quotidienne : étoile de laine violette. Les boutons, onglets, cartes, fenêtres, champs et menus partagent une texture de feutre, des coutures, un relief discret et des états cohérents. Les zones de texte et de réponse gardent des fonds sobres ; le menu mobile et les interactions existantes sont conservés.
 
-Les identifiants serveur `room` / `daily`, les tarifs, les soldes et les gains restent identiques. Seuls les noms affichés et les représentations visuelles changent. Images produites avec l’outil ImageGen intégré, assorties au logo existant : `public/branding/textile/` ; [prompts complets](docs/textile-prompts.json) ; packaging reproductible : `node scripts/package-textile.mjs <manifest.json>`.
+Les identifiants serveur `room` / `daily`, les tarifs, les soldes et les gains restent identiques. Seuls les noms affichés et les représentations visuelles changent. Images produites avec l’outil ImageGen intégré, assorties au logo existant : `public/branding/textile/` ; [prompts des matières et de l’étoile](docs/textile-prompts.json), [prompt de la pièce cousue](docs/currency-coin-prompt.json) ; packaging reproductible : `node scripts/package-textile.mjs <manifest.json>`.
 
 ## Mobile et tarifs de saison
 
