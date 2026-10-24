@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen built-in",
+  "use_case": "precise-object-edit",
+  "reference": "public/branding/kikalmo-stitched.webp",
+  "asset": "public/branding/kikalmo-halloween.webp",
+  "prompt": "Use case: precise-object-edit. Edit target: the supplied Kikalmo stitched wordmark. Create a Halloween seasonal version of this exact logo for a small website header. Text verbatim: Kikalmo (K i k a l m o). Preserve recognizable letter shapes, single-line arrangement and handmade puffy felt / wool stitching. Recolor orange vowels pumpkin orange and cream consonants warm ivory, introduce deep plum accents subtly. Add a small felt witch hat perched above the initial K and a tiny wool pumpkin beside the final o; tasteful miniature embroidered star details. Cozy playful Halloween, readable at 180px wide. No tagline, no other text, no rectangular background. Entire logo isolated on genuinely transparent background, compact wide horizontal composition, ample margin to avoid clipping. Soft realistic fibers and dimensional embroidery matching the original."
+}

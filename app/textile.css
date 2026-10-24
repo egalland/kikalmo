@@ -32,3 +32,9 @@ body.textile-ui{background-color:var(--wool-cream);background-image:linear-gradi
 .textile-ui .modal-backdrop{z-index:100}
 /* The atelier itself scrolls; its controls must not create a second scroll area. */
 .textile-ui .atelier-modal .profile-controls{max-height:none;overflow:visible;padding-right:0}
+
+/* Compact, functional shop header and readable earning hints. */
+.textile-ui .shop-heading{align-items:center;margin-top:26px}
+.textile-ui .shop-balances>span{gap:8px;max-width:190px}
+.textile-ui .shop-balances small{font-size:11px;line-height:1.45;color:#675c46}
+.textile-ui .boutique-wordmark .brand-logo-halloween{height:auto}

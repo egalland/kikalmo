@@ -1,13 +1,17 @@
 'use client';
-import {useEffect,useId,useRef} from 'react';
+import {useEffect,useId,useRef,useState} from 'react';
+import {HALLOWEEN} from '../../lib/cosmetics';
 
 // Keep the approved lettering intact at rest; each region moves independently.
 const edges=[0,258,339,518,679,777,1003,1200];
 const vowels=new Set([1,3,6]);
 export default function AnimatedLogo(){
  const id=useId().replace(/:/g,'');
+ const [halloween,setHalloween]=useState(false);
+ useEffect(()=>{const update=()=>setHalloween(Date.now()>=Date.parse('2026-10-23T00:00:00+02:00')&&Date.now()<HALLOWEEN.endsAt);update();const timer=setInterval(update,60000);return()=>clearInterval(timer);},[]);
  const letters=useRef<(SVGGElement|null)[]>([]);
  useEffect(()=>{
+  if(halloween)return;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let timer:ReturnType<typeof setTimeout>|undefined;
   let animation:Animation|null=null;
@@ -39,7 +43,8 @@ export default function AnimatedLogo(){
   reduced.addEventListener('change',resume);
   schedule();
   return()=>{disposed=true;pause();document.removeEventListener('visibilitychange',resume);reduced.removeEventListener('change',resume);};
- },[]);
+ },[halloween]);
+ if(halloween)return <img className="brand-logo brand-logo-halloween" src="/branding/kikalmo-halloween.webp" width="1200" height="345" alt="Kikalmo · Halloween"/>;
  return <svg className="brand-logo" viewBox="0 0 1200 307" width="1200" height="307" role="img" aria-label="Kikalmo" style={{overflow:'visible'}}>
   <defs>{edges.slice(0,-1).map((left,index)=><clipPath key={index} id={`${id}-letter-${index}`}><rect x={left} y="0" width={edges[index+1]-left} height="307"/></clipPath>)}</defs>
   {edges.slice(0,-1).map((left,index)=><g key={index} ref={element=>{letters.current[index]=element;}} style={{transformOrigin:`${(left+edges[index+1])/2}px 285px`}} aria-hidden="true"><image href="/branding/kikalmo-stitched.webp" width="1200" height="307" clipPath={`url(#${id}-letter-${index})`}/></g>)}
