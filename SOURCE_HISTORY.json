@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "62fddcea95969a66cb57463d27e9e23b512f178a",
+  "source_head": "12b08fe4315ab664aa141dbe938cc5691adeb90e",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -446,6 +446,11 @@
       "source_sha": "62fddcea95969a66cb57463d27e9e23b512f178a",
       "source_author": "Codex",
       "message": "Add mutual friends, live room joining, friend avatars on cards and shared desktop/mobile room navigation"
+    },
+    {
+      "source_sha": "12b08fe4315ab664aa141dbe938cc5691adeb90e",
+      "source_author": "Codex",
+      "message": "Simplify the empty daily word champion message"
     }
   ]
 }
