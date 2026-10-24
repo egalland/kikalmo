@@ -6,6 +6,12 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## Mobile et tarifs de saison
+
+Sur mobile et tablette, le menu regroupe personnage, statistiques, son et règles. La boutique garde un raccourci visible. Sur la page boutique, le choix de rayon passe par une liste déroulante ; monnaies et actions d’achat restent faciles à toucher.
+
+Tarifs Halloween : costumes à 18 / 24 pièces de salon ou 8 éclats ; autres articles à 2–6 pièces ou 1–3 éclats. Total de la collection quotidienne : 16 éclats, soit 16 participations ordinaires sans podium. Le costume quotidien demande 8 participations ; les podiums accélèrent cette progression. Les anciennes dépenses Halloween sont ajustées automatiquement par un crédit de la différence, une seule fois par achat, dans la monnaie d’origine.
+
 ## La petite mercerie et Halloween 2026
 
 Bouton **Boutique** visible dans l’en-tête, page dédiée `/boutique`, ambiance mercerie avec vitrine saisonnière, articles mis en avant et navigation précédent/suivant. L’atelier conserve l’équipement du personnage ; acheter ou examiner ne l’équipe jamais automatiquement.

@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "081428aedf389a5357a335f7cbc6389ac392170d",
+  "source_head": "9f26556fcdae95875e743f8bfaf011222617ac82",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -421,6 +421,11 @@
       "source_sha": "081428aedf389a5357a335f7cbc6389ac392170d",
       "source_author": "Codex",
       "message": "Add dedicated cozy yarn shop, eleven Halloween collectibles and server-enforced seasonal expiry"
+    },
+    {
+      "source_sha": "9f26556fcdae95875e743f8bfaf011222617ac82",
+      "source_author": "Codex",
+      "message": "Rebalance attainable Halloween prices, credit prior price differences and simplify mobile navigation"
     }
   ]
 }

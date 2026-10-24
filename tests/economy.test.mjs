@@ -51,3 +51,19 @@ assert.equal((await purchaseStatement(db,p,COSMETICS.find(c=>c.id===48)).run()).
 assert.equal((await ownedAppearance(db,p,{shape:0,hair:1,eyes:0,nose:1,mouth:0,accessory:0,outfit:0,color:'#f8d779',costume:39})).costume,39,'Owned event costume still equipable after expiry');
 assert.equal((await api.POST(req('POST',{item:3}))).status,200,'Permanent stock remains buyable');
 console.log('Passed Halloween expiry: Paris midnight, no late purchase, permanent stock available and prior purchases retained.');
+
+const eventItems=COSMETICS.filter(c=>isSeasonal(c.id));
+assert.equal(eventItems.filter(c=>c.currency==='daily').reduce((n,c)=>n+c.price,0),16,'Entire daily collection attainable with sixteen ordinary daily participations');
+assert.equal(eventItems.filter(c=>c.currency==='room').reduce((n,c)=>n+c.price,0),58,'Room collection attainable in fifty-eight first-place rounds');
+assert.deepEqual(eventItems.filter(c=>c.kind==='costume').map(c=>c.price),[18,24,8]);
+// Reprice previous purchases using the actual ledger charge, with no duplicate credits.
+const early=players[5];
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('early-credit-room',early,'room',160,null,now);
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('early-credit-daily',early,'daily',100,null,now);
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('purchase:'+early+':39',early,'room',-160,39,now);
+sql.prepare('INSERT INTO economy_ledger VALUES(?,?,?,?,?,?)').run('purchase:'+early+':41',early,'daily',-75,41,now);
+const adjusted=await wallet(db,early);assert.equal(adjusted.room,142);assert.equal(adjusted.daily,92);assert.deepEqual(adjusted.owned.sort((a,b)=>a-b),[39,41]);assert.deepEqual(await wallet(db,early),adjusted,'Reopening the shop never refunds twice');
+now=HALLOWEEN.endsAt-1000;
+const earlyBuy=await api.POST(new Request('https://test.local/api/economy',{method:'POST',headers:{Cookie:'sv_player='+early,Origin:'https://test.local','Content-Type':'application/json'},body:JSON.stringify({item:40})}));assert.equal(earlyBuy.status,200);assert.equal((await wallet(db,early)).room,118);
+assert.equal(sql.prepare('SELECT count(*) AS n FROM economy_ledger WHERE player=? AND id LIKE ?').get(early,'price-adjustment:%').n,2,'Exactly one credit per old purchase, none for purchases at the new price');
+console.log('Passed seasonal balance: reachable budgets, actual price-difference refunds, no duplicate credit, original ownership preserved.');
