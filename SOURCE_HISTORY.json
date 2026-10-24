@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "221d00773b147721b59db4b4a8edfd0c2d0e4ce9",
+  "source_head": "431ea5dee58c05a302c00ef7c05c04fa2ddcbe49",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -481,6 +481,11 @@
       "source_sha": "221d00773b147721b59db4b4a8edfd0c2d0e4ce9",
       "source_author": "Codex",
       "message": "Separate private friend messages from room chat, hide existing-friend Add buttons and expose blocking controls"
+    },
+    {
+      "source_sha": "431ea5dee58c05a302c00ef7c05c04fa2ddcbe49",
+      "source_author": "Codex",
+      "message": "Fix avatar option alignment, readable mobile choices, dismissible creation and overlay keyboard/focus handling"
     }
   ]
 }

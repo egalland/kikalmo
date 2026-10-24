@@ -4,5 +4,5 @@ export function CurrencyIcon({currency,className=''}:{currency:CurrencyType;clas
  return <img className={'wool-token wool-token-'+currency+' '+className} src={'/branding/textile/'+(currency==='room'?'piece':'etoile')+'.webp'} width="32" height="32" alt="" aria-hidden="true" draggable={false}/>;
 }
 export function CurrencyAmount({currency,amount}:{currency:CurrencyType;amount:number|string}){
- return <span className="wool-amount" role="img" aria-label={String(amount)+' '+CURRENCY_LABELS[currency].toLocaleLowerCase('fr')}><CurrencyIcon currency={currency}/><span aria-hidden="true">{amount}</span></span>;
+ return <span className="wool-amount" role="img" aria-label={String(amount)+' '+(Number(amount)===1?(currency==='room'?'pièce de laine':'étoile de laine'):CURRENCY_LABELS[currency].toLocaleLowerCase('fr'))}><CurrencyIcon currency={currency}/><span aria-hidden="true">{amount}</span></span>;
 }

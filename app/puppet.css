@@ -52,3 +52,14 @@
 .game-layout .leaderboard li.solved-first{background:#ffe7a0;border-color:#c49a3b;box-shadow:inset 0 0 0 1px #c49a3b;border-radius:10px}
 .game-layout .leaderboard li.solved-player .player-name>span,.game-layout .leaderboard li.solved-player .solved-check{color:#245633}
 .game-layout .leaderboard li.solved-first .player-name>span,.game-layout .leaderboard li.solved-first .solved-check{color:#77500b}
+
+/* One explicit column prevents the old flex-end alignment from shifting thumbnails. */
+.part-options>button{grid-template-columns:minmax(0,1fr);justify-content:center}
+.part-options>button>.felt-avatar{grid-column:1;justify-self:center;left:auto;bottom:auto}
+.part-options>button>span:last-of-type{grid-column:1}
+@media(max-width:650px){
+ .part-options{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+ .part-options>button{height:96px;min-height:96px;grid-template-rows:minmax(0,1fr) 28px}
+ .part-options>button>.felt-avatar{max-width:52px;max-height:52px}
+ .part-options>button>span:last-of-type{white-space:normal;overflow-wrap:anywhere;font-size:9px;line-height:13px;min-height:26px;display:grid;place-items:center}
+}
