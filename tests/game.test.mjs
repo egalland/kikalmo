@@ -32,3 +32,17 @@ assert.equal(s.game,match);assert.equal(s.deadline,now+35000);assert.equal(s.pha
 // A newly arriving player may also resume the still-paused room, but not inherit a score.
 s=fresh();s.players=[{...player('old',now),score:200}];begin(s,'cinema',now);depart(s,'old',now+1000);
 s.players.push(player('new',now+2000));s=advance(s,now+2000);assert.equal(s.players[0].score,0);assert.equal(s.phase,'countdown');
+
+// Room rotation survives an empty room and does not reveal future question indices.
+let rotation=fresh(),previous=[];
+for(let game=0;game<13;game++){
+ rotation.players=[player('rotation',now)];begin(rotation,'general',now);
+ const blocked=new Set(previous.slice(-100).map(i=>normalize(QUESTIONS[i].answer)));
+ assert.equal(rotation.deck.length,10);assert.ok(rotation.deck.every(i=>!blocked.has(normalize(QUESTIONS[i].answer))));
+ assert.equal(new Set(rotation.deck.map(i=>normalize(QUESTIONS[i].answer))).size,10);
+ assert.equal(view(rotation,'rotation',now).recentQuestions,undefined);
+ previous.push(...rotation.deck);
+ if(game===3){rotation.players=[];rotation=advance(rotation,now);assert.equal(rotation.phase,'empty');assert.ok(rotation.recentQuestions.length);}
+}
+assert.ok(rotation.recentQuestions.length<=100);
+console.log('Passed room rotation: last ten decks excluded, unique answers, empty-room persistence, bounded private history and legacy state compatibility.');

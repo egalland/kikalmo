@@ -51,3 +51,374 @@ const entries=[
  ['Qui vole un œuf vole un bœuf','Une petite malhonnêteté peut en annoncer une grande.','Un petit produit du poulailler et un grand bovin.'],
 ];
 export const DAILY_QUESTIONS:(Question&{dailyHint:string})[]=entries.map(([answer,hint,dailyHint])=>({answer,hint,dailyHint,theme:'daily',wiki:''}));
+
+// Longer, reviewed additions with linked definition sources, reserved for the daily mode.
+DAILY_QUESTIONS.push(...[
+  {
+    "answer": "Arriver comme un cheveu sur la soupe",
+    "hint": "Arriver de façon soudaine, par hasard.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 7 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/arriver_comme_un_cheveu_sur_la_soupe"
+  },
+  {
+    "answer": "Au royaume des aveugles, les borgnes sont rois",
+    "hint": "Avec une aptitude ou un savoir médiocre, on brille au milieu des inaptes ou des ignorants.",
+    "dailyHint": "Expression en 8 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/au_royaume_des_aveugles,_les_borgnes_sont_rois"
+  },
+  {
+    "answer": "Avoir le rythme dans la peau",
+    "hint": "Être naturellement doué pour la musique et pour la danse.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_le_rythme_dans_la_peau"
+  },
+  {
+    "answer": "Avoir du sang dans les veines",
+    "hint": "Être courageux voire téméraire.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_du_sang_dans_les_veines"
+  },
+  {
+    "answer": "Avoir le fin mot de l’histoire",
+    "hint": "Obtenir une explication, la clé d’un mystère, la révélation d’un secret.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_le_fin_mot_de_l’histoire"
+  },
+  {
+    "answer": "Avoir du travail sur la planche",
+    "hint": "Avoir du travail à faire encore.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_du_travail_sur_la_planche"
+  },
+  {
+    "answer": "Avoir du plomb dans la cervelle",
+    "hint": "Être réfléchi, avoir du bon sens.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_du_plomb_dans_la_cervelle"
+  },
+  {
+    "answer": "Avoir les nerfs à fleur de peau",
+    "hint": "Être irrité, énervé.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "aliases": [
+      "Avoir les nerfs à vif"
+    ],
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_les_nerfs_à_fleur_de_peau"
+  },
+  {
+    "answer": "Avoir le cœur au bord des lèvres",
+    "hint": "Avoir envie de vomir.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_le_cœur_au_bord_des_lèvres"
+  },
+  {
+    "answer": "Avoir le couteau entre les dents",
+    "hint": "Être sous tension, prêt à se venger.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_le_couteau_entre_les_dents"
+  },
+  {
+    "answer": "Avoir le courage de ses opinions",
+    "hint": "Soutenir ses opinions en public.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_le_courage_de_ses_opinions"
+  },
+  {
+    "answer": "Avoir les yeux en face des trous",
+    "hint": "Comprendre normalement.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_les_yeux_en_face_des_trous"
+  },
+  {
+    "answer": "Avoir le sang qui monte à la tête",
+    "hint": "Commencer à s'énerver.",
+    "dailyHint": "Expression en 8 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_le_sang_qui_monte_à_la_tête"
+  },
+  {
+    "answer": "Avoir le moral dans les chaussettes",
+    "hint": "Ne plus avoir le moral.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_le_moral_dans_les_chaussettes"
+  },
+  {
+    "answer": "Avoir les dents du fond qui baignent",
+    "hint": "Avoir trop mangé et être pris de nausées, être sur le point de vomir.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_les_dents_du_fond_qui_baignent"
+  },
+  {
+    "answer": "Avoir les dents qui rayent le parquet",
+    "hint": "Afficher une ambition démesurée.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_les_dents_qui_rayent_le_parquet"
+  },
+  {
+    "answer": "Avoir les yeux plus grands que le ventre",
+    "hint": "Prendre plus qu’on ne peut manger, avoir plus de convoitise que d’appétit.",
+    "dailyHint": "Expression en 8 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_les_yeux_plus_grands_que_le_ventre"
+  },
+  {
+    "answer": "Avoir eu son permis dans une pochette-surprise",
+    "hint": "Être un piètre conducteur, comme si on avait obtenu le permis de conduire sans passer d’examen.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/avoir_eu_son_permis_dans_une_pochette-surprise"
+  },
+  {
+    "answer": "Bien mal acquis ne profite jamais",
+    "hint": "Un bien mal acquis ne profite pas à celui qui le possède.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 4 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/bien_mal_acquis_ne_profite_jamais"
+  },
+  {
+    "answer": "Boire la coupe jusqu’à la lie",
+    "hint": "Assumer les conséquences désastreuses de ses actions.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/boire_la_coupe_jusqu’à_la_lie"
+  },
+  {
+    "answer": "Brosser dans le sens du poil",
+    "hint": "Flatter une personne dans le but d’obtenir sa confiance.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 7 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/brosser_dans_le_sens_du_poil"
+  },
+  {
+    "answer": "Brûler la chandelle par les deux bouts",
+    "hint": "User son corps par un mode de vie frénétique ; vivre de manière trop intense.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 6 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/brûler_la_chandelle_par_les_deux_bouts"
+  },
+  {
+    "answer": "Cacher la poussière sous le tapis",
+    "hint": "Dissimuler, remettre à plus tard quelque chose, généralement embarrassant.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 6 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/cacher_la_poussière_sous_le_tapis"
+  },
+  {
+    "answer": "Ce n’est pas tous les jours dimanche",
+    "hint": "En bonne part, souligne que l’on peut se permettre le dimanche ce qui ne l’est pas les autres jours de la semaine.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/ce_n’est_pas_tous_les_jours_dimanche"
+  },
+  {
+    "answer": "Ce n’est pas à un vieux singe qu’on apprend à faire des grimaces",
+    "hint": "Ce n’est pas à un expert que l’on apprend sa spécialité.",
+    "dailyHint": "Expression en 13 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/ce_n’est_pas_à_un_vieux_singe_qu’on_apprend_à_faire_des_grimaces"
+  },
+  {
+    "answer": "Chacun pour soi, Dieu pour tous",
+    "hint": "L’individualisme est préférable à la solidarité.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 6 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/chacun_pour_soi,_Dieu_pour_tous"
+  },
+  {
+    "answer": "Charité bien ordonnée commence par soi-même",
+    "hint": "Il faut penser à soi avant de s’occuper des autres.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 7 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/charité_bien_ordonnée_commence_par_soi-même"
+  },
+  {
+    "answer": "Chercher des poux sur la tête",
+    "hint": "Importuner, harceler sur des points de détail ; quereller pour des choses oiseuses.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 8 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/chercher_des_poux_sur_la_tête"
+  },
+  {
+    "answer": "Choisir entre la peste et le choléra",
+    "hint": "Dilemme où on doit choisir l’une de deux mauvaises choses.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 7 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/choisir_entre_la_peste_et_le_choléra"
+  },
+  {
+    "answer": "Faire de la prose sans le savoir",
+    "hint": "Réussir par hasard et sans dessein.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/faire_de_la_prose_sans_le_savoir"
+  },
+  {
+    "answer": "Fais ce que je dis, pas ce que je fais",
+    "hint": "Se dit à une personne dont le comportement n’est pas conforme à ses conseils.",
+    "dailyHint": "Expression en 10 mots. Le premier mot comporte 4 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/fais_ce_que_je_dis,_pas_ce_que_je_fais"
+  },
+  {
+    "answer": "Il n’y a pas de petits profits",
+    "hint": "Chaque gain est important.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/il_n’y_a_pas_de_petits_profits"
+  },
+  {
+    "answer": "Il vaut mieux tenir que courir",
+    "hint": "Ce proverbe signifie que posséder une chose de faible valeur vaut mieux qu'être à la poursuite d'un bien plus considérable.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/il_vaut_mieux_tenir_que_courir"
+  },
+  {
+    "answer": "Il n’y a pas de temps à perdre",
+    "hint": "Il faut agir ou commencer maintenant.",
+    "dailyHint": "Expression en 8 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/il_n’y_a_pas_de_temps_à_perdre"
+  },
+  {
+    "answer": "Il n’y a pas de quoi fouetter un chat",
+    "hint": "Cela n’est pas si grave, il n'y a pas lieu de s’alarmer.",
+    "dailyHint": "Expression en 9 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/il_n’y_a_pas_de_quoi_fouetter_un_chat"
+  },
+  {
+    "answer": "Il vaut mieux s’adresser au Bon Dieu qu’à ses saints",
+    "hint": "Il est plus utile de s'organiser avec le décisionnaire plutôt qu'avec son messager.",
+    "dailyHint": "Expression en 10 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/il_vaut_mieux_s’adresser_au_Bon_Dieu_qu’à_ses_saints"
+  },
+  {
+    "answer": "Il ne faut pas dire : fontaine, je ne boirai pas de ton eau",
+    "hint": "Il ne faut jamais agir comme si l’on était certain de ne jamais avoir besoin d’une chose ou d’une personne.",
+    "dailyHint": "Expression en 14 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/il_ne_faut_pas_dire_:_fontaine,_je_ne_boirai_pas_de_ton_eau"
+  },
+  {
+    "answer": "Jeter le bébé avec l’eau du bain",
+    "hint": "Ne pas prendre la peine de séparer le bon du mauvais et tout jeter.",
+    "dailyHint": "Expression en 7 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/jeter_le_bébé_avec_l’eau_du_bain"
+  },
+  {
+    "answer": "La vie n’est pas un long fleuve tranquille",
+    "hint": "La vie n’est pas toujours une partie de plaisir.",
+    "dailyHint": "Expression en 8 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/la_vie_n’est_pas_un_long_fleuve_tranquille"
+  },
+  {
+    "answer": "La parole est d’argent et le silence est d’or",
+    "hint": "Mieux vaut parfois se taire plutôt que parler.",
+    "dailyHint": "Expression en 9 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/la_parole_est_d’argent_et_le_silence_est_d’or"
+  },
+  {
+    "answer": "La raison du plus fort est toujours la meilleure",
+    "hint": "Ce proverbe sous-entend une loi « naturelle » avec laquelle la justice n’a que peu à voir.",
+    "dailyHint": "Expression en 9 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/la_raison_du_plus_fort_est_toujours_la_meilleure"
+  },
+  {
+    "answer": "Le chemin de l’enfer est pavé de bonnes intentions",
+    "hint": "En pensant bien agir, on peut néanmoins obtenir un effet contraire.",
+    "dailyHint": "Expression en 9 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/le_chemin_de_l’enfer_est_pavé_de_bonnes_intentions"
+  },
+  {
+    "answer": "Les loups ne se mangent pas entre eux",
+    "hint": "Les méchants, les puissants, ne cherchent pas à se nuire l’un l’autre.",
+    "dailyHint": "Expression en 8 mots. Le premier mot comporte 3 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/les_loups_ne_se_mangent_pas_entre_eux"
+  },
+  {
+    "answer": "Les paroles s’envolent, les écrits restent",
+    "hint": "Proverbe qui invite à la prudence, en rappelant que, contrairement aux paroles, les écrits ne s’évanouissent pas dans l’air et laissent des traces qui peuvent être compromettantes.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 3 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/les_paroles_s’envolent,_les_écrits_restent"
+  },
+  {
+    "answer": "L’argent ne tombe pas du ciel",
+    "hint": "Il faut travailler dur pour gagner de l’argent.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 7 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/l’argent_ne_tombe_pas_du_ciel"
+  },
+  {
+    "answer": "Mieux vaut un tu l’as que deux tu l’auras",
+    "hint": "Mieux vaut opter pour quelque chose que l’on peut obtenir immédiatement plutôt que pour quelque chose de plus de valeur mais que l’on n'est pas sûr d’obtenir plus tard.",
+    "dailyHint": "Expression en 9 mots. Le premier mot comporte 5 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/mieux_vaut_un_tu_l’as_que_deux_tu_l’auras"
+  },
+  {
+    "answer": "Même une horloge arrêtée donne l’heure juste deux fois par jour",
+    "hint": "Une personne ou un instrument normalement peu fiable peut occasionnellement fournir des informations correctes, même si ce n’est que par accident.",
+    "dailyHint": "Expression en 11 mots. Le premier mot comporte 4 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/même_une_horloge_arrêtée_donne_l’heure_juste_deux_fois_par_jour"
+  },
+  {
+    "answer": "Ne pas avoir voix au chapitre",
+    "hint": "Ne pas avoir son mot à dire, ne pas être maître d’une situation.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/ne_pas_avoir_voix_au_chapitre"
+  },
+  {
+    "answer": "Ne pas avoir inventé la poudre",
+    "hint": "Ne pas être très intelligent ; être simple d'esprit, simplet.",
+    "dailyHint": "Expression en 6 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/ne_pas_avoir_inventé_la_poudre"
+  },
+  {
+    "answer": "Ne pas être à prendre avec des pincettes",
+    "hint": "Être extrêmement sale.",
+    "dailyHint": "Expression en 8 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/ne_pas_être_à_prendre_avec_des_pincettes"
+  },
+  {
+    "answer": "Ne pas être le couteau le plus affûté du tiroir",
+    "hint": "Ne pas être très malin ; être un peu idiot.",
+    "dailyHint": "Expression en 10 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/ne_pas_être_le_couteau_le_plus_affûté_du_tiroir"
+  },
+  {
+    "answer": "Ne fais pas à autrui ce que tu ne voudrais pas qu’on te fît",
+    "hint": "On ne doit pas faire aux autres ce qu’on n’accepterait pas de vivre soi-même.",
+    "dailyHint": "Expression en 14 mots. Le premier mot comporte 2 lettres.",
+    "theme": "daily",
+    "wiki": "https://fr.wiktionary.org/wiki/ne_fais_pas_à_autrui_ce_que_tu_ne_voudrais_pas_qu’on_te_fît"
+  }
+]);

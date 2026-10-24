@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "431ea5dee58c05a302c00ef7c05c04fa2ddcbe49",
+  "source_head": "d5eba900675ee16e53d6feb47158746f23fd3bf8",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -486,6 +486,11 @@
       "source_sha": "431ea5dee58c05a302c00ef7c05c04fa2ddcbe49",
       "source_author": "Codex",
       "message": "Fix avatar option alignment, readable mobile choices, dismissible creation and overlay keyboard/focus handling"
+    },
+    {
+      "source_sha": "d5eba900675ee16e53d6feb47158746f23fd3bf8",
+      "source_author": "Codex",
+      "message": "Expand all twelve rooms to 1,000 answers and the daily bank to 100 expressions; prevent recent room and daily repeats while preserving published questions"
     }
   ]
 }

@@ -102,3 +102,15 @@ d'une reconstruction des indices.
 Les tests exigent désormais exactement 500 réponses par thème, vérifient
 les 6 000 indices et les compteurs publics, et figent aussi le contenu et
 l'ordre des 4 382 questions de la version précédente.
+
+## Extension à 1 000 réponses par thème — 24 octobre 2026
+
+6 000 entrées supplémentaires portent les douze thèmes à 1 000 réponses chacun ; le généraliste rassemble les 12 000 réponses. La sélection finale, les indices et les liens individuels figurent dans `expansion-1000.json`. Les 6 000 entrées précédentes restent intactes, dans le même ordre, pour préserver les indices de questions des parties en cours.
+
+Les ajouts proviennent des descriptions françaises Wikidata proposées par l’API Wikipédia (CC0), d’introductions Wikipédia reformulées et de définitions du Wiktionnaire adaptées (CC BY-SA 4.0). Les filtres écartent les homonymies, titres de listes, concepts hors thème, réponses sans voyelles/consonnes, noms scientifiques animaux en italique et indices révélant la réponse complète. Au maximum deux indices identiques sont conservés par thème. Les formulations alternatives regroupées partagent une réponse acceptée. La sélection structurelle et les contrôles éditoriaux ne constituent pas une vérification humaine indépendante de chacun des 6 000 faits. Les références et crédits restent accessibles à la révélation ; aucun appel externe n’est nécessaire pendant le jeu.
+
+Le mot du jour utilise une réserve serveur séparée de 100 expressions : les 48 précédentes et 52 nouvelles formulations longues relues. `daily-expansion-100.json` conserve les sources et variantes de ces ajouts ; celles-ci sont réservées au quotidien, hors des nouveaux ajouts des salons. Les indices se débloquent toujours après 3 et 6 erreurs, puis une voyelle après 9. La source d’une nouvelle définition apparaît après résolution.
+
+Chaque salon conserve en privé les indices des 100 dernières questions et évite également leurs réponses normalisées lors du tirage suivant. Cette mémoire survit au retour à vide du salon. Le quotidien évite toutes les expressions présentes dans ses 100 derniers défis ; à épuisement il reprend la moins récemment utilisée. Un défi déjà enregistré pour une date ne change pas. Le contenu anonyme des défis est conservé 366 jours pour cette rotation ; la rétention des participations personnelles reste inchangée.
+
+Reconstruction idempotente : `node scripts/expand-bank-1000.mjs` et `node scripts/expand-daily-bank.mjs`. Le constructeur d’indices `scripts/build-clues.py` intègre aussi cette nouvelle sélection.

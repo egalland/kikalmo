@@ -11,7 +11,7 @@ export const EMOTES=['👏','😂','🤔','🔥','🎉','❤️','👍','👎','
 export type Message={id:string;player:string;name:string;text:string;kind:'guess'|'correct'|'chat'|'emote';game:string;round:number;private:boolean;at?:number;solveRank?:number;result?:'incorrect'|'close'};
 export type CoinProgress={attempts:number[];solo:number[];first:number[];completed?:boolean};
 export type CoinAward={kind:'round'|'solo'|'completion';player:string;game:string;index:number;amount:number};
-export type State={coinProgress?:Record<string,CoinProgress>;vacancy?:{since:number;until:number;players:Player[]};telemetryCommit?:string;telemetryMatchStarted?:number;players:Player[];phase:'empty'|'countdown'|'guess'|'reveal'|'podium';deadline:number;started:number;round:number;deck:number[];game:string;solveCount?:number;champion?:string;messages?:Message[]};
+export type State={recentQuestions?:number[];coinProgress?:Record<string,CoinProgress>;vacancy?:{since:number;until:number;players:Player[]};telemetryCommit?:string;telemetryMatchStarted?:number;players:Player[];phase:'empty'|'countdown'|'guess'|'reveal'|'podium';deadline:number;started:number;round:number;deck:number[];game:string;solveCount?:number;champion?:string;messages?:Message[]};
 // Kept with the match, rather than the player object, so reconnecting cannot reset rewards.
 export function roomCoinAwards(before:State,after:State):CoinAward[]{
  if(!after.game||before.game!==after.game)return [];
@@ -26,7 +26,16 @@ export function roomCoinAwards(before:State,after:State):CoinAward[]{
  return awards;
 }
 export const fresh=():State=>({players:[],phase:'empty',deadline:0,started:0,round:0,deck:[],game:''});
-export function begin(s:State,room:string,now:number){delete s.vacancy;delete s.coinProgress;s.deck=QUESTIONS.map((q,i)=>({q,i})).filter(x=>room==='general'||x.q.theme===room).map(x=>x.i);for(let i=s.deck.length-1;i>0;i--){const j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[s.deck[i],s.deck[j]]=[s.deck[j],s.deck[i]];}s.deck=s.deck.slice(0,10);s.game=crypto.randomUUID();s.telemetryMatchStarted=now;s.round=0;s.phase='countdown';s.deadline=now+10000;s.solveCount=0;s.players.forEach(p=>{p.score=0;p.solved=false;p.solveRank=undefined;p.gain=0;p.tries=0;});}
+export function begin(s:State,room:string,now:number){
+ delete s.vacancy;delete s.coinProgress;
+ const recent=[...new Set([...(s.recentQuestions||[]),...s.deck])].filter(i=>Number.isInteger(i)&&!!QUESTIONS[i]).slice(-100);
+ const excluded=new Set(recent.map(i=>normalize(QUESTIONS[i].answer)));
+ const candidates=QUESTIONS.map((q,i)=>({q,i})).filter(x=>(room==='general'||x.q.theme===room)&&!excluded.has(normalize(x.q.answer))).map(x=>x.i);
+ for(let i=candidates.length-1;i>0;i--){const j=crypto.getRandomValues(new Uint32Array(1))[0]%(i+1);[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}
+ const chosen=new Set<string>();s.deck=[];
+ for(const i of candidates){const key=normalize(QUESTIONS[i].answer);if(!chosen.has(key)){chosen.add(key);s.deck.push(i);if(s.deck.length===10)break;}}
+ s.recentQuestions=recent;s.game=crypto.randomUUID();s.telemetryMatchStarted=now;s.round=0;s.phase='countdown';s.deadline=now+10000;s.solveCount=0;s.players.forEach(p=>{p.score=0;p.solved=false;p.solveRank=undefined;p.gain=0;p.tries=0;});
+}
 export const EMPTY_ROOM_GRACE_MS=10000;
 // Keep a private snapshot of the last participants while the empty room is paused.
 export function depart(s:State,id:string,now:number){
@@ -44,7 +53,7 @@ export function advance(s:State,now:number){
    const since=Math.max(...previous.map(p=>p.seen))+12000;
    s.vacancy={since,until:since+EMPTY_ROOM_GRACE_MS,players:previous};
   }
-  return s.vacancy&&now<s.vacancy.until?s:fresh();
+  return s.vacancy&&now<s.vacancy.until?s:{...fresh(),recentQuestions:[...new Set([...(s.recentQuestions||[]),...s.deck])].slice(-100)};
  }
  if(s.vacancy){
   const pause=Math.max(0,now-s.vacancy.since);
@@ -78,4 +87,4 @@ export function roundHint(q:Question){
  return (safe(description)?description+' ':'')+'Le mot principal commence par « '+prefix+' ».';
 }
 export function roundHintSource(q:Question){return (clueSources as Record<string,string>)[clueKey(q)];}
-export function view(s:State,id:string,now:number){const q=QUESTIONS[s.deck[s.round-1]];const solved=s.players.find(p=>p.id===id)?.solved;const messages=(s.messages||[]).filter(m=>m.kind!=='emote'&&(!m.private||m.game!==s.game||m.round!==s.round||s.phase!=='guess'||solved)).map(({private:privateMessage,...m})=>({...m,player:m.player===id.slice(0,8)?'me':m.player,private:privateMessage}));const progress=s.coinProgress?.[id];const roomCoinProgress={attemptedRounds:progress?.attempts.length||0,soloSolved:progress?.solo.length||0,earned:(progress?.first.length||0)+Math.min(3,Math.floor((progress?.solo.length||0)/3))+(progress?.completed?3:0),completionEarned:progress?.completed?3:0};return {...s,coinProgress:undefined,roomCoinProgress,vacancy:undefined,telemetryCommit:undefined,telemetryMatchStarted:undefined,champion:s.champion===id?'me':s.champion?.slice(0,8),messages,players:s.players.map(({id:pid,tracking,...p})=>({...p,reaction:p.reaction&&now-p.reaction.at<4500?p.reaction:undefined,id:pid===id?'me':pid.slice(0,8)})),deck:undefined,started:undefined,serverNow:now,question:q&&s.phase!=='countdown'?{masked:mask(q.answer),theme:q.theme,words:q.answer.split(/\s+/).length,...(s.phase==='guess'&&s.deadline-now<=10000?{clue:roundHint(q)}:{}),...(s.phase==='reveal'||s.phase==='podium'?{answer:q.answer,wiki:q.wiki,hint:roundHint(q),...(roundHintSource(q)?{hintSource:roundHintSource(q)}:{})}:{})}:null};}
+export function view(s:State,id:string,now:number){const q=QUESTIONS[s.deck[s.round-1]];const solved=s.players.find(p=>p.id===id)?.solved;const messages=(s.messages||[]).filter(m=>m.kind!=='emote'&&(!m.private||m.game!==s.game||m.round!==s.round||s.phase!=='guess'||solved)).map(({private:privateMessage,...m})=>({...m,player:m.player===id.slice(0,8)?'me':m.player,private:privateMessage}));const progress=s.coinProgress?.[id];const roomCoinProgress={attemptedRounds:progress?.attempts.length||0,soloSolved:progress?.solo.length||0,earned:(progress?.first.length||0)+Math.min(3,Math.floor((progress?.solo.length||0)/3))+(progress?.completed?3:0),completionEarned:progress?.completed?3:0};return {...s,recentQuestions:undefined,coinProgress:undefined,roomCoinProgress,vacancy:undefined,telemetryCommit:undefined,telemetryMatchStarted:undefined,champion:s.champion===id?'me':s.champion?.slice(0,8),messages,players:s.players.map(({id:pid,tracking,...p})=>({...p,reaction:p.reaction&&now-p.reaction.at<4500?p.reaction:undefined,id:pid===id?'me':pid.slice(0,8)})),deck:undefined,started:undefined,serverNow:now,question:q&&s.phase!=='countdown'?{masked:mask(q.answer),theme:q.theme,words:q.answer.split(/\s+/).length,...(s.phase==='guess'&&s.deadline-now<=10000?{clue:roundHint(q)}:{}),...(s.phase==='reveal'||s.phase==='podium'?{answer:q.answer,wiki:q.wiki,hint:roundHint(q),...(roundHintSource(q)?{hintSource:roundHintSource(q)}:{})}:{})}:null};}

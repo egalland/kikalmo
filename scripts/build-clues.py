@@ -79,6 +79,9 @@ def from_page(q,p):
 
 expansion_file=Path('data/expansion-500.json')
 expansion=json.loads(expansion_file.read_text()) if expansion_file.exists() else {'entries':[]}
+for extra in [Path('data/expansion-1000.json')]:
+ if extra.exists():
+  more=json.loads(extra.read_text());expansion['entries']+=more['entries'];expansion['retrieved']=more['retrieved']
 expanded={key(q):q for q in expansion['entries']}
 clues={};audit={};missing=[];counts=collections.Counter()
 for index,q in enumerate(bank):
@@ -104,8 +107,8 @@ for index,q in enumerate(bank):
  clues[k]=clue;counts[q['theme']]+=1
  audit[k]={'kind':origin,**({'page':'https://fr.wikipedia.org/wiki/'+title.replace(' ','_'),'title':title,'license':'CC BY-SA 4.0'} if origin=='wikipedia' else {})}
  if k in expanded:
-  entry=expanded[k];audit[k]={'kind':origin,**({'page':entry['source'],'title':entry['wiki'].replace('_',' '),'license':'CC BY-SA 4.0','retrieved':expansion['retrieved']} if entry.get('source') else {})}
-Path('lib/question-clue-sources.json').write_text(json.dumps({k:v['page'] for k,v in audit.items() if v['kind'] in ['wikipedia','wiktionary']},ensure_ascii=False,indent=2)+'\n')
+  entry=expanded[k];audit[k]={'kind':origin,**({'page':entry['source'],'title':entry['wiki'].replace('_',' '),'license':('CC0' if origin=='wikidata-description' else 'CC BY-SA 4.0'),'retrieved':expansion['retrieved']} if entry.get('source') else {})}
+Path('lib/question-clue-sources.json').write_text(json.dumps({k:v['page'] for k,v in audit.items() if v.get('page')},ensure_ascii=False,indent=2)+'\n')
 Path('lib/question-clues.json').write_text(json.dumps(clues,ensure_ascii=False,indent=2)+'\n')
 Path('data/clue-sources.json').write_text(json.dumps({'retrieved':'2026-10-16','expanded':expansion.get('retrieved'),'attribution':'Wikipédia et Wiktionnaire, contributeurs des pages citées ; adaptations pour le jeu. CC BY-SA 4.0. Historique et auteurs sur chaque page source.','license':'https://creativecommons.org/licenses/by-sa/4.0/','entries':audit},ensure_ascii=False,indent=2)+'\n')
 Path('.sites-runtime/clues-missing.json').write_text(json.dumps(missing,ensure_ascii=False,indent=2)+'\n')

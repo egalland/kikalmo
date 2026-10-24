@@ -56,7 +56,7 @@ Huit casques et combinaisons en laine et feutre : cosmonaute, scaphandrier, drag
 - Premier à répondre correctement dans une manche : 1 pièce de salon. Accessoires à partir de 2 pièces ; costumes de 80 à 250 pièces de salon ou de 40 à 120 éclats. Les achats antérieurs restent acquis sans supplément.
 - Monnaie quotidienne indépendante : 5 / 3 / 2 éclats au podium final ; 1 éclat aux autres participants ayant envoyé au moins une proposition, même sans résoudre le défi. Une simple ouverture ne rapporte rien.
 - Classement quotidien : moins d’essais, puis heure de résolution, puis identifiant stable en cas d’égalité. Les gains sont calculés sur les journées closes, à la requête suivante après minuit à Paris, et chaque gain n’est crédité qu’une fois.
-- Banque dédiée de 48 expressions/proverbes, indices après 3 et 6 erreurs et une voyelle après 9. Le défi déjà commencé le jour de la mise à jour reste identique.
+- Banque dédiée de 100 expressions/proverbes, dont 52 nouvelles formulations longues, indices après 3 et 6 erreurs et une voyelle après 9. Les 100 derniers défis sont évités avant reprise du plus ancien ; un défi déjà publié reste identique.
 - Pièces et achats conservés dans D1 et liés au cookie du navigateur, séparés des statistiques facultatives. Export et effacement depuis le panneau de confidentialité. Les deux monnaies ne sont pas convertibles ; les cosmétiques ne modifient pas les scores.
 - Achats atomiques au tarif serveur ; contrôle de propriété côté serveur avant affichage en salon et au classement. Les crédits de manche font partie du même batch que la mise à jour du salon et sont protégés contre les nouvelles tentatives simultanées.
 
@@ -130,3 +130,7 @@ Le bouton Ajouter est masqué pour les personnes déjà amies ou bloquées. Les 
 ### Documentation du projet
 
 [Dossier, cahier des charges et mode opératoire](docs/projet/README.md), avec un PDF de 24 pages dans la direction artistique textile du site et des sources éditables.
+
+## Réserve de questions et rotation
+
+Les douze thèmes contiennent chacun 1 000 réponses ; le généraliste rassemble les 12 000 entrées. Les 6 000 réponses déjà publiées conservent leurs indices et leur contenu. Les salons excluent les 100 dernières questions lors d’un nouveau tirage, avec une mémoire conservée après le retour à vide. La réserve du mot du jour reste indépendante. Sources, crédits et reconstruction : [data/BANK_SOURCES.md](data/BANK_SOURCES.md).

@@ -45,3 +45,28 @@ console.log('Passed daily: same puzzle, protected answer, progressive clues, CAS
 
 const {dailyReport}=await import('../scripts/analytics-report.mjs');
 const stats=dailyReport(sql.prepare('SELECT * FROM daily_players').all());assert.equal(stats.participants,14);assert.equal(stats.solved,14);assert.equal(stats.guesses,23);assert.equal(stats.incorrect,9);assert.equal(stats.firstTry,13);assert.equal(stats.hintUnlocks.vowel,1);assert.equal(stats.uniqueBrowsers,14);assert.ok(!JSON.stringify(stats).includes('Erreur'));console.log('Passed daily analytics: deduped browsers, attempts, mistakes, solved first try, hints and private guesses excluded from report.');
+
+const {DAILY_QUESTIONS:dailyBank}=await import(dailyBankURI);
+assert.equal(dailyBank.length,100);
+assert.ok(dailyBank.every(q=>q.theme==='daily')&&dailyBank.slice(48).every(q=>q.answer.split(/\s+/).length>=6));
+const oldQuestion=sql.prepare('SELECT question FROM daily_challenges WHERE day=?').get(day).question;
+const used=[];
+const firstReserved=JSON.parse(sql.prepare('SELECT question FROM daily_challenges WHERE day=?').get('2026-10-18').question).answer;used.push(firstReserved);
+for(let offset=1;offset<dailyBank.length;offset++){
+ now=Date.parse('2026-10-18T12:00:00Z')+offset*86400000;
+ const response=await get();assert.equal(response.status,200);assert.equal(response.body.theme,'daily');assert.equal(response.body.answer,undefined);assert.equal(response.body.source,undefined);
+ const entry=JSON.parse(sql.prepare('SELECT question FROM daily_challenges WHERE day=?').get(response.body.day).question);
+ assert.ok(!used.includes(entry.answer),'No repeat before the daily bank is exhausted');used.push(entry.answer);
+ if(offset===5){const replies=await Promise.all([get(),get(),get()]);assert.ok(replies.every(r=>r.body.masked===response.body.masked),'Concurrent visitors share the saved challenge');}
+}
+assert.equal(new Set(used).size,100);
+now+=86400000;const cycle=await get();assert.equal(cycle.status,200);
+const recycled=JSON.parse(sql.prepare('SELECT question FROM daily_challenges WHERE day=?').get(cycle.body.day).question);assert.equal(recycled.answer,firstReserved,'Once exhausted, select the least recently used puzzle');
+assert.equal(sql.prepare('SELECT question FROM daily_challenges WHERE day=?').get(day).question,oldQuestion,'A previously published puzzle remains unchanged');
+console.log('Passed daily rotation: 100 distinct challenges, oldest-first reuse, concurrent stability, hidden answer/source and preservation of published puzzles.');
+
+const sourced=sql.prepare("SELECT day,question FROM daily_challenges WHERE question LIKE '%https://fr.wiktionary.org/wiki/%' ORDER BY day LIMIT 1").get();assert.ok(sourced);
+const sourcedQuestion=JSON.parse(sourced.question);now=Date.parse(sourced.day+'T12:00:00Z');
+const answerResponse=await POST(new Request('https://test.local/api/daily',{method:'POST',headers:{Origin:'https://test.local','Content-Type':'application/json'},body:JSON.stringify({day:sourced.day,action:'answer',name:'Source test',answer:sourcedQuestion.aliases?.[0]||sourcedQuestion.answer,requestId:'sourced-daily-answer-request-001'})}));
+assert.equal(answerResponse.status,200);const answerPayload=await answerResponse.json();assert.equal(answerPayload.solved,true);assert.equal(answerPayload.source,sourcedQuestion.wiki);assert.equal(answerPayload.answer,sourcedQuestion.answer);
+console.log('Passed sourced daily answers: accepted variants and credits disclosed after solving.');

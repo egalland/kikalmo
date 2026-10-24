@@ -39,7 +39,8 @@ export async function purgeExpired(db:D1Database,now=Date.now()){
   db.prepare('DELETE FROM personal_sessions WHERE last_seen<?').bind(now-395*86400000),
   db.prepare('DELETE FROM personal_daily WHERE at<?').bind(now-395*86400000),
   db.prepare('DELETE FROM daily_players WHERE day<?').bind(day(30)),
-  db.prepare('DELETE FROM daily_challenges WHERE day<?').bind(day(30)),
+  // Puzzle content contains no player data; retain a year for daily rotation.
+  db.prepare('DELETE FROM daily_challenges WHERE day<?').bind(day(366)),
   db.prepare('DELETE FROM analytics_commits WHERE at<?').bind(now-90*86400000),
   db.prepare('DELETE FROM analytics_sessions WHERE last_seen<?').bind(now-90*86400000),
   db.prepare('DELETE FROM analytics_player_days WHERE day<?').bind(day(90)),
