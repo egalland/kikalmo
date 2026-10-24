@@ -6,6 +6,12 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## Identité textile Kikalmo
+
+Le logo cousu et les marionnettes servent de référence aux composants du site. Monnaie de salon : pelote dorée ; monnaie quotidienne : étoile de laine violette. Les boutons, onglets, cartes, fenêtres, champs et menus partagent une texture de feutre, des coutures, un relief discret et des états cohérents. Les zones de texte et de réponse gardent des fonds sobres ; le menu mobile et les interactions existantes sont conservés.
+
+Les identifiants serveur `room` / `daily`, les tarifs, les soldes et les gains restent identiques. Seuls les noms affichés et les représentations visuelles changent. Images produites avec l’outil ImageGen intégré, assorties au logo existant : `public/branding/textile/` ; [prompts complets](docs/textile-prompts.json) ; packaging reproductible : `node scripts/package-textile.mjs <manifest.json>`.
+
 ## Mobile et tarifs de saison
 
 Sur mobile et tablette, le menu regroupe personnage, statistiques, son et règles. La boutique garde un raccourci visible. Sur la page boutique, le choix de rayon passe par une liste déroulante ; monnaies et actions d’achat restent faciles à toucher.

@@ -1,0 +1,21 @@
+{
+  "tool": "Built-in ImageGen",
+  "reference": "public/branding/kikalmo-stitched.webp",
+  "assets": [
+    {
+      "key": "pelote",
+      "prompt": "Use case: stylized-concept. Asset type: production UI artwork for Kikalmo, a cozy handmade wool and felt puppet word game. Match the reference image's tactile felt fibres, carefully sewn edges, warm soft studio light, dimensional miniature handcrafted style. No letters, numbers, symbols, watermark or text. One single compact round ball of golden mustard-yellow knitting wool, neat layered criss-cross yarn winding, short curled loose thread tucked at bottom right. Front view, clearly readable coin-like silhouette at tiny icon size, soft rounded tactile wool fibers, no needles, no other objects. Isolated centered, fills 80% square canvas, genuine transparent background, no ground shadow outside object.",
+      "productionPath": "public/branding/textile/pelote.webp"
+    },
+    {
+      "key": "etoile",
+      "prompt": "Use case: stylized-concept. Asset type: production UI artwork for Kikalmo, a cozy handmade wool and felt puppet word game. Match the reference image's tactile felt fibres, carefully sewn edges, warm soft studio light, dimensional miniature handcrafted style. No letters, numbers, symbols, watermark or text. One single five-point plush star token sewn from lavender purple felt, softly padded rounded five arms, a raised pale lilac wool blanket stitch running around its edge, delicate tightly wound yarn spiral embroidered at center. A special reward token clearly readable at tiny UI size. Front view, isolated centered, fills 80% square canvas, genuine transparent background, no ground shadow outside object.",
+      "productionPath": "public/branding/textile/etoile.webp"
+    },
+    {
+      "key": "felt",
+      "prompt": "Use case: stylized-concept. Asset type: production UI artwork for Kikalmo, a cozy handmade wool and felt puppet word game. Match the reference image's tactile felt fibres, carefully sewn edges, warm soft studio light, dimensional miniature handcrafted style. No letters, numbers, symbols, watermark or text. Seamless repeatable flat neutral ivory wool felt fabric texture, extreme close-up of finely needle-felted dense matte ivory fibers. Perfectly even diffuse lighting, no shadows, no objects, no seams, no borders, no gradients, no speckles or large knots. Subtle tactile textile surface, uniform edge-to-edge tile for website buttons and panels. Flat neutral off-white color, opaque square image.",
+      "productionPath": "public/branding/textile/felt.webp"
+    }
+  ]
+}

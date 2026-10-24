@@ -54,7 +54,7 @@ async function converse(e?:React.FormEvent){
   setVerdict(answerFeedback(d.result,{answer:text,gain:solvedMe?.gain,rank:solvedMe?.solveRank}));
   if(d.result==='incorrect'||d.result==='close'){setAnswer(text);requestAnimationFrame(()=>input.current?.setSelectionRange(0,text.length));}
   else setAnswer('');
-  if(d.result==='correct'){setFeedback((solvedMe?.solveRank===1?'Premier à trouver !':'Bien joué !')+' +'+(solvedMe?.gain||0)+' points'+(d.roomCoinsEarned?' · +1 pièce de salon ●':''));setBurst(true);setTimeout(()=>setBurst(false),1000);}
+  if(d.result==='correct'){setFeedback((solvedMe?.solveRank===1?'Premier à trouver !':'Bien joué !')+' +'+(solvedMe?.gain||0)+' points'+(d.roomCoinsEarned?' · +1 pelote de salon':''));setBurst(true);setTimeout(()=>setBurst(false),1000);}
  }catch(e:any){if(n===session.current&&snapshot.current?.game===state.game&&snapshot.current?.round===state.round)setVerdict({kind:'error',title:'Non envoyé',text:'« '+text+' » : '+e.message});}
  finally{sendLock.current=false;setSending(false);}
 }

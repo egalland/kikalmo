@@ -1,0 +1,20 @@
+[
+  {
+    "key": "pelote",
+    "path": "public/branding/textile/pelote.webp",
+    "sourceSha256": "e8faa17b4f2d729194b82fc3b4e0640ba19e4d792b13258f82687e9b720ee704",
+    "bytes": 14832
+  },
+  {
+    "key": "etoile",
+    "path": "public/branding/textile/etoile.webp",
+    "sourceSha256": "5fe029a4f25eca7626f8cb142ad77b8b80a2ebdcb60810fe19a4f2f6895a86d1",
+    "bytes": 14044
+  },
+  {
+    "key": "felt",
+    "path": "public/branding/textile/felt.webp",
+    "sourceSha256": "bb2448a118e23df610b083d5e839a94614b1f3e83c6617f67c7f22917ba4a053",
+    "bytes": 26596
+  }
+]

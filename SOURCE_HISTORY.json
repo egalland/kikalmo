@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "9f26556fcdae95875e743f8bfaf011222617ac82",
+  "source_head": "454f44a9531f81919acaac57ef69035f34c6c95a",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -426,6 +426,11 @@
       "source_sha": "9f26556fcdae95875e743f8bfaf011222617ac82",
       "source_author": "Codex",
       "message": "Rebalance attainable Halloween prices, credit prior price differences and simplify mobile navigation"
+    },
+    {
+      "source_sha": "454f44a9531f81919acaac57ef69035f34c6c95a",
+      "source_author": "Codex",
+      "message": "Unify Kikalmo textile identity with wool currencies, felt controls and stitched surfaces"
     }
   ]
 }
