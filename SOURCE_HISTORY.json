@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "b1244ff21ba13a613dafbf1f735a41b56fc61570",
+  "source_head": "e46d8de79f398934367bab7923bc9c8063bdd849",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -436,6 +436,11 @@
       "source_sha": "b1244ff21ba13a613dafbf1f735a41b56fc61570",
       "source_author": "Codex",
       "message": "Add stitched felt coin, show all shop items with combined currency checkboxes and fit default accessories"
+    },
+    {
+      "source_sha": "e46d8de79f398934367bab7923bc9c8063bdd849",
+      "source_author": "Codex",
+      "message": "Fit short hair under witch hats and restore padding in room action labels"
     }
   ]
 }

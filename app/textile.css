@@ -23,3 +23,7 @@ body.textile-ui{background-color:var(--wool-cream);background-image:linear-gradi
 @media(max-width:650px){.shop-currency-filters{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:7px}.shop-currency-choice{padding:7px;gap:5px;font-size:10px;min-width:0;line-height:1.4}.shop-currency-choice .wool-token{width:23px;height:23px}.shop-currency-choice span{min-width:0}.shop-currency-filters legend{grid-column:1/-1}}
 
 .shop-currency-choice input[type=checkbox]{padding:0;min-width:18px;min-height:18px;border-radius:4px;appearance:auto}
+
+/* The room action is now a padded textile label rather than an old top-only separator. */
+.textile-ui .room-card .room-cta{min-height:48px;padding:12px 16px;gap:12px;line-height:1.4;font-size:12px;font-weight:650;text-align:left}.textile-ui .room-card .room-cta>span{display:block;min-width:0;flex:1}.textile-ui .room-card .room-cta>svg{flex:0 0 auto;align-self:center}.textile-ui .room-card .room-bottom>p{line-height:1.6;color:#59654e}
+@media(max-width:650px){.textile-ui .room-card .room-cta{min-height:48px;padding:11px 14px;font-size:12px;gap:10px}}
