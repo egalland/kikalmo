@@ -1,4 +1,5 @@
 import type {Avatar} from './profile';
+import type {CoinAward} from './game';
 import {COSMETICS,HALLOWEEN,isSeasonal,type Wallet} from './cosmetics';
 // Rewards begin with this release; older daily competitions are not re-awarded.
 export const REWARDS_FROM='2026-10-23';
@@ -11,15 +12,19 @@ export function settleDailyStatement(db:D1Database,day:string,now=Date.now()){
  FROM (SELECT day,player,solved_at,ROW_NUMBER() OVER(PARTITION BY day ORDER BY solved_at IS NULL,tries,solved_at,id) AS position
  FROM daily_players WHERE day>=? AND day<? AND tries>0)`).bind(now,REWARDS_FROM,day);
 }
+const LEGACY_HALLOWEEN_REBATE_BEFORE=Date.parse('2026-10-24T11:22:00Z');
 export function seasonalPriceAdjustment(db:D1Database,player:string){
  // Refund only the actual excess charged for owned Halloween pieces, exactly once per purchase.
  const seasonal=COSMETICS.filter(item=>isSeasonal(item.id));
- const cases=seasonal.map(item=>`WHEN ${item.id} THEN ${item.price}`).join(' ');
+ // Freeze the previous rebate promise independently of later catalogue increases.
+ const rebatePrices:Record<number,number>={39:18,40:24,41:8,42:5,43:3,44:2,45:3,46:1,47:2,48:6,49:2};
+ const cases=seasonal.map(item=>`WHEN ${item.id} THEN ${rebatePrices[item.id]}`).join(' ');
  return db.prepare(`INSERT OR IGNORE INTO economy_ledger(id,player,currency,delta,item,created_at)
  SELECT 'price-adjustment:halloween-v1:'||id,player,currency,-delta-(CASE item ${cases} END),NULL,?
  FROM economy_ledger WHERE player=? AND item IN (${seasonal.map(item=>item.id).join(',')})
+ AND (currency!='room' OR created_at<?)
  AND id='purchase:'||player||':'||item AND -delta>(CASE item ${cases} END)`)
- .bind(Date.now(),player);
+ .bind(Date.now(),player,LEGACY_HALLOWEEN_REBATE_BEFORE);
 }
 export async function wallet(db:D1Database,player:string):Promise<Wallet>{
  await seasonalPriceAdjustment(db,player).run();
@@ -28,10 +33,14 @@ export async function wallet(db:D1Database,player:string):Promise<Wallet>{
  return {room:rows.results.find(r=>r.currency==='room')?.balance||0,daily:rows.results.find(r=>r.currency==='daily')?.balance||0,owned:owned.results.map(r=>r.item)};
 }
 export function roomPrizeStatement(db:D1Database,player:string,room:string,game:string,round:number,revision:number,nonce:string){
- // Same D1 batch as the room CAS: a losing retry cannot create a credit.
+ return coinPrizeStatement(db,{kind:'round',player,game,index:round,amount:1},room,revision,nonce);
+}
+export function coinPrizeStatement(db:D1Database,award:CoinAward,room:string,revision:number,nonce:string){
+ // Rewards commit atomically with the room CAS. The IDs survive retries and reconnects.
+ const id=award.kind==='round'?`round:${room}:${award.game}:${award.index}`:award.kind==='solo'?`solo:${room}:${award.game}:${award.player}:${award.index}`:`match:${room}:${award.game}:${award.player}`;
  return db.prepare(`INSERT OR IGNORE INTO economy_ledger(id,player,currency,delta,item,created_at)
- SELECT ?,?,'room',1,NULL,? FROM rooms WHERE id=? AND revision=? AND json_extract(state,'$.telemetryCommit')=?`)
- .bind('round:'+room+':'+game+':'+round,player,Date.now(),room,revision,nonce);
+ SELECT ?,?,'room',?,NULL,? FROM rooms WHERE id=? AND revision=? AND json_extract(state,'$.telemetryCommit')=?`)
+ .bind(id,award.player,award.amount,Date.now(),room,revision,nonce);
 }
 export async function allowedCosmetic(db:D1Database,player:string,id:unknown){
  if(typeof id!=='number'||!COSMETICS.some(c=>c.id===id))return undefined;

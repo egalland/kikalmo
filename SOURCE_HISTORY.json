@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "657bf3313891c995d8d524c17ccd25d4ff8b4002",
+  "source_head": "15880967e54da75f123c4ac859e6e5f299eb5a34",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -461,6 +461,11 @@
       "source_sha": "657bf3313891c995d8d524c17ccd25d4ff8b4002",
       "source_author": "Codex",
       "message": "Simplify the skin shop and add a seasonal felt Halloween logo"
+    },
+    {
+      "source_sha": "15880967e54da75f123c4ac859e6e5f299eb5a34",
+      "source_author": "Codex",
+      "message": "Add participation and solo coin rewards with repriced coin cosmetics and unchanged stars"
     }
   ]
 }

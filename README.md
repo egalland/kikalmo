@@ -112,3 +112,9 @@ Les **28 étapes du dépôt source Sites**, jusqu’au commit `9a20512`, sont re
 L’import via l’API GitHub recrée les commits avec de nouveaux identifiants et de nouvelles métadonnées de création. Les références originales, auteurs et dates sont conservés dans [SOURCE_HISTORY.json](SOURCE_HISTORY.json) et dans les messages des commits importés. Les commits de documentation ajoutés après l’import sont propres à ce dépôt GitHub.
 
 Les données de jeu en production et les secrets d’exécution ne sont pas inclus.
+
+### Pièces et prix
+
+Une partie terminée avec une proposition dans au moins cinq manches rapporte trois pièces. En multijoueur, trouver en premier rapporte une pièce supplémentaire par manche. En solo, chaque groupe de trois mots trouvés rapporte une pièce, dans la limite de trois par partie. Les crédits sont atomiques avec la sauvegarde du salon et uniques par partie, joueur et seuil ; les reconnexions ne remettent pas la progression à zéro. Les étoiles restent inchangées.
+
+Accessoires : 8–40 pièces ; coiffures et regards : 45–75 ; costumes Halloween : 60–80 ; costumes permanents : 180–550. Les achats acquis restent équipables et aucun solde existant n’est débité par la hausse des prix. Le remboursement historique Halloween conserve ses anciens montants.

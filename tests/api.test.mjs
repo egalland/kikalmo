@@ -145,3 +145,50 @@ assert.notEqual(replacement.body.game,graceGame);assert.equal(replacement.body.p
 assert.equal(replacement.body.players[0].score,0);
 assert.equal(allEvents().filter(e=>e.kind==='match_abandoned'&&e.game===graceGame).length,1);
 console.log('Passed: solo room grace, 9.999s recovery, paused timer, score restoration, no duplicate matches, private state and 10s expiry.');
+
+// Reward rules run independently of optional analytics and persist across real API retries.
+async function rewardPost(action,cookie='',extra={}){
+ const response=await POST(new Request('https://test.local/api/game',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://test.local',Cookie:cookie+'; kk_consent=v1-no'},body:JSON.stringify({action,room:'general',...extra})}));
+ const body=await response.json();assert.equal(response.status,200,JSON.stringify(body));
+ return {body,cookie:response.headers.get('set-cookie')?.split(';')[0]||cookie};
+}
+sql.prepare("DELETE FROM rooms WHERE id IN ('general','food')").run();
+const racers=[];for(const name of ['First','Participant','Idle','Leaves'])racers.push(await rewardPost('join','',{name}));
+let activeRacers=[...racers];now+=10000;
+async function pulseRacers(){return Promise.all(activeRacers.map(p=>rewardPost('sync',p.cookie)));}
+let rewardSnapshot=(await pulseRacers())[0].body;const rewardGame=rewardSnapshot.game;
+for(let round=1;round<=10;round++){
+ assert.equal(rewardSnapshot.round,round);assert.equal(rewardSnapshot.phase,'guess');
+ if(round===7){const late=await rewardPost('join','',{name:'Late'});racers.push(late);activeRacers.push(late);}
+ const stored=JSON.parse(sql.prepare("SELECT state FROM rooms WHERE id='general'").get().state),answer=QUESTIONS[stored.deck[round-1]].answer;
+ if(round<=5)await rewardPost('answer',racers[1].cookie,{answer:'Definitely incorrect xyz',game:rewardGame,round});
+ await Promise.all([rewardPost('answer',racers[0].cookie,{answer,game:rewardGame,round}),rewardPost('answer',racers[0].cookie,{answer,game:rewardGame,round})]);
+ if(round<=5)await rewardPost('answer',racers[1].cookie,{answer,game:rewardGame,round});
+ if(round===2)await rewardPost('answer',racers[2].cookie,{answer:'   ',game:rewardGame,round});
+ if(round<=5)await rewardPost('answer',racers[3].cookie,{answer:'Definitely incorrect xyz',game:rewardGame,round});
+ if(round>=7)await rewardPost('answer',racers[4].cookie,{answer,game:rewardGame,round});
+ if(round===4){await rewardPost('leave',racers[1].cookie);await rewardPost('join',racers[1].cookie,{name:'Participant'});const duplicate=await rewardPost('answer',racers[1].cookie,{answer,game:rewardGame,round});assert.equal(duplicate.body.roomCoinProgress.attemptedRounds,4,'Reconnect and repeat cannot count the same round twice');}
+ for(const ms of [9000,9000,2000]){now+=ms;rewardSnapshot=(await pulseRacers())[0].body;}
+ assert.equal(rewardSnapshot.phase,'reveal');
+ if(round===5){await rewardPost('leave',racers[3].cookie);activeRacers=activeRacers.filter(p=>p!==racers[3]);}
+ now+=5000;rewardSnapshot=(await pulseRacers())[0].body;
+}
+assert.equal(rewardSnapshot.phase,'podium');assert.equal(rewardSnapshot.coinProgress,undefined,'Private reward identities never leave the server');
+const idOf=p=>p.cookie.split('=')[1],earned=p=>sql.prepare("SELECT coalesce(sum(delta),0) AS n FROM economy_ledger WHERE player=? AND currency='room'").get(idOf(p)).n;
+assert.deepEqual(racers.map(earned),[13,3,0,0,0],'First places plus completion, real attempts required, late and departed players excluded');
+assert.equal((await rewardPost('sync',racers[1].cookie)).body.roomCoinProgress.attemptedRounds,5,'Exactly five attempted rounds qualify');
+assert.equal(rewardSnapshot.roomCoinProgress.completionEarned,3);assert.equal(rewardSnapshot.roomCoinProgress.earned,13);
+for(let i=0;i<3;i++)await pulseRacers();assert.deepEqual(racers.map(earned),[13,3,0,0,0],'Concurrent finish and repeated sync cannot repeat the payout');
+const lateReturn=await rewardPost('join',racers[3].cookie,{name:'Leaves'});assert.equal(lateReturn.body.roomCoinProgress.completionEarned,0,'Returning after the match ends cannot show or award a completion bonus');assert.equal(earned(racers[3]),0);
+// A solo player earns one coin per three different solved rounds, capped at three, plus completion.
+const soloReward=await rewardPost('join','',{room:'food',name:'Solo'});now+=10000;let soloSnapshot=(await rewardPost('sync',soloReward.cookie,{room:'food'})).body;
+for(let round=1;round<=10;round++){
+ const stored=JSON.parse(sql.prepare("SELECT state FROM rooms WHERE id='food'").get().state),answer=QUESTIONS[stored.deck[round-1]].answer;
+ const responses=await Promise.all([rewardPost('answer',soloReward.cookie,{room:'food',answer,game:soloSnapshot.game,round}),rewardPost('answer',soloReward.cookie,{room:'food',answer,game:soloSnapshot.game,round})]);
+ assert.equal(responses.reduce((n,r)=>n+r.body.roomCoinsEarned,0),round%3===0?1:0);
+ if(round===3){await rewardPost('leave',soloReward.cookie,{room:'food'});await rewardPost('join',soloReward.cookie,{room:'food',name:'Solo'});assert.equal(earned(soloReward),1);}
+ now+=5000;soloSnapshot=(await rewardPost('sync',soloReward.cookie,{room:'food'})).body;
+}
+assert.equal(soloSnapshot.phase,'podium');assert.equal(earned(soloReward),6);assert.equal(soloSnapshot.roomCoinProgress.earned,6);
+assert.equal(sql.prepare("SELECT count(*) n FROM economy_ledger WHERE player=? AND id LIKE 'solo:%'").get(idOf(soloReward)).n,3);
+console.log('Passed coin API: +3 completion after 5 distinct attempted rounds, +1 multiplayer first, solo 3/6/9 thresholds, 13/6 maximums, no AFK/late/left bonus, no duplicate reconnect/concurrent credit, no analytics dependency and private match progress.');
