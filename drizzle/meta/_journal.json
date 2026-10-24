@@ -57,6 +57,13 @@
       "when": 1792787614040,
       "tag": "0007_boring_jack_murdock",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1792822881778,
+      "tag": "0008_acoustic_professor_monster",
+      "breakpoints": true
     }
   ]
 }

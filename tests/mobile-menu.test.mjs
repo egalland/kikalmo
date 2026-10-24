@@ -10,7 +10,7 @@ const listeners={},cleanups=[];let focused=0,prevented=0;
 try{
  const root={open:true,contains:n=>n==='inside',querySelector:()=>({focus:()=>focused++})};globalThis.menuRef={current:root};globalThis.menuEffects=[];
  globalThis.document={addEventListener:(key,fn)=>listeners[key]=fn,removeEventListener:key=>delete listeners[key]};globalThis.window={innerWidth:390,addEventListener:(key,fn)=>listeners[key]=fn,removeEventListener:key=>delete listeners[key]};
- const tree=MobileMenu({children:'navigation actions'});for(const effect of globalThis.menuEffects)cleanups.push(effect());assert.equal(tree.type,'details');const [summary,nav]=tree.props.children;assert.equal(summary.type,'summary');assert.equal(summary.props['aria-controls'],nav.props.id);assert.equal(nav.props['aria-label'],'Navigation mobile');
+ const tree=MobileMenu({children:'navigation actions'});for(const effect of globalThis.menuEffects)cleanups.push(effect());assert.equal(tree.type,'details');const [summary,nav]=tree.props.children;assert.equal(summary.type,'summary');assert.equal(summary.props['aria-controls'],nav.props.id);assert.equal(nav.props['aria-label'],'Navigation principale');
  listeners.pointerdown({target:'inside'});assert.equal(root.open,true);listeners.pointerdown({target:'outside'});assert.equal(root.open,false,'Outside pointer closes the dropdown');
  root.open=true;tree.props.onKeyDown({key:'Escape',preventDefault:()=>prevented++});assert.equal(root.open,false);assert.equal(focused,1,'Escape returns focus to the menu summary');assert.equal(prevented,1);
  root.open=true;nav.props.onClick({target:{closest:()=>null}});assert.equal(root.open,true);nav.props.onClick({target:{closest:()=>({})}});assert.equal(root.open,false,'Selecting any link or action closes navigation');

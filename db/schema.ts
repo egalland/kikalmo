@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, primaryKey, real } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, primaryKey, real, index } from 'drizzle-orm/sqlite-core';
 export const rooms = sqliteTable('rooms', {id:text('id').primaryKey(), state:text('state').notNull(), revision:integer('revision').notNull().default(0)});
 
 // Server-side telemetry. Reporting requires the admin session cookie.
@@ -59,3 +59,8 @@ export const economyLedger=sqliteTable('economy_ledger',{
  id:text('id').primaryKey(),player:text('player').notNull(),currency:text('currency').notNull(),
  delta:integer('delta').notNull(),item:integer('item'),createdAt:integer('created_at').notNull(),
 });
+
+// Browser-bound social identities. Codes are public; raw player cookies never leave the server.
+export const friendProfiles=sqliteTable('friend_profiles',{player:text('player').primaryKey(),code:text('code').notNull().unique(),name:text('name').notNull(),avatar:text('avatar').notNull(),seen:integer('seen').notNull(),visible:integer('visible').notNull().default(1)});
+export const friendLinks=sqliteTable('friend_links',{requester:text('requester').notNull(),recipient:text('recipient').notNull(),status:text('status').notNull().default('pending'),createdAt:integer('created_at').notNull()},t=>[primaryKey({columns:[t.requester,t.recipient]}),index('friend_links_recipient').on(t.recipient,t.status)]);
+export const friendBlocks=sqliteTable('friend_blocks',{owner:text('owner').notNull(),target:text('target').notNull()},t=>[primaryKey({columns:[t.owner,t.target]})]);

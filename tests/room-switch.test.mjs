@@ -1,0 +1,9 @@
+import ts from 'typescript';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+const source=readFileSync('app/page.tsx','utf8'),start=source.indexOf('async function call('),end=source.indexOf('async function join(',start);
+const js=ts.transpileModule(source.slice(start,end),{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText.trim();
+const active={current:'new-room'},messages={current:'keep'},countdown={current:'keep'},changes=[];
+const create=new Function('fetch','active','lastMessage','countdown','setRoom','setS','return ('+js+');');
+const call=create(async()=>Response.json({expired:true,error:'Old room expired'},{status:409}),active,messages,countdown,v=>changes.push(['room',v]),v=>changes.push(['snapshot',v]));
+await assert.rejects(()=>call('sync','old-room'));assert.equal(active.current,'new-room');assert.equal(messages.current,'keep');assert.equal(countdown.current,'keep');assert.equal(changes.length,0,'A late response from the old room cannot clear the new session');
+await assert.rejects(()=>call('sync','new-room'));assert.equal(active.current,'');assert.equal(changes.length,2,'The actual current room still handles expiration');
+console.log('Passed room switching: stale old-room expiry cannot clear a newly joined friend room; current-room expiration remains effective.');

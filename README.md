@@ -6,6 +6,14 @@ Jeu de mots et de culture générale multijoueur : retrouvez les voyelles manqua
 
 **[Jouer à Kikalmo](https://kikalmo.emmanuel-galland117.chatgpt.site)**
 
+## Amis et navigation commune
+
+Le menu burger est disponible sur PC et mobile, dans le jeu, la boutique et les statistiques. Les salons y sont triés par fréquentation. Le salon le plus actif est signalé dans le lobby ; les cartes et le menu affichent les avatars des amis présents.
+
+Le panneau d’amis fournit un code public aléatoire lié au navigateur. Les demandes doivent être acceptées avant de partager la présence ou le salon. Retrait, annulation, refus, blocage et visibilité de présence sont disponibles. Les identifiants de session restent côté serveur ; le code ami n’est pas un moyen de connexion. La position est vérifiée côté serveur au clic sur Rejoindre et expire après 12 secondes sans présence de jeu. Le bouton rejoint le salon via le parcours habituel, avec son contrôle de capacité et la conservation du score lors d’un retour dans le même salon.
+
+La liste d’amis est fonctionnelle et indépendante du consentement statistique. L’export et l’effacement des données incluent le profil ami et les relations. Migration : `0008_acoustic_professor_monster.sql`.
+
 ## Catalogue et accessoires de base
 
 La boutique affiche tous les articles disponibles par défaut, avec les deux monnaies cochées. Les cases de monnaie sont indépendantes et se combinent avec les rayons ; un état vide explique de recocher une monnaie si les deux sont désactivées. Prix, disponibilité du bouton d’achat et navigation entre articles utilisent la monnaie propre à chaque article. Halloween conserve sa vitrine et son filtre dédié.

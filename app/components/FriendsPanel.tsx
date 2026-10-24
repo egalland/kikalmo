@@ -1,0 +1,28 @@
+'use client';
+import {useEffect,useRef,useState} from 'react';
+import {Copy,UserPlus,X} from 'lucide-react';
+import Avatar from './Avatar';
+import type {FriendsController} from '../hooks/useFriends';
+import type {Profile} from '../../lib/profile';
+import {THEMES} from '../../lib/themes';
+export default function FriendsPanel({controller,profile,onClose,onProfile,onJoin,currentRoom}:{controller:FriendsController;profile:Profile|null;onClose:()=>void;onProfile:()=>void;onJoin:(room:string)=>void;currentRoom:string}){
+ const {data,busy,error,action}=controller,[code,setCode]=useState(''),[notice,setNotice]=useState('');const dialog=useRef<HTMLDialogElement>(null);
+ useEffect(()=>{const previous=document.activeElement as HTMLElement;dialog.current?.showModal();return()=>{dialog.current?.close();previous?.focus();};},[]);
+ useEffect(()=>{if(profile&&!data.me&&!busy)void action('register');},[profile?.name]);
+ async function join(code:string){const result=await action('locate',{code});if(result?.room){onJoin(result.room);}}
+ return <dialog ref={dialog} className="friends-panel" aria-labelledby="friends-title" onCancel={e=>{e.preventDefault();onClose();}} onClick={e=>{if(e.target===e.currentTarget){const box=e.currentTarget.getBoundingClientRect();if(e.clientX<box.left||e.clientX>box.right||e.clientY<box.top||e.clientY>box.bottom)onClose();}}}>
+ <header><div><div className="eyebrow">LES COMPAGNONS DE MAILLE</div><h2 id="friends-title">Mes amis</h2></div><button type="button" onClick={onClose} aria-label="Fermer les amis"><X size={21}/></button></header>
+ {!profile?<div className="friends-empty"><p>Créez votre personnage pour obtenir votre code ami et retrouver vos proches.</p><button className="primary" onClick={()=>{onClose();onProfile();}}>Créer mon personnage</button></div>:<>
+ {!data.me?<div><p>Préparation de votre code ami…</p><button onClick={()=>void action('register')} disabled={busy}>Réessayer</button></div>:<>
+ <section className="friend-own-code"><span>Mon code ami</span><strong>{data.me.code.match(/.{1,4}/g)?.join('-')}</strong><button type="button" onClick={async()=>{try{await navigator.clipboard.writeText(data.me!.code);setNotice('Code ami copié.');}catch{setNotice('Copiez le code affiché ci-dessus.');}}}><Copy size={14}/> Copier</button><small>Code lié à ce navigateur. Partagez-le à un ami pour recevoir sa demande.</small></section>
+ <form className="friend-add" onSubmit={async e=>{e.preventDefault();const result=await action('request',{code});if(result){setCode('');setNotice('Demande envoyée, ou déjà présente dans votre liste.');}}}><label htmlFor="friend-code">Ajouter avec un code ami</label><div><input id="friend-code" value={code} maxLength={24} autoComplete="off" spellCheck={false} placeholder="XXXX-XXXX-XXXX-XXXX" onChange={e=>setCode(e.target.value)}/><button type="submit" disabled={busy||!code.trim()} aria-label="Envoyer la demande d’ami"><UserPlus size={18}/></button></div></form>
+ <label className="friend-visibility"><input type="checkbox" checked={data.me.visible} disabled={busy} onChange={e=>void action('visibility',{visible:e.target.checked})}/> Montrer ma présence et mon salon à mes amis</label>
+ {data.incoming.length>0&&<section className="friend-requests"><h3>Demandes reçues <small>{data.incoming.length}</small></h3>{data.incoming.map(f=><div className="friend-person" key={f.code}><Avatar value={f.avatar} animated={false}/><div><strong>{f.name}</strong><span>Souhaite vous ajouter</span><div className="friend-actions"><button className="primary" disabled={busy} onClick={()=>void action('accept',{code:f.code})}>Accepter</button><button disabled={busy} onClick={()=>void action('decline',{code:f.code})}>Refuser</button><button disabled={busy} onClick={()=>void action('block',{code:f.code})}>Bloquer</button></div></div></div>)}</section>}
+ <section className="friends-list"><h3>Mes compagnons <small>{data.friends.length}</small></h3>{!data.friends.length&&<p className="friends-empty">Ajoutez un ami et acceptez sa demande pour voir où il joue.</p>}{data.friends.map(f=><article className="friend-person" key={f.code}><Avatar value={f.avatar} animated={false} label={f.name}/><div><strong>{f.name}<i className={f.online?'friend-online':''}/></strong><span>{f.hidden?'Présence masquée':f.room?THEMES.find(t=>t.id===f.room)?.name:f.online?'En ligne':'Hors ligne'}</span>{f.room&&<button className="primary" disabled={busy} onClick={()=>void join(f.code)}>{f.room===currentRoom?'Voir notre salon':'Rejoindre sa partie'}</button>}<details className="friend-options"><summary>Gérer cet ami</summary><button disabled={busy} onClick={()=>void action('remove',{code:f.code})}>Retirer de mes amis</button><button disabled={busy} onClick={()=>void action('block',{code:f.code})}>Bloquer</button></details></div></article>)}</section>
+ {data.outgoing.length>0&&<section className="friend-requests"><h3>En attente</h3>{data.outgoing.map(f=><div className="friend-pending" key={f.code}><strong>{f.name}</strong><button disabled={busy} onClick={()=>void action('cancel',{code:f.code})}>Annuler la demande</button></div>)}</section>}
+ {data.blocked.length>0&&<details className="friend-blocks"><summary>Joueurs bloqués ({data.blocked.length})</summary>{data.blocked.map(f=><div className="friend-pending" key={f.code}><span>{f.name}</span><button disabled={busy} onClick={()=>void action('unblock',{code:f.code})}>Débloquer</button></div>)}</details>}
+ </>}
+ </>}{error&&<p className="notice error" role="alert">{error}</p>}{notice&&<p className="notice" role="status">{notice}</p>}
+ <p className="friends-help">Seuls les amis acceptés voient votre présence. Le salon est vérifié à nouveau quand vous cliquez sur Rejoindre.</p>
+ </dialog>;
+}

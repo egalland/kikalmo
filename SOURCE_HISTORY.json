@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "e46d8de79f398934367bab7923bc9c8063bdd849",
+  "source_head": "62fddcea95969a66cb57463d27e9e23b512f178a",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -441,6 +441,11 @@
       "source_sha": "e46d8de79f398934367bab7923bc9c8063bdd849",
       "source_author": "Codex",
       "message": "Fit short hair under witch hats and restore padding in room action labels"
+    },
+    {
+      "source_sha": "62fddcea95969a66cb57463d27e9e23b512f178a",
+      "source_author": "Codex",
+      "message": "Add mutual friends, live room joining, friend avatars on cards and shared desktop/mobile room navigation"
     }
   ]
 }
