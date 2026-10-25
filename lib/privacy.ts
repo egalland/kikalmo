@@ -1,3 +1,4 @@
+import {resolvePlayer} from './account-identity';
 import {settleDailyStatement} from './economy';
 import {dailyDate} from './daily';
 import {playerHash} from './analytics';
@@ -9,7 +10,7 @@ export const statsAllowed=(req:Request)=>cookieValue(req,'kk_consent')===CONSENT
 export const expireCookie=(key:string)=>`${key}=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0`;
 export const consentCookie=(yes:boolean)=>`kk_consent=${CONSENT_VERSION}-${yes?'yes':'no'}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=15552000`;
 export async function removeOptional(db:D1Database,req:Request){
- const player=browserId(req,'sv_player'),visitor=browserId(req,'kk_visitor');
+ const player=await resolvePlayer(db,req),visitor=browserId(req,'kk_visitor');
  const statements:D1PreparedStatement[]=[];
  if(visitor)statements.push(db.prepare('DELETE FROM site_visitor_days WHERE visitor=?').bind(await playerHash('visit:'+visitor)));
  if(player){const hash=await playerHash(player);
@@ -34,6 +35,7 @@ export async function purgeExpired(db:D1Database,now=Date.now()){
  const day=(days:number)=>new Date(now-days*86400000).toISOString().slice(0,10);
  await settleDailyStatement(db,dailyDate(now),now).run();
  await db.batch([
+  db.prepare('DELETE FROM account_sessions WHERE expires_at<?').bind(now),
   db.prepare('DELETE FROM direct_messages WHERE created_at<?').bind(now-90*86400000),
   db.prepare('DELETE FROM personal_events WHERE at<?').bind(now-395*86400000),
   db.prepare('DELETE FROM personal_sessions WHERE last_seen<?').bind(now-395*86400000),

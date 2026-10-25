@@ -1,3 +1,4 @@
+import {resolvePlayer} from '../../../lib/account-identity';
 import {env} from 'cloudflare:workers';
 import {QUESTIONS,view,type State} from '../../../lib/game';
 import {sameOrigin,privateHeaders} from '../../../lib/admin-auth';
@@ -5,7 +6,7 @@ export const dynamic='force-dynamic';
 const reply=(data:unknown,status=200)=>Response.json(data,{status,headers:privateHeaders});
 export async function POST(req:Request){try{
  if(!sameOrigin(req))return reply({error:'Origine refusée.'},403);
- const player=req.headers.get('cookie')?.match(/(?:^|;\s*)sv_player=([a-f0-9-]{36})(?:;|$)/)?.[1];
+ const player=await resolvePlayer(env.DB!,req);
  if(!player)return reply({error:'Rejoignez un salon pour signaler un problème.'},401);
  const raw=await req.text();if(raw.length>3000)return reply({error:'Signalement trop long.'},413);
  const b=JSON.parse(raw),kind=b.kind;

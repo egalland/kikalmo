@@ -1,9 +1,10 @@
+import {identityURI} from './account-modules.mjs';
 import ts from 'typescript';import {readFileSync,readdirSync} from 'node:fs';import {DatabaseSync} from 'node:sqlite';import assert from 'node:assert/strict';
 const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText,uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
 const codes=uri(compile(readFileSync('lib/friends.ts','utf8').split('\n').find(s=>s.startsWith('export function friendCode'))));
 const sql=new DatabaseSync(':memory:');for(const f of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+f,'utf8'));
 const db={prepare(q){let values=[];return{bind(...v){values=v;return this;},async first(){return sql.prepare(q).get(...values)||null;},async all(){return{results:sql.prepare(q).all(...values)};},async run(){const r=sql.prepare(q).run(...values);return{meta:{changes:Number(r.changes)}};}}}};
-globalThis.messageDB=db;const source=readFileSync('app/api/messages/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.messageDB};').replace("'../../../lib/friends'",JSON.stringify(codes));const api=await import(uri(compile(source)));
+globalThis.messageDB=db;const source=readFileSync('app/api/messages/route.ts','utf8').replaceAll("'../../../lib/account-identity'",JSON.stringify(identityURI)).replaceAll("'./account-identity'",JSON.stringify(identityURI)).replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.messageDB};').replace("'../../../lib/friends'",JSON.stringify(codes));const api=await import(uri(compile(source)));
 const oldNow=Date.now;let now=Date.parse('2026-10-24T18:00:00Z');Date.now=()=>now;
 const people=Array.from({length:4},(_,i)=>({id:crypto.randomUUID(),code:String(i+1).repeat(16),name:'Player '+i}));const [a,b,c,d]=people;
 for(const p of people)sql.prepare('INSERT INTO friend_profiles(player,code,name,avatar,seen) VALUES(?,?,?,?,?)').run(p.id,p.code,p.name,'{}',now);

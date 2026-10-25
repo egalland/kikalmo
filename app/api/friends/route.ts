@@ -1,22 +1,24 @@
+import {resolvePlayer,accountSession} from '../../../lib/account-identity';
 import {env} from 'cloudflare:workers';
 import {cleanAvatar} from '../../../lib/profile';
 import {ownedAppearance} from '../../../lib/economy';
 import {friendCode,friendsSnapshot} from '../../../lib/friends';
 export const dynamic='force-dynamic';
-const identity=(req:Request)=>req.headers.get('cookie')?.match(/(?:^|;\s*)sv_player=([a-f0-9-]{36})(?:;|$)/)?.[1];
+const identity=(req:Request)=>resolvePlayer(env.DB!,req);
 function response(data:unknown,status=200,player?:string){return Response.json(data,{status,headers:{'Cache-Control':'no-store',...(player?{'Set-Cookie':`sv_player=${player}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`}:{})}});}
-export async function GET(req:Request){try{return response(await friendsSnapshot(env.DB!,identity(req)));}catch{return response({error:'Le panneau d’amis est momentanément indisponible.'},503);}}
+export async function GET(req:Request){try{return response(await friendsSnapshot(env.DB!,await identity(req)));}catch{return response({error:'Le panneau d’amis est momentanément indisponible.'},503);}}
 export async function POST(req:Request){try{
  if(req.headers.get('origin')!==new URL(req.url).origin)return response({error:'Origine refusée.'},403);
- const b=await req.json() as {action:string;code?:string;name?:string;avatar?:unknown;visible?:boolean;room?:string;target?:string};let player=identity(req);const db=env.DB!;
+ const b=await req.json() as {action:string;code?:string;name?:string;avatar?:unknown;visible?:boolean;room?:string;target?:string};let player=await identity(req);const db=env.DB!;
  if(b.action==='register'||b.action==='pulse'){
+  const stored=await accountSession(db,req);if(stored){const p=JSON.parse(stored.profile);b.name=p.name;b.avatar=p.avatar;}
   if(typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>20)return response({error:'Créez votre personnage pour utiliser les amis.'},400);
   if(b.action==='pulse'&&!player)return response({error:'Ouvrez d’abord le panneau d’amis.'},401);player??=crypto.randomUUID();
   const exists=await db.prepare('SELECT code FROM friend_profiles WHERE player=?').bind(player).first();
   if(!exists&&b.action==='pulse')return response({error:'Ouvrez d’abord le panneau d’amis.'},409);
   const avatar=await ownedAppearance(db,player,cleanAvatar(b.avatar));
   await db.prepare('INSERT INTO friend_profiles(player,code,name,avatar,seen) VALUES(?,?,?,?,?) ON CONFLICT(player) DO UPDATE SET name=excluded.name,avatar=excluded.avatar,seen=excluded.seen').bind(player,crypto.randomUUID().replaceAll('-','').slice(0,16).toUpperCase(),b.name.trim(),JSON.stringify(avatar),Date.now()).run();
-  return response(await friendsSnapshot(db,player),200,player);
+  return response(await friendsSnapshot(db,player),200,stored?undefined:player);
  }
  if(!player||!await db.prepare('SELECT code FROM friend_profiles WHERE player=?').bind(player).first())return response({error:'Ouvrez d’abord le panneau d’amis.'},401);
  if(b.action==='visibility'){if(typeof b.visible!=='boolean')return response({error:'Choix invalide.'},400);await db.prepare('UPDATE friend_profiles SET visible=? WHERE player=?').bind(b.visible?1:0,player).run();return response(await friendsSnapshot(db,player));}

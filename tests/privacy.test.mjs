@@ -1,3 +1,4 @@
+import {identityURI} from './account-modules.mjs';
 import {economyURI,dailyBankURI,calendarURI} from './economy-modules.mjs';
 import ts from 'typescript';
 import {readFileSync,readdirSync} from 'node:fs';
@@ -7,14 +8,14 @@ const compile=s=>ts.transpileModule(s,{compilerOptions:{module:ts.ModuleKind.ES2
 const uri=s=>'data:text/javascript;base64,'+Buffer.from(s).toString('base64');
 const game=uri("export const fresh=()=>({players:[],phase:'empty',deadline:0,started:0,round:0,deck:[],game:''});");
 const analytics=uri(compile(readFileSync('lib/analytics.ts','utf8').replace("import {QUESTIONS, type State, type Player} from './game';",'const QUESTIONS=[];')));
-const privacyURI=uri(compile(readFileSync('lib/privacy.ts','utf8').replace("'./economy'",JSON.stringify(economyURI)).replace("'./daily'",JSON.stringify(calendarURI)).replace("'./analytics'",JSON.stringify(analytics)).replace("'./game'",JSON.stringify(game))));
+const privacyURI=uri(compile(readFileSync('lib/privacy.ts','utf8').replaceAll("'../../../lib/account-identity'",JSON.stringify(identityURI)).replaceAll("'./account-identity'",JSON.stringify(identityURI)).replace("'./economy'",JSON.stringify(economyURI)).replace("'./daily'",JSON.stringify(calendarURI)).replace("'./analytics'",JSON.stringify(analytics)).replace("'./game'",JSON.stringify(game))));
 const authURI=uri(compile(readFileSync('lib/admin-auth.ts','utf8')));
 const {statsAllowed,cookieValue,purgeExpired}=await import(privacyURI);
 const {playerHash,collector}=await import(analytics);
 const sql=new DatabaseSync(':memory:');for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+file,'utf8'));
 const db={async batch(list){sql.exec('BEGIN');try{const out=[];for(const s of list)out.push(await s.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}},prepare(query){let values=[];return {bind(...v){values=v;return this;},async first(){return sql.prepare(query).get(...values)||null;},async all(){return {results:sql.prepare(query).all(...values)};},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}};}}}};
 globalThis.privacyDB=db;
-function route(path){const source=readFileSync(path,'utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.privacyDB};').replaceAll("'../../../lib/privacy'",JSON.stringify(privacyURI)).replaceAll("'../../../lib/admin-auth'",JSON.stringify(authURI)).replaceAll("'../../../lib/analytics'",JSON.stringify(analytics));return import(uri(compile(source)));}
+function route(path){const source=readFileSync(path,'utf8').replaceAll("'../../../lib/account-identity'",JSON.stringify(identityURI)).replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.privacyDB};').replaceAll("'../../../lib/privacy'",JSON.stringify(privacyURI)).replaceAll("'../../../lib/admin-auth'",JSON.stringify(authURI)).replaceAll("'../../../lib/analytics'",JSON.stringify(analytics));return import(uri(compile(source)));}
 const privacy=await route('app/api/privacy/route.ts'),visits=await route('app/api/visits/route.ts');
 const req=(cookie='',method='GET',body,path='/api/privacy',origin='https://test.local')=>new Request('https://test.local'+path,{method,headers:{Cookie:cookie,Origin:origin,'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});
 assert.equal(statsAllowed(req()),false);assert.equal(statsAllowed(req('other=x; kk_consent=v1-yes; sv_player=no')),true);assert.equal(statsAllowed(req('kk_consent=v0-yes')),false);assert.equal(cookieValue(req('x=a; kk_consent=v1-no'),'kk_consent'),'v1-no');

@@ -1,8 +1,9 @@
+import {resolvePlayer,accountSession} from '../../../lib/account-identity';
 import {env} from 'cloudflare:workers';
 import {friendCode} from '../../../lib/friends';
 export const dynamic='force-dynamic';
 const RETENTION=90*86400000;
-const identity=(req:Request)=>req.headers.get('cookie')?.match(/(?:^|;\s*)sv_player=([a-f0-9-]{36})(?:;|$)/)?.[1];
+const identity=(req:Request)=>resolvePlayer(env.DB!,req);
 const response=(data:unknown,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
 const permission=`EXISTS(SELECT 1 FROM friend_links WHERE status='accepted' AND ((requester=? AND recipient=?) OR (requester=? AND recipient=?))) AND NOT EXISTS(SELECT 1 FROM friend_blocks WHERE (owner=? AND target=?) OR (owner=? AND target=?))`;
 const pair=(player:string,peer:string)=>[player,peer,peer,player,player,peer,peer,player];
@@ -13,7 +14,7 @@ async function target(db:D1Database,player:string,code:string){
  return await db.prepare(`SELECT 1 AS allowed WHERE ${permission}`).bind(...pair(player,peer.player)).first()?peer:null;
 }
 export async function GET(req:Request){try{
- const player=identity(req);if(!player)return response({conversations:[],messages:[],hasOlder:false});
+ const player=await identity(req);if(!player)return response({conversations:[],messages:[],hasOlder:false});
  const db=env.DB!,url=new URL(req.url),code=friendCode(url.searchParams.get('code')),cutoff=Date.now()-RETENTION;
  if(!url.searchParams.has('code')){
   const result=await db.prepare(`SELECT p.code,
@@ -36,7 +37,7 @@ export async function GET(req:Request){try{
  }catch{return response({error:'La messagerie est momentanément indisponible.'},503);}}
 export async function POST(req:Request){try{
  if(req.headers.get('origin')!==new URL(req.url).origin)return response({error:'Origine refusée.'},403);
- const player=identity(req);if(!player)return response({error:'Ouvrez Mes amis pour activer votre messagerie.'},401);
+ const player=await identity(req);if(!player)return response({error:'Ouvrez Mes amis pour activer votre messagerie.'},401);
  const body=await req.json() as {action?:string;code?:string;text?:string;requestId?:string;ids?:string[]},db=env.DB!,peer=await target(db,player,friendCode(body.code));
  if(!peer)return response({error:'Cette conversation n’est pas disponible. Vérifiez votre liste d’amis.'},403);
  if(body.action==='read'){

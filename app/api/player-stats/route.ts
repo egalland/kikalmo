@@ -1,3 +1,4 @@
+import {resolvePlayer,accountSession} from '../../../lib/account-identity';
 import {env} from 'cloudflare:workers';
 import {playerHash,calendar} from '../../../lib/analytics';
 import {browserId,cookieValue,statsAllowed,scrubRooms,expireCookie} from '../../../lib/privacy';
@@ -8,7 +9,7 @@ export const dynamic='force-dynamic';
 const keyCookie=(key:string)=>`kk_stats=${key}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=34128000`;
 const validKey=(key:unknown):key is string=>typeof key==='string'&&/^KK1_[a-zA-Z0-9_-]{43}$/.test(key);
 function reply(data:unknown,status=200,token?:string,key?:string){const headers=new Headers(privateHeaders);if(token)headers.append('Set-Cookie',`sv_player=${token}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=2592000`);if(key!==undefined)headers.append('Set-Cookie',key?keyCookie(key):expireCookie('kk_stats'));return Response.json(data,{status,headers});}
-async function identity(req:Request){const id=browserId(req,'sv_player'),key=cookieValue(req,'kk_stats');let vault:string|null=null;if(validKey(key)){const hash=await playerHash('stats-key:'+key);const row=await env.DB!.prepare('SELECT id FROM personal_stat_keys WHERE id=? AND last_seen>=?').bind(hash,Date.now()-395*86400000).first<{id:string}>();if(row)vault=row.id;}return {id,player:id?await playerHash(id):null,vault,key:vault?key:undefined};}
+async function identity(req:Request){const id=await resolvePlayer(env.DB!,req),account=await accountSession(env.DB!,req),key=cookieValue(req,'kk_stats');let vault:string|null=null;if(validKey(key)){const hash=await playerHash('stats-key:'+key);const row=await env.DB!.prepare('SELECT id FROM personal_stat_keys WHERE id=? AND last_seen>=?').bind(hash,Date.now()-395*86400000).first<{id:string}>();if(row)vault=row.id;}if(account)vault=account.vault;return {id,player:id?await playerHash(id):null,vault,key:vault?key:undefined};}
 async function owners(db:D1Database,player:string|null,vault:string|null){const rows=vault?(await db.prepare('SELECT player FROM player_stat_links WHERE vault=?').bind(vault).all<{player:string}>()).results:[];return [...new Set([...(player?[player]:[]),...rows.map(r=>r.player)])];}
 export async function GET(req:Request){try{
  const who=await identity(req);if(!statsAllowed(req)&&new URL(req.url).searchParams.get('export')!=='1')return reply({allowed:false,hasKey:!!who.vault});
@@ -20,6 +21,7 @@ export async function GET(req:Request){try{
  }catch{return reply({error:'Impossible de charger les statistiques. Réessaie.'},503);}}
 export async function POST(req:Request){if(!sameOrigin(req))return reply({error:'Origine refusée.'},403);if(!statsAllowed(req))return reply({error:'Accepte les statistiques dans les préférences pour activer cette fonction.'},403);try{
  const length=Number(req.headers.get('content-length')||0);if(length>3000000)return reply({error:'Fichier trop volumineux (3 Mo maximum).'},413);let raw='',size=0;const reader=req.body?.getReader(),decoder=new TextDecoder();if(reader){while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;if(size>3000000){await reader.cancel();return reply({error:'Fichier trop volumineux.'},413);}raw+=decoder.decode(value,{stream:true});}raw+=decoder.decode();}const b=JSON.parse(raw) as {action:string;archive?:unknown;key?:unknown};const who=await identity(req),id=who.id||crypto.randomUUID(),player=who.player||await playerHash(id),db=env.DB!;
+ if(['create-key','import-key','export-key','unlink-key'].includes(b.action)&&await accountSession(db,req))return reply({error:'Gérez la clé et les appareils dans Mon compte.'},409);
  if(b.action==='create-key'||b.action==='import-key'){
   let key=who.key,vault=who.vault;
   if(b.action==='import-key'){key=typeof b.key==='string'?b.key.trim():undefined;if(!validKey(key))return reply({error:'Clé Kikalmo invalide.'},400);vault=await playerHash('stats-key:'+key);const found=await db.prepare('SELECT id FROM personal_stat_keys WHERE id=? AND last_seen>=?').bind(vault,Date.now()-395*86400000).first();if(!found)return reply({error:'Clé invalide ou expirée.'},400);}

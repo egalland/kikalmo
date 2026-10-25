@@ -78,6 +78,13 @@
       "when": 1792951304430,
       "tag": "0010_abandoned_blue_shield",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1792953519447,
+      "tag": "0011_damp_yellowjacket",
+      "breakpoints": true
     }
   ]
 }

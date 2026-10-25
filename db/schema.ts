@@ -78,3 +78,12 @@ export const playerReports=sqliteTable('player_reports',{
  detail:text('detail').notNull(),context:text('context').notNull(),createdAt:integer('created_at').notNull(),
  status:text('status').notNull().default('open'),
 },t=>[index('player_reports_created').on(t.createdAt)]);
+
+// Functional accounts and independently revocable browser sessions. Recovery secrets are hashed.
+export const playerAccounts=sqliteTable('player_accounts',{
+ player:text('player').primaryKey(),keyHash:text('key_hash').notNull().unique(),vault:text('vault').notNull(),
+ profile:text('profile').notNull(),revision:integer('revision').notNull().default(0),createdAt:integer('created_at').notNull(),
+});
+export const accountSessions=sqliteTable('account_sessions',{
+ token:text('token').primaryKey(),player:text('player').notNull(),createdAt:integer('created_at').notNull(),expiresAt:integer('expires_at').notNull(),
+},t=>[index('account_sessions_player').on(t.player)]);

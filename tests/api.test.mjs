@@ -1,3 +1,4 @@
+import {identityURI} from './account-modules.mjs';
 import {economyURI,dailyBankURI,calendarURI} from './economy-modules.mjs';
 import ts from 'typescript';
 import {readFileSync} from 'node:fs';
@@ -11,9 +12,10 @@ const analytics=uri(compile(readFileSync('lib/analytics.ts','utf8').replace("'./
 const sql=new DatabaseSync(':memory:');sql.exec(readFileSync('drizzle/0000_polite_next_avengers.sql','utf8'));
 sql.exec(readFileSync('drizzle/0001_premium_miracleman.sql','utf8'));
 for(const f of ['0007_boring_jack_murdock.sql','0008_acoustic_professor_monster.sql'])sql.exec(readFileSync('drizzle/'+f,'utf8'));
+sql.exec(readFileSync('drizzle/0011_damp_yellowjacket.sql','utf8'));
 let batchTail=Promise.resolve();
 globalThis.__testDB={batch(statements){const task=batchTail.then(async()=>{sql.exec('BEGIN');try{const result=[];for(const s of statements)result.push(await s.run());sql.exec('COMMIT');return result;}catch(e){sql.exec('ROLLBACK');throw e;}});batchTail=task.catch(()=>{});return task;},prepare(query){let values=[];return {bind(...v){values=v;return this},async first(){return sql.prepare(query).get(...values)||null},async all(){return {results:sql.prepare(query).all(...values)}},async run(){const r=sql.prepare(query).run(...values);return {meta:{changes:Number(r.changes)}}}}}};
-let source=readFileSync('app/api/game/route.ts','utf8').replace("'../../../lib/economy'",JSON.stringify(economyURI)).replace("'../../../lib/daily-bank'",JSON.stringify(dailyBankURI)).replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/analytics'",JSON.stringify(analytics)).replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/themes'",JSON.stringify(themes)).replace("'../../../lib/profile'",JSON.stringify(profile));
+let source=readFileSync('app/api/game/route.ts','utf8').replaceAll("'../../../lib/account-identity'",JSON.stringify(identityURI)).replaceAll("'./account-identity'",JSON.stringify(identityURI)).replace("'../../../lib/economy'",JSON.stringify(economyURI)).replace("'../../../lib/daily-bank'",JSON.stringify(dailyBankURI)).replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.__testDB};').replace("'../../../lib/analytics'",JSON.stringify(analytics)).replace("'../../../lib/game'",JSON.stringify(game)).replace("'../../../lib/themes'",JSON.stringify(themes)).replace("'../../../lib/profile'",JSON.stringify(profile));
 const {POST,GET}=await import(uri(compile(source)));
 let now=1000000;Date.now=()=>now;
 async function post(action,cookie='',extra={}){const r=await POST(new Request('https://test.local/api/game',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://test.local',Cookie:cookie+'; kk_consent=v1-yes'},body:JSON.stringify({action,room:'cinema',...extra})}));return {status:r.status,body:await r.json(),cookie:r.headers.get('set-cookie')?.split(';')[0]||cookie}}

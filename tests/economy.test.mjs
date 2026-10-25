@@ -1,3 +1,4 @@
+import {identityURI} from './account-modules.mjs';
 import ts from 'typescript';
 import {readFileSync,readdirSync} from 'node:fs';
 import {DatabaseSync} from 'node:sqlite';
@@ -9,7 +10,7 @@ const {COSMETICS,HALLOWEEN,availableItem,eventRemaining,isSeasonal}=await import
 const sql=new DatabaseSync(':memory:');for(const file of readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort())sql.exec(readFileSync('drizzle/'+file,'utf8'));
 const db={async batch(list){sql.exec('BEGIN');try{const out=[];for(const s of list)out.push(await s.run());sql.exec('COMMIT');return out;}catch(e){sql.exec('ROLLBACK');throw e;}},prepare(q){let values=[];return{bind(...v){values=v;return this;},async first(){return sql.prepare(q).get(...values)||null;},async all(){return{results:sql.prepare(q).all(...values)};},async run(){const r=sql.prepare(q).run(...values);return{meta:{changes:Number(r.changes)}};}}}};
 globalThis.economyTestDB=db;
-let source=readFileSync('app/api/economy/route.ts','utf8').replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.economyTestDB};').replace("'../../../lib/economy'",JSON.stringify(economyURI)).replace("'../../../lib/cosmetics'",JSON.stringify(cosmeticsURI)).replace("'../../../lib/daily'",JSON.stringify(calendarURI));
+let source=readFileSync('app/api/economy/route.ts','utf8').replaceAll("'../../../lib/account-identity'",JSON.stringify(identityURI)).replaceAll("'./account-identity'",JSON.stringify(identityURI)).replace("import {env} from 'cloudflare:workers';",'const env={DB:globalThis.economyTestDB};').replace("'../../../lib/economy'",JSON.stringify(economyURI)).replace("'../../../lib/cosmetics'",JSON.stringify(cosmeticsURI)).replace("'../../../lib/daily'",JSON.stringify(calendarURI));
 const api=await import(uri(compile(source)));
 let now=Date.parse('2026-10-23T19:00:00Z');Date.now=()=>now;
 const players=Array.from({length:6},()=>crypto.randomUUID());

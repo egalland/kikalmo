@@ -134,3 +134,9 @@ Le bouton Ajouter est masqué pour les personnes déjà amies ou bloquées. Les 
 ## Réserve de questions et rotation
 
 Les douze thèmes contiennent chacun 1 000 réponses ; le généraliste rassemble les 12 000 entrées. Les 6 000 réponses déjà publiées conservent leurs indices et leur contenu. Les salons excluent les 100 dernières questions lors d’un nouveau tirage, avec une mémoire conservée après le retour à vide. La réserve du mot du jour reste indépendante. Sources, crédits et reconstruction : [data/BANK_SOURCES.md](data/BANK_SOURCES.md).
+
+## Compte joueur et récupération
+
+**Menu → Mon compte** lie le personnage et la progression existante à une clé privée. La clé retrouve les monnaies, achats, amis, blocages, messages, quotidien et statistiques autorisées sur un autre appareil. La première association conserve une ancienne clé de statistiques présente sur le navigateur d’origine. Les progressions ne sont pas additionnées ; les préférences et le consentement statistique restent propres à chaque appareil.
+
+Chaque appareil possède une session distincte. Le renouvellement de la clé ferme les autres sessions, et la modification du personnage contrôle les révisions pour éviter les écrasements concurrents. Migration ajoutée : `0011_damp_yellowjacket.sql`. [Mode opératoire et architecture des comptes](docs/projet/comptes.md).
