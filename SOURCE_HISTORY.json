@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "d5eba900675ee16e53d6feb47158746f23fd3bf8",
+  "source_head": "515aa7862022b1f40c1a32008c3a80b7c37a0bf3",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -491,6 +491,11 @@
       "source_sha": "d5eba900675ee16e53d6feb47158746f23fd3bf8",
       "source_author": "Codex",
       "message": "Expand all twelve rooms to 1,000 answers and the daily bank to 100 expressions; prevent recent room and daily repeats while preserving published questions"
+    },
+    {
+      "source_sha": "515aa7862022b1f40c1a32008c3a80b7c37a0bf3",
+      "source_author": "Emmanuel Galland",
+      "message": "Improve room blocking, reconnect recovery, message alerts and question reports"
     }
   ]
 }

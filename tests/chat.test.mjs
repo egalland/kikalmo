@@ -56,3 +56,7 @@ assert.equal(matchAnswer('bonjuorr',q('Bonjourr')),'correct','Adjacent transposi
 assert.equal(matchAnswer('bonjoxxx',q('Bonjourr')),'incorrect');
 assert.equal(matchAnswer('abcdefghijklmx',q('abcdefghijklmn')),'correct');
 assert.equal(matchAnswer('anything',q('Exact answer',['anything'])),'correct','Explicit aliases remain accepted');
+const blockedState=fresh();blockedState.players=['alice','bob'].map(player);begin(blockedState,'cinema',now);blockedState.phase='guess';blockedState.round=1;blockedState.started=now;blockedState.deadline=now+20000;
+submit(blockedState,'bob','wrong guess',now+100);submit(blockedState,'bob',QUESTIONS[blockedState.deck[0]].answer,now+200);communicate(blockedState,'bob','hidden chat',now+300);communicate(blockedState,'bob','😂',now+400,true);submit(blockedState,'alice',QUESTIONS[blockedState.deck[0]].answer,now+500);
+const muted=view(blockedState,'alice',now+600,new Set(['bob']));assert.ok(muted.messages.some(m=>m.kind==='guess'&&m.text==='wrong guess'));assert.ok(muted.messages.some(m=>m.kind==='correct'&&m.player==='bob'));assert.ok(!muted.messages.some(m=>m.text==='hidden chat'));assert.equal(muted.players.find(p=>p.id==='bob').reaction,undefined);assert.ok(view(blockedState,'bob',now+600).messages.some(m=>m.text==='hidden chat'),'A block does not erase the shared room history');
+console.log('Passed room blocking: guesses/correct answers and score kept, chat and reactions hidden only for blocker.');

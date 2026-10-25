@@ -5,5 +5,6 @@ const active={current:'new-room'},messages={current:'keep'},countdown={current:'
 const create=new Function('fetch','active','lastMessage','countdown','setRoom','setS','return ('+js+');');
 const call=create(async()=>Response.json({expired:true,error:'Old room expired'},{status:409}),active,messages,countdown,v=>changes.push(['room',v]),v=>changes.push(['snapshot',v]));
 await assert.rejects(()=>call('sync','old-room'));assert.equal(active.current,'new-room');assert.equal(messages.current,'keep');assert.equal(countdown.current,'keep');assert.equal(changes.length,0,'A late response from the old room cannot clear the new session');
-await assert.rejects(()=>call('sync','new-room'));assert.equal(active.current,'');assert.equal(changes.length,2,'The actual current room still handles expiration');
+await assert.rejects(()=>call('sync','new-room'),e=>e.expired===true);assert.equal(active.current,'new-room');assert.equal(changes.length,0,'Sync expiry preserves current room for automatic recovery');
+await assert.rejects(()=>call('answer','new-room'));assert.equal(active.current,'');assert.equal(changes.length,2,'Non-sync expired operations retain their explicit exit behavior');
 console.log('Passed room switching: stale old-room expiry cannot clear a newly joined friend room; current-room expiration remains effective.');

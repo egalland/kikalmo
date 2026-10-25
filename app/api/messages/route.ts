@@ -18,9 +18,11 @@ export async function GET(req:Request){try{
  if(!url.searchParams.has('code')){
   const result=await db.prepare(`SELECT p.code,
    (SELECT created_at FROM direct_messages m WHERE ((m.sender=? AND m.recipient=p.player) OR (m.recipient=? AND m.sender=p.player)) AND created_at>=? ORDER BY created_at DESC,id DESC LIMIT 1) AS lastAt,
+   (SELECT created_at FROM direct_messages m WHERE m.sender=p.player AND m.recipient=? AND m.created_at>=? ORDER BY created_at DESC,id DESC LIMIT 1) AS lastIncomingAt,
+   (SELECT id FROM direct_messages m WHERE m.sender=p.player AND m.recipient=? AND m.created_at>=? ORDER BY created_at DESC,id DESC LIMIT 1) AS lastIncomingId,
    (SELECT count(*) FROM direct_messages m WHERE m.sender=p.player AND m.recipient=? AND m.read_at IS NULL AND m.created_at>=?) AS unread
    FROM friend_profiles p JOIN friend_links l ON (l.requester=? AND l.recipient=p.player) OR (l.recipient=? AND l.requester=p.player)
-   WHERE l.status='accepted' AND NOT EXISTS(SELECT 1 FROM friend_blocks b WHERE (b.owner=? AND b.target=p.player) OR (b.owner=p.player AND b.target=?))`).bind(player,player,cutoff,player,cutoff,player,player,player,player).all();
+   WHERE l.status='accepted' AND NOT EXISTS(SELECT 1 FROM friend_blocks b WHERE (b.owner=? AND b.target=p.player) OR (b.owner=p.player AND b.target=?))`).bind(player,player,cutoff,player,cutoff,player,cutoff,player,cutoff,player,player,player,player).all();
   return response({conversations:result.results});
  }
  const peer=await target(db,player,code);if(!peer)return response({error:'Cette conversation n’est pas disponible. Vérifiez votre liste d’amis.'},403);

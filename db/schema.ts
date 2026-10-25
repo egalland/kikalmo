@@ -70,3 +70,11 @@ export const directMessages=sqliteTable('direct_messages',{
  id:text('id').primaryKey(),sender:text('sender').notNull(),recipient:text('recipient').notNull(),
  text:text('text').notNull(),createdAt:integer('created_at').notNull(),readAt:integer('read_at'),
 },t=>[index('direct_messages_pair').on(t.sender,t.recipient,t.createdAt),index('direct_messages_unread').on(t.recipient,t.readAt)]);
+
+// Player reports are reviewed by the publisher; no automatic sanctions.
+export const playerReports=sqliteTable('player_reports',{
+ id:text('id').primaryKey(),reporter:text('reporter').notNull(),kind:text('kind').notNull(),
+ room:text('room').notNull(),itemKey:text('item_key').notNull(),reason:text('reason').notNull(),
+ detail:text('detail').notNull(),context:text('context').notNull(),createdAt:integer('created_at').notNull(),
+ status:text('status').notNull().default('open'),
+},t=>[index('player_reports_created').on(t.createdAt)]);

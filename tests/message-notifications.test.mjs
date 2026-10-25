@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {incomingNotifications as check} from '../lib/message-notifications.mjs';
+const row=(id,unread=1,code='a')=>({code,lastIncomingId:id,unread});
+let r=check(null,[row('old',5)]);assert.equal(r.notify,false,'Existing unread messages never ring on startup');
+r=check(r.next,[row('old',5)]);assert.equal(r.notify,false);
+r=check(r.next,[row('new',6)]);assert.equal(r.notify,true);
+r=check(r.next,[row('new',6)]);assert.equal(r.notify,false,'Polling cannot repeat a notification');
+r=check(r.next,[row('new',0)]);assert.equal(r.notify,false,'Marking read is silent');
+r=check(r.next,[row('new',0),row('first',1,'b')]);assert.equal(r.notify,true,'A new conversation rings after initialization');
+r=check(r.next,[]);assert.equal(r.notify,false,'Removed/blocked contacts do not ring');
+console.log('Passed incoming notifications: old unread baseline, new message, repeated polls, reads and removed contacts.');

@@ -15,6 +15,7 @@ for(const entry of expansion.entries){
  if(q.hint.length<20||q.hint.length>190||[q.answer,...q.aliases||[]].some(a=>normalize(a).length>=3&&normalize(q.hint).includes(normalize(a))))throw Error('Invalid clue: '+q.answer);
  clues[key]=q.hint;sources[key]=source;audit.entries[key]={kind,page:source,title:q.wiki.replaceAll('_',' '),retrieved:expansion.retrieved,license:kind==='wikidata-description'?'CC0':'CC BY-SA 4.0'};
 }
+Object.assign(clues,read('data/editorial-clues.json'));
 const counts={general:bank.length};for(const q of bank)counts[q.theme]=(counts[q.theme]||0)+1;
 if(bank.length!==12000||Object.entries(counts).some(([k,n])=>k!=='general'&&n!==1000))throw Error('Expected 1,000 questions per theme');
 for(const [path,value] of [['lib/question-bank.json',bank],['lib/question-clues.json',clues],['lib/question-clue-sources.json',sources],['data/clue-sources.json',audit]])writeFileSync(path,JSON.stringify(value,null,2)+'\n');
