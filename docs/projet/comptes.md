@@ -5,7 +5,7 @@ Le compte est facultatif. Il permet de reprendre le personnage, le portefeuille,
 ## Mode opératoire
 
 1. Depuis l’appareil possédant la progression, ouvrir **Menu → Mon compte**.
-2. Vérifier le personnage et les soldes, puis **Lier mon personnage et obtenir ma clé**. Si une ancienne clé de statistiques valide existe dans le navigateur, elle est conservée et devient la clé du compte.
+2. Vérifier le personnage et les soldes, puis **Lier mon personnage et obtenir ma clé**. Si une ancienne clé de statistiques valide existe dans le navigateur, elle est conservée et devient la clé du compte. Une clé sauvegardée peut aussi être collée dans « Utiliser une ancienne clé de statistiques » avant cette association.
 3. Télécharger ou copier la clé privée. Le serveur ne conserve que son empreinte ; il ne peut pas renvoyer une clé perdue à une adresse e-mail.
 4. Sur un autre appareil, ouvrir **Mon compte**, coller la clé ou charger le fichier, puis **Récupérer mon compte**.
 5. Les données proviennent du même compte : les soldes et les achats ne sont pas recopiés ni additionnés. Le code ami reste identique.

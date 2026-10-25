@@ -137,6 +137,6 @@ Les douze thèmes contiennent chacun 1 000 réponses ; le généraliste rassembl
 
 ## Compte joueur et récupération
 
-**Menu → Mon compte** lie le personnage et la progression existante à une clé privée. La clé retrouve les monnaies, achats, amis, blocages, messages, quotidien et statistiques autorisées sur un autre appareil. La première association conserve une ancienne clé de statistiques présente sur le navigateur d’origine. Les progressions ne sont pas additionnées ; les préférences et le consentement statistique restent propres à chaque appareil.
+**Menu → Mon compte** lie le personnage et la progression existante à une clé privée. La clé retrouve les monnaies, achats, amis, blocages, messages, quotidien et statistiques autorisées sur un autre appareil. La première association conserve une ancienne clé de statistiques présente sur le navigateur d’origine, ou collée depuis une copie sauvegardée dans « Utiliser une ancienne clé de statistiques ». Les progressions ne sont pas additionnées ; les préférences et le consentement statistique restent propres à chaque appareil.
 
 Chaque appareil possède une session distincte. Le renouvellement de la clé ferme les autres sessions, et la modification du personnage contrôle les révisions pour éviter les écrasements concurrents. Migration ajoutée : `0011_damp_yellowjacket.sql`. [Mode opératoire et architecture des comptes](docs/projet/comptes.md).

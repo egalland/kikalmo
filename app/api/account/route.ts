@@ -20,7 +20,7 @@ export async function POST(req:Request){if(!sameOrigin(req))return response({err
  const raw=await req.text();if(raw.length>16000)return response({error:'Demande trop volumineuse.'},413);
  const b=JSON.parse(raw) as {action:string;key?:string;profile?:unknown;revision?:number};const db=env.DB!,current=await accountSession(db,req),now=Date.now(),token=sessionToken(req);
  if(b.action==='import'){
-  const key=b.key?.trim();if(!validKey(key))return response({error:'Clé Kikalmo invalide.'},400);
+  const key=typeof b.key==='string'?b.key.trim():undefined;if(!validKey(key))return response({error:'Clé Kikalmo invalide.'},400);
   const hash=await playerHash('stats-key:'+key),target=await db.prepare('SELECT player FROM player_accounts WHERE key_hash=?').bind(hash).first<{player:string}>();
   if(!target)return response({error:'Cette clé n’ouvre pas encore de compte joueur. Si elle servait aux statistiques, liez-la au compte depuis l’appareil qui possède votre personnage et vos achats.'},400);
   if(current?.player===target.player)return response({...await snapshot(req),hasKey:true,key},200,[keyCookie(key)]);
@@ -33,8 +33,9 @@ export async function POST(req:Request){if(!sameOrigin(req))return response({err
  if(b.action==='create'){
   if(current)return response(await snapshot(req));
   const player=await resolvePlayer(db,req)||crypto.randomUUID(),profile=await cleanProfile(b.profile,player);if(!profile)return response({error:'Créez votre personnage avant de lier votre compte.'},400);
-  let key=(cookie(req,'kk_account_key')||cookie(req,'kk_stats')),vault:string|undefined;
-  if(validKey(key)){const hash=await playerHash('stats-key:'+key);const legacy=await db.prepare('SELECT id FROM personal_stat_keys WHERE id=? AND last_seen>=?').bind(hash,now-395*86400000).first<{id:string}>();if(legacy)vault=legacy.id;else key=undefined;}
+  const supplied=typeof b.key==='string'?b.key.trim():undefined;let key=supplied||(cookie(req,'kk_account_key')||cookie(req,'kk_stats')),vault:string|undefined;
+  if(b.key!==undefined&&!validKey(supplied))return response({error:'Ancienne clé invalide.'},400);
+  if(validKey(key)){const hash=await playerHash('stats-key:'+key);const legacy=await db.prepare('SELECT id FROM personal_stat_keys WHERE id=? AND last_seen>=?').bind(hash,now-395*86400000).first<{id:string}>();if(legacy)vault=legacy.id;else if(b.key)return response({error:'Cette ancienne clé de statistiques est invalide ou expirée.'},400);else key=undefined;}
   if(!validKey(key))key=makeKey();const hash=await playerHash('stats-key:'+key);
   const link=await db.prepare('SELECT vault FROM player_stat_links WHERE player=?').bind(await playerHash(player)).first<{vault:string}>();vault=vault||link?.vault||hash;
   const existing=await db.prepare('SELECT player FROM player_accounts WHERE key_hash=?').bind(hash).first<{player:string}>();if(existing&&existing.player!==player)return response({error:'Cette clé est déjà liée à un compte. Utilisez Récupérer mon compte.'},409);

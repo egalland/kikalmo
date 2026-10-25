@@ -1,6 +1,6 @@
 {
   "source": "Sites",
-  "source_head": "edd603b65b8774a5454ce773f09a61d4112dde5b",
+  "source_head": "076cf0b39299e15f25995d8f137876f4bc937a71",
   "note": "Commits recreated through GitHub API; original source references retained. Initial import preserves original blob/tree hashes; subsequent changes preserve GitHub-specific documentation on top. Native Git push credentials are not exposed by the connected GitHub tool.",
   "commits": [
     {
@@ -501,6 +501,11 @@
       "source_sha": "edd603b65b8774a5454ce773f09a61d4112dde5b",
       "source_author": "Codex",
       "message": "Link complete player progression to private-key accounts with per-device sessions, profile synchronization and revocation"
+    },
+    {
+      "source_sha": "076cf0b39299e15f25995d8f137876f4bc937a71",
+      "source_author": "Codex",
+      "message": "Support linking a saved legacy statistics key from the original device and validate the complete recovery flow"
     }
   ]
 }
